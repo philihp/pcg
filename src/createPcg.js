@@ -12,7 +12,7 @@ import { SETSEQ, ONESEQ, MCG } from './enums/StreamScheme'
  * Even though delta is an unsigned integer, we can pass a signed integer to go backwards, it just
  * goes "the long way round".
  */
-const stepState = curry((delta, pcg) => {
+export const stepState = curry((delta, pcg) => {
   let currMultiplier = pcg.algorithm.multiplier
   let currIncrement = {
     [SETSEQ]: () => pcg.streamId,
