@@ -10,3 +10,9 @@ coverage
 
 # Dependencies
 node_modules
+
+# Dont commit builds
+dist/
+
+# npmrc should prevent this, but at any rate...
+package-lock.json

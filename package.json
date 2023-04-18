@@ -1,27 +1,77 @@
 {
-  "name": "pcg",
+  "name": "fn-pcg",
   "version": "0.1.0",
   "description": "A functional implementation of the PCG family random number generators, written in JavaScript",
   "main": "lib/index.js",
   "repository": "https://github.com/kripod/pcg",
   "author": "Kristóf Poduszló <kripod@protonmail.com>",
+  "contributors": [
+    "Philihp Busby <philihp@gmail.com>"
+  ],
   "license": "MIT",
   "scripts": {
-    "build": "babel src -d lib -s",
-    "lint": "eslint ./src",
-    "test": "nyc -r lcov -r text ava -T 30s"
+    "build": "babel src --out-dir dist --source-maps",
+    "lint": "eslint --ext .ts,.json,.js src",
+    "prepare": "husky install && npm run build",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
   },
+  "files": [
+    "/dist/",
+    "!/dist/**/__tests__/*.js"
+  ],
   "dependencies": {
-    "long": "^3.2.0",
-    "ramda": "^0.28.0"
+    "long": "5.2.3",
+    "ramda": "0.29.0"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
-    "babel-cli": "^6.18.0",
-    "babel-preset-latest": "^6.16.0",
-    "eslint": "^3.12.1",
-    "eslint-config-airbnb-base": "^11.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "nyc": "^10.0.0"
+    "@babel/cli": "7.21.0",
+    "@babel/core": "7.21.4",
+    "@babel/preset-env": "7.21.4",
+    "@philihp/eslint-config": "6.0.2",
+    "@philihp/prettier-config": "1.0.0",
+    "eslint": "8.38.0",
+    "eslint-plugin-import": "2.27.5",
+    "husky": "8.0.3",
+    "jest": "29.5.0",
+    "lint-staged": "13.2.1",
+    "prettier": "2.8.7"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "dist/"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,ts}": [
+      "eslint --ext .js,.json,.ts --fix"
+    ]
+  },
+  "prettier": "@philihp/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@philihp",
+      "plugin:jest/all"
+    ],
+    "settings": {
+      "import/extensions": [
+        ".js"
+      ],
+      "import/parsers": {
+        "@typescript-eslint/parser": [
+          ".ts"
+        ]
+      },
+      "import/resolver": {
+        "typescript": {},
+        "node": {
+          "extensions": [
+            ".js"
+          ]
+        }
+      }
+    },
+    "rules": {}
   }
 }
