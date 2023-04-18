@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "A functional implementation of the PCG family random number generators, written in JavaScript",
   "main": "lib/index.js",
-  "repository": "https://github.com/kripod/pcg",
+  "repository": "https://github.com/philihp/fn-pcg",
   "author": "Kristóf Poduszló <kripod@protonmail.com>",
   "contributors": [
     "Philihp Busby <philihp@gmail.com>"
