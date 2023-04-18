@@ -1,6 +1,6 @@
 {
   "name": "fn-pcg",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A functional implementation of the PCG family random number generators, written in JavaScript",
   "main": "lib/index.js",
   "repository": "https://github.com/philihp/fn-pcg",
