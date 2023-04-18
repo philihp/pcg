@@ -1,6 +1,6 @@
 import { createPcg32, nextState, prevState, randomInt, randomList } from '..'
 
-describe('pcg.js', () => {
+describe('basic', () => {
   it('pCG32_XSH_RR: Single integer', () => {
     expect.assertions(2)
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
