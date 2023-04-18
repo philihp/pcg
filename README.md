@@ -1,8 +1,8 @@
 # fn-pcg
 
-[![NPM](https://img.shields.io/npm/v/pcg.svg)](https://www.npmjs.com/package/pcg)
-[![Travis CI](https://img.shields.io/travis/kripod/pcg.js/master.svg)](https://travis-ci.org/kripod/pcg.js)
-[![Codecov](https://img.shields.io/codecov/c/github/kripod/pcg.js.svg)](https://codecov.io/gh/kripod/pcg.js)
+[![NPM](https://img.shields.io/npm/v/fn-pcg.svg)](https://www.npmjs.com/package/fn-pcg)
+[![Tests](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml)
+[![Coverage](https://coveralls.io/repos/github/philihp/pcg.js/badge.svg?branch=main)](https://coveralls.io/github/philihp/pcg.js?branch=main)
 
 A functional implementation of the [PCG family random number generators](), written in JavaScript.
 
