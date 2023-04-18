@@ -1,11 +1,11 @@
 import { createPcg32, randomInt, randomList } from '..'
-import { ONESEQ } from '../enums/StreamScheme'
+import { StreamScheme } from '../types'
 
-describe('oneseq', () => {
+describe('setseq', () => {
   it('generates a list', () => {
     expect.assertions(3)
     const advancedOptions = {
-      streamScheme: ONESEQ,
+      streamScheme: StreamScheme.SETSEQ,
     }
     const initState = 42
     const initStreamId = 54
@@ -16,7 +16,7 @@ describe('oneseq', () => {
     const out = randomList(listLength, randomUint32, pcg)
 
     expect(out).toHaveLength(6)
-    expect(out.map((n) => n[0])).toStrictEqual([73173280, 3745155691, 2856497084, 4276626055, 3324726470, 3500761220])
+    expect(out.map((n) => n[0])).toStrictEqual([2707161783, 2068313097, 3122475824, 2211639955, 3215226955, 3421331566])
 
     // the next int after the 3rd state is the 4th int
     expect(randomUint32(out[2][1])[0]).toBe(out[3][0])
