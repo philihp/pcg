@@ -54,24 +54,7 @@
       "@philihp",
       "plugin:jest/all"
     ],
-    "settings": {
-      "import/extensions": [
-        ".js"
-      ],
-      "import/parsers": {
-        "@typescript-eslint/parser": [
-          ".ts"
-        ]
-      },
-      "import/resolver": {
-        "typescript": {},
-        "node": {
-          "extensions": [
-            ".js"
-          ]
-        }
-      }
-    },
+    "settings": {},
     "rules": {}
   }
 }
