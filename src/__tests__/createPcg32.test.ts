@@ -48,6 +48,12 @@ describe('basic', () => {
     expect(nextPcg).toBeDefined()
   })
 
+  it('complains when range is wrong', () => {
+    expect.assertions(1)
+    const pcg = createPcg32({}, 42, 1)
+    expect(() => randomInt(0, -1, pcg)).toThrow(RangeError)
+  })
+
   it('can generate a list, with corresponding states', () => {
     expect.assertions(3)
     const advancedOptions = {}
