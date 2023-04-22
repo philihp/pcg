@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/fn-pcg.svg)](https://www.npmjs.com/package/fn-pcg)
 [![Tests](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml)
-[![Coverage](https://coveralls.io/repos/github/philihp/pcg.js/badge.svg?branch=main)](https://coveralls.io/github/philihp/pcg.js?branch=main)
+[![Coverage](https://coveralls.io/repos/github/philihp/fn-pcg/badge.svg?branch=main)](https://coveralls.io/github/philihp/fn-pcg?branch=main)
 ![Downloads](https://img.shields.io/npm/dt/fn-pcg)
 ![License](https://img.shields.io/npm/l/fn-pcg)
 
