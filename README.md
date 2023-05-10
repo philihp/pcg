@@ -1,10 +1,10 @@
-# fn-pcg
+# pcg
 
-[![Version](https://img.shields.io/npm/v/fn-pcg.svg)](https://www.npmjs.com/package/fn-pcg)
-[![Tests](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/fn-pcg/actions/workflows/tests.yml)
-[![Coverage](https://coveralls.io/repos/github/philihp/fn-pcg/badge.svg?branch=main)](https://coveralls.io/github/philihp/fn-pcg?branch=main)
-![Downloads](https://img.shields.io/npm/dt/fn-pcg)
-![License](https://img.shields.io/npm/l/fn-pcg)
+[![Version](https://img.shields.io/npm/v/pcg.svg)](https://www.npmjs.com/package/pcg)
+[![Tests](https://github.com/philihp/pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/pcg/actions/workflows/tests.yml)
+[![Coverage](https://coveralls.io/repos/github/philihp/pcg/badge.svg?branch=main)](https://coveralls.io/github/philihp/pcg?branch=main)
+![Downloads](https://img.shields.io/npm/dt/pcg)
+![License](https://img.shields.io/npm/l/pcg)
 
 A functional implementation of the [PCG family random number generators](), written in JavaScript.
 
@@ -14,7 +14,7 @@ A functional implementation of the [PCG family random number generators](), writ
 
 To achieve frictionless reproducibility of random output results, immutable objects are used throughout the project.
 
-First, create a starting state. A stream ID is a unique and distinct periodic series of entropy. The state specifies _where_ in that series we start.
+First, seed a PCG state. A stream ID specifies _which_ unique periodic series of entropy to use. The state specifies _where_ in that series we start.
 
 ```
 import { createPcg32 } from 'pcg'
