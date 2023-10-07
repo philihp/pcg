@@ -24,14 +24,14 @@
   },
   "dependencies": {
     "long": "5.2.3",
-    "ramda": "0.29.0"
+    "ramda": "0.29.1"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.1.0",
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/node20": "20.1.2",
     "@types/jest": "29.5.5",
-    "@types/ramda": "0.29.5",
+    "@types/ramda": "0.29.6",
     "@typescript-eslint/eslint-plugin": "6.7.3",
     "@typescript-eslint/parser": "6.7.3",
     "eslint": "8.50.0",
