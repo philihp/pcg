@@ -1,4 +1,5 @@
 import { createPcg32, nextState, prevState, randomInt, randomList } from '..'
+import { OutputFnType } from '../types'
 
 describe('basic', () => {
   it('pCG32_XSH_RR: Single integer', () => {
@@ -11,12 +12,69 @@ describe('basic', () => {
     expect(randomUint32(pcg)[0]).toBe(0xa15c02b7)
   })
 
+  it('pCG32_XSH_RS: Single integer', () => {
+    expect.assertions(2)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.XSH_RS }, 42, 54)
+    // Check for generator immutability and result reproducibility
+    const [n, _state] = randomUint32(pcg)
+    expect(n).toBe(1545299392)
+    expect(randomUint32(pcg)[0]).toBe(1545299392)
+  })
+
+  it('pCG32_XSL_RR: Single integer', () => {
+    expect.assertions(2)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.XSL_RR }, 42, 54)
+    // Check for generator immutability and result reproducibility
+    const [n, _state] = randomUint32(pcg)
+    expect(n).toBe(110043304)
+    expect(randomUint32(pcg)[0]).toBe(110043304)
+  })
+
+  it('pCG32_RXS_M_XS: Single integer', () => {
+    expect.assertions(2)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.RXS_M_XS }, 42, 54)
+    // Check for generator immutability and result reproducibility
+    const [n, _state] = randomUint32(pcg)
+    expect(n).toBe(3562606574)
+    expect(randomUint32(pcg)[0]).toBe(3562606574)
+  })
+
   it('pCG32_XSH_RR: Multiple integers', () => {
     expect.assertions(1)
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
     const pcg = createPcg32({}, 42, 54)
     expect(randomList(6, randomUint32, pcg).map(([value]) => value)).toStrictEqual([
       0xa15c02b7, 0x7b47f409, 0xba1d3330, 0x83d2f293, 0xbfa4784b, 0xcbed606e,
+    ])
+  })
+
+  it('pCG32_XSH_RS: Multiple integers', () => {
+    expect.assertions(1)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.XSH_RS }, 42, 54)
+    expect(randomList(6, randomUint32, pcg).map(([value]) => value)).toStrictEqual([
+      1545299392, 2415717169, 3435843701, 3090997190, 1576856010, 3235194092,
+    ])
+  })
+
+  it('pCG32_XSL_RR: Multiple integers', () => {
+    expect.assertions(1)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.XSL_RR }, 42, 54)
+    expect(randomList(6, randomUint32, pcg).map(([value]) => value)).toStrictEqual([
+      110043304, 3982559790, 957466950, 3645676572, 223035418, 2465086851,
+    ])
+  })
+
+  it('pCG32_RXS_M_XS: Multiple integers', () => {
+    expect.assertions(1)
+    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const pcg = createPcg32({ outputFnType: OutputFnType.RXS_M_XS }, 42, 54)
+    expect(randomList(6, randomUint32, pcg).map(([value]) => value)).toStrictEqual([
+      3562606574, 3701842622, 2826130885, 1212371962, 849807893, 1843984456,
     ])
   })
 

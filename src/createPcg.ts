@@ -67,8 +67,8 @@ export const randomInt = curry((min: number, max: number, pcg: PCGState): [numbe
   return [n.mod(bound).add(min).toNumber(), nextPcg]
 })
 
-export const randomList = curry((length, rng, pcg): [number, PCGState][] =>
-  scan(([, nextPcg]) => rng(nextPcg), rng(pcg), new Array(length - 1))
+export const randomList = curry((length, rng, initPcg): [number, PCGState][] =>
+  scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
 )
 
 export default curry(

@@ -1,13 +1,11 @@
 import Long from 'long'
 
-// TODO: Implement more output functions
-
 export enum OutputFnType {
   XSH_RR = 0,
-  // XSH_RS = 1
-  // XSL_RR = 2
-  // XSL_RR_RR = 3
-  // RXS_M_XS = 4
+  XSH_RS = 1,
+  XSL_RR = 2,
+  // XSL_RR_RR = 3 // currently unstable
+  RXS_M_XS = 4,
 }
 
 export type OutputFn = (state: Long) => number
