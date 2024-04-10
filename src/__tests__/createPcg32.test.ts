@@ -136,8 +136,7 @@ describe('basic', () => {
     for (let x = 0; x < 256; x++) {
       for (let y = 0; y < 256; y++) {
         const pcg = createPcg32({}, x, y)
-        const nextState = Long.fromValue(pcg.getOutput(pcg.state))
-        expect(nextState.toInt()).not.toBe(0)
+        expect(pcg.getOutput(pcg.state)).not.toBe(0)
       }
     }
   })
