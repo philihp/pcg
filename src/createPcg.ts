@@ -60,7 +60,7 @@ export const randomInt = curry((min: number, max: number, pcg: PCGState): [numbe
   let n: Long
   let nextPcg = pcg
   do {
-    n = Long.fromValue(nextPcg.getOutput(pcg.state))
+    n = Long.fromValue(pcg.getOutput(nextPcg.state))
     nextPcg = nextState(nextPcg)
   } while (n.lt(threshold))
 
