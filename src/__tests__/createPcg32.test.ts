@@ -1,3 +1,4 @@
+import Long from 'long'
 import { createPcg32, nextState, prevState, randomInt, randomList } from '..'
 import { OutputFnType } from '../types'
 
