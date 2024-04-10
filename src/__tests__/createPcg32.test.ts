@@ -129,4 +129,14 @@ describe('basic', () => {
     // the next int after the 3rd state is the 4th int
     expect(randomUint32(out[2][1])[0]).toBe(out[3][0])
   })
+
+  it('make sure there are no infinite loops', () => {
+    expect.assertions(65536)
+    for (let x = 0; x < 256; x++) {
+      for (let y = 0; y < 256; y++) {
+        const pcg = createPcg32({}, x, y)
+        expect(pcg.getOutput(pcg.state)).not.toBe(0)
+      }
+    }
+  })
 })
