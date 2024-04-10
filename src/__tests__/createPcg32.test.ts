@@ -1,3 +1,4 @@
+import Long from 'long'
 import { createPcg32, nextState, prevState, randomInt, randomList } from '..'
 import { OutputFnType } from '../types'
 
@@ -128,5 +129,16 @@ describe('basic', () => {
 
     // the next int after the 3rd state is the 4th int
     expect(randomUint32(out[2][1])[0]).toBe(out[3][0])
+  })
+
+  it('make sure there are no infinite loops', () => {
+    expect.assertions(65536)
+    for (let x = 0; x < 256; x++) {
+      for (let y = 0; y < 256; y++) {
+        const pcg = createPcg32({}, x, y)
+        const nextState = Long.fromValue(pcg.getOutput(pcg.state))
+        expect(nextState.toInt()).not.toBe(0)
+      }
+    }
   })
 })
