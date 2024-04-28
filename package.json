@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "long": "5.2.3",
-    "ramda": "0.29.1"
+    "ramda": "0.30.0"
   },
   "devDependencies": {
     "@philihp/eslint-config": "6.1.0",
