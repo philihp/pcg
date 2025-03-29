@@ -29,7 +29,7 @@
   "devDependencies": {
     "@philihp/eslint-config": "6.1.0",
     "@philihp/prettier-config": "1.0.0",
-    "@tsconfig/node20": "20.1.4",
+    "@tsconfig/node20": "20.1.5",
     "@types/jest": "29.5.14",
     "@types/ramda": "0.30.2",
     "@typescript-eslint/eslint-plugin": "6.21.0",
