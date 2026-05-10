@@ -1,7 +1,7 @@
 import Long from 'long'
 import { curry, scan } from 'ramda'
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import { PCGState, SchemeFn, StreamScheme } from './types'
+import { OutputFnType, PCGConfig, PCGState, SchemeFn, StreamScheme } from './types'
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -71,9 +71,15 @@ export const randomList = curry((length, rng, initPcg): [number, PCGState][] =>
   scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
 )
 
-export default curry(
+export type CreatePcgOptions = {
+  streamScheme?: StreamScheme
+  outputFnType?: OutputFnType
+}
+
+export type CreatePcg = (options: CreatePcgOptions, initState: number | Long, initStreamId: number | Long) => PCGState
+
+export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
   (
-    { numOutputBits, multiplier, increment, outputFns },
     { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType },
     initState,
     initStreamId
@@ -93,4 +99,3 @@ export default curry(
       getOutput: outputFns[outputFnType],
     })
   }
-)
