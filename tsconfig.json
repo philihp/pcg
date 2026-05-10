@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
+    "types": ["jest", "node"]
   },
   "include": ["./src/**/*"]
 }
