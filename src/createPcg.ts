@@ -71,17 +71,15 @@ export const randomList = curry((length, rng, initPcg): [number, PCGState][] =>
   scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
 )
 
-export type CreatePcgOptions = {
-  streamScheme?: StreamScheme
-  outputFnType?: OutputFnType
-}
-
-export default curry(
+type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
+export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig) =>
   (
-    { numOutputBits, multiplier, increment, outputFns }: PCGConfig,
-    { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
-    initState: number | Long,
-    initStreamId: number | Long
+    {
+      streamScheme = pcgDefaultStreamScheme,
+      outputFnType = pcgDefaultOutputFnType,
+    }: { streamScheme?: StreamScheme; outputFnType?: OutputFnType },
+    initState: LongLike,
+    initStreamId: LongLike
   ): PCGState => {
     const streamId = Long.fromValue(initStreamId).toUnsigned().shl(1).or(1)
 
@@ -98,4 +96,3 @@ export default curry(
       getOutput: outputFns[outputFnType],
     })
   }
-)

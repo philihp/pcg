@@ -5,7 +5,6 @@ import { OutputFnType } from './types'
 import createPcg from './createPcg'
 
 export { stepState, nextState, prevState, randomInt, randomList } from './createPcg'
-export type { CreatePcgOptions } from './createPcg'
 export { OutputFnType, StreamScheme } from './types'
 export type { OutputFn, PCGConfig, PCGState, SchemeFn } from './types'
 
