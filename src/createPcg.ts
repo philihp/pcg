@@ -76,13 +76,12 @@ export type CreatePcgOptions = {
   outputFnType?: OutputFnType
 }
 
-export type CreatePcg = (options: CreatePcgOptions, initState: number | Long, initStreamId: number | Long) => PCGState
-
-export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
+export default curry(
   (
-    { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType },
-    initState,
-    initStreamId
+    { numOutputBits, multiplier, increment, outputFns }: PCGConfig,
+    { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
+    initState: number | Long,
+    initStreamId: number | Long
   ): PCGState => {
     const streamId = Long.fromValue(initStreamId).toUnsigned().shl(1).or(1)
 
@@ -99,3 +98,4 @@ export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig):
       getOutput: outputFns[outputFnType],
     })
   }
+)
