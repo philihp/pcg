@@ -21,6 +21,8 @@ export enum StreamScheme {
 
 export type SchemeFn = () => Long
 
+export type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
+
 export type PCGConfig = {
   numOutputBits: number
   multiplier: Long
@@ -40,3 +42,12 @@ export type PCGState = {
   }
   getOutput: OutputFn
 }
+
+export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
+
+export type CreatePcgOptions = {
+  streamScheme?: StreamScheme
+  outputFnType?: OutputFnType
+}
+
+export type CreatePcg = (options: CreatePcgOptions, initState: LongLike, initStreamId: LongLike) => PCGState
