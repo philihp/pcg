@@ -1,7 +1,7 @@
 import Long from 'long'
 import { curry, scan } from 'ramda'
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import { OutputFnType, PCGConfig, PCGState, SchemeFn, StreamScheme } from './types'
+import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, SchemeFn, StreamScheme } from './types'
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -67,17 +67,21 @@ export const randomInt = curry((min: number, max: number, pcg: PCGState): [numbe
   return [n.mod(bound).add(min).toNumber(), nextPcg]
 })
 
-export const randomList = curry((length, rng, initPcg): [number, PCGState][] =>
-  scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
-)
+// Manually-typed curried overloads — ramda's Curry<> helper erases generics.
+interface RandomListFn {
+  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+  <T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
+  <T>(length: number): (rng: RandomFn<T>, initPcg: PCGState) => [T, PCGState][]
+}
 
-type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
-export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig) =>
+export const randomList: RandomListFn = curry(
+  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] =>
+    scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
+) as RandomListFn
+
+export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
   (
-    {
-      streamScheme = pcgDefaultStreamScheme,
-      outputFnType = pcgDefaultOutputFnType,
-    }: { streamScheme?: StreamScheme; outputFnType?: OutputFnType },
+    { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
