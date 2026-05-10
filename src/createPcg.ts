@@ -67,17 +67,32 @@ export const randomInt = curry((min: number, max: number, pcg: PCGState): [numbe
   return [n.mod(bound).add(min).toNumber(), nextPcg]
 })
 
-export const randomList = curry((length, rng, initPcg): [number, PCGState][] =>
-  scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
-)
+export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
 
-type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
-export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig) =>
+interface RandomListFn {
+  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+  <T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
+  <T>(length: number): (rng: RandomFn<T>, initPcg: PCGState) => [T, PCGState][]
+  <T>(length: number): (rng: RandomFn<T>) => (initPcg: PCGState) => [T, PCGState][]
+}
+
+export const randomList: RandomListFn = curry(
+  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] =>
+    scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
+) as RandomListFn
+
+export type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
+
+export type CreatePcgOptions = {
+  streamScheme?: StreamScheme
+  outputFnType?: OutputFnType
+}
+
+export type CreatePcg = (options: CreatePcgOptions, initState: LongLike, initStreamId: LongLike) => PCGState
+
+export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
   (
-    {
-      streamScheme = pcgDefaultStreamScheme,
-      outputFnType = pcgDefaultOutputFnType,
-    }: { streamScheme?: StreamScheme; outputFnType?: OutputFnType },
+    { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
