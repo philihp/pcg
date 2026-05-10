@@ -42,7 +42,7 @@
   "devDependencies": {
     "@philihp/eslint-config": "6.1.0",
     "@philihp/prettier-config": "1.0.0",
-    "@tsconfig/node20": "20.1.9",
+    "@tsconfig/node22": "22.0.0",
     "@types/jest": "30.0.0",
     "@types/ramda": "0.31.1",
     "@typescript-eslint/eslint-plugin": "8.59.2",
