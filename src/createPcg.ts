@@ -29,6 +29,17 @@ const getConfig = (variant: PCGVariant): PCGConfig => {
   return config
 }
 
+const resolveStreamScheme = (
+  streamScheme: StreamScheme | keyof typeof StreamScheme,
+  config: PCGConfig
+): StreamScheme => {
+  const resolved: StreamScheme = typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
+  if (resolved === undefined || config.incrementers[resolved] === undefined) {
+    throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
+  }
+  return resolved
+}
+
 export const getOutput = (pcg: PCGState): number =>
   getConfig(pcg.variant).outputFns[pcg.outputFnType](toBigInt(pcg.state))
 
@@ -159,11 +170,7 @@ export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
-    const resolvedScheme: StreamScheme =
-      typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
-    if (resolvedScheme === undefined || config.incrementers[resolvedScheme] === undefined) {
-      throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
-    }
+    const resolvedScheme = resolveStreamScheme(streamScheme, config)
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
     return nextState({
       state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
