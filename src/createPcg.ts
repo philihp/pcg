@@ -1,7 +1,39 @@
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, SchemeFn, StreamScheme } from './types'
+import {
+  CreatePcg,
+  CreatePcgOptions,
+  LongLike,
+  PCGConfig,
+  PCGState,
+  PCGVariant,
+  RandomFn,
+  SchemeFn,
+  StreamScheme,
+  Uint64,
+} from './types'
 
+const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
+
+export const toBigInt = ({ hi, lo }: Uint64): bigint => (BigInt(hi) << 32n) | BigInt(lo)
+
+export const fromBigInt = (value: bigint): Uint64 => ({
+  hi: Number((value >> 32n) & MASK_32),
+  lo: Number(value & MASK_32),
+})
+
+const variantConfigs: Partial<Record<PCGVariant, PCGConfig>> = {}
+
+const getConfig = (variant: PCGVariant): PCGConfig => {
+  const config = variantConfigs[variant]
+  if (config === undefined) throw new Error(`Unknown PCG variant: ${String(variant)}`)
+  return config
+}
+
+export const getOutput = (pcg: PCGState): number => {
+  const config = getConfig(pcg.variant)
+  return config.outputFns[pcg.outputFnType](toBigInt(pcg.state))
+}
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -13,15 +45,17 @@ const MASK_64 = 0xffffffffffffffffn
  * goes "the long way round".
  */
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
-  let currMultiplier = pcg.algorithm.multiplier
+  const config = getConfig(pcg.variant)
+  let currMultiplier = config.multiplier
+  const streamIdBig = toBigInt(pcg.streamId)
   const incrementers: Record<StreamScheme, SchemeFn> = {
-    [StreamScheme.SETSEQ]: () => pcg.streamId,
-    [StreamScheme.ONESEQ]: () => pcg.algorithm.increment,
+    [StreamScheme.SETSEQ]: () => streamIdBig,
+    [StreamScheme.ONESEQ]: () => config.increment,
     // TODO: [StreamScheme.UNIQUE]: () => null,
     [StreamScheme.MCG]: () => 0n,
   }
 
-  let currIncrement = incrementers[pcg.algorithm.streamScheme]()
+  let currIncrement = incrementers[pcg.streamScheme]()
 
   let accMultiplier = 1n
   let accIncrement = 0n
@@ -36,9 +70,10 @@ const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
     currMultiplier = (currMultiplier * currMultiplier) & MASK_64
   }
 
+  const stateBig = toBigInt(pcg.state)
   return {
     ...pcg,
-    state: (pcg.state * accMultiplier + accIncrement) & MASK_64,
+    state: fromBigInt((stateBig * accMultiplier + accIncrement) & MASK_64),
   }
 }
 
@@ -52,32 +87,36 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 // Fast path for delta=1, which is the common case driven by randomInt.
 // Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
 export const nextState = (pcg: PCGState): PCGState => {
-  const scheme = pcg.algorithm.streamScheme
+  const config = getConfig(pcg.variant)
+  const scheme = pcg.streamScheme
   const increment =
     scheme === StreamScheme.SETSEQ
-      ? pcg.streamId
+      ? toBigInt(pcg.streamId)
       : scheme === StreamScheme.ONESEQ
-        ? pcg.algorithm.increment
+        ? config.increment
         : 0n
+  const stateBig = toBigInt(pcg.state)
   return {
     ...pcg,
-    state: (pcg.state * pcg.algorithm.multiplier + increment) & MASK_64,
+    state: fromBigInt((stateBig * config.multiplier + increment) & MASK_64),
   }
 }
 
 export const prevState = stepState(-1)
 
 const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
+  const config = getConfig(pcg.variant)
+  const outputMaxRange = 2 ** config.numOutputBits
   const bound = max - min
-  if (bound < 0 || bound > pcg.algorithm.outputMaxRange) throw new RangeError()
+  if (bound < 0 || bound > outputMaxRange) throw new RangeError()
 
-  const threshold = (pcg.algorithm.outputMaxRange - bound) % bound
-  const getOutput = pcg.getOutput
+  const threshold = (outputMaxRange - bound) % bound
+  const outputFn = config.outputFns[pcg.outputFnType]
 
   let n: number
   let nextPcg = pcg
   do {
-    n = getOutput(nextPcg.state)
+    n = outputFn(toBigInt(nextPcg.state))
     nextPcg = nextState(nextPcg)
   } while (n < threshold)
 
@@ -133,24 +172,21 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
-  (
+export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
+  variantConfigs[variant] = config
+  return (
     { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-
-    return nextState({
-      state: (streamId + BigInt(initState)) & MASK_64,
-      streamId,
-      algorithm: {
-        streamScheme,
-        outputFnType,
-        outputMaxRange: 2 ** numOutputBits,
-        multiplier,
-        increment,
-      },
-      getOutput: outputFns[outputFnType],
-    })
+    const initial: PCGState = {
+      state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
+      streamId: fromBigInt(streamId),
+      variant,
+      outputFnType,
+      streamScheme,
+    }
+    return nextState(initial)
   }
+}
