@@ -17,7 +17,7 @@ export enum StreamScheme {
   MCG = 3,
 }
 
-export type SchemeFn = () => bigint
+export type SchemeFn = (pcg: PCGState) => bigint
 
 export type LongLike = bigint | number | string
 
@@ -43,7 +43,7 @@ export type PCGConfig = {
   multiplier: bigint
   increment: bigint
   outputFns: Record<OutputFnType, OutputFn>
-  getIncrement: (pcg: PCGState) => bigint
+  incrementers: Record<StreamScheme, SchemeFn>
 }
 
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]

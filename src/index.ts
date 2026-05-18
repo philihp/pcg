@@ -25,10 +25,10 @@ export const createPcg32 = createPcg('pcg32', {
   numOutputBits: 32,
   multiplier: pcgDefaultMultiplier64,
   increment: pcgDefaultIncrement64,
-  getIncrement: (pcg: PCGState): bigint => {
-    if (pcg.streamScheme === StreamScheme.SETSEQ) return toBigInt(pcg.streamId)
-    if (pcg.streamScheme === StreamScheme.ONESEQ) return pcgDefaultIncrement64
-    return 0n
+  incrementers: {
+    [StreamScheme.SETSEQ]: (pcg: PCGState) => toBigInt(pcg.streamId),
+    [StreamScheme.ONESEQ]: () => pcgDefaultIncrement64,
+    [StreamScheme.MCG]: () => 0n,
   },
   outputFns: {
     [OutputFnType.XSH_RR]: (state: bigint): number =>

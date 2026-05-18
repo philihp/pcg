@@ -34,7 +34,7 @@ export const getOutput = (pcg: PCGState): number =>
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
   let currMultiplier = config.multiplier
-  let currIncrement = config.getIncrement(pcg)
+  let currIncrement = config.incrementers[pcg.streamScheme](pcg)
 
   let accMultiplier = 1n
   let accIncrement = 0n
@@ -68,7 +68,7 @@ export const nextState = (pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
   return {
     ...pcg,
-    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + config.getIncrement(pcg)) & MASK_64),
+    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + config.incrementers[pcg.streamScheme](pcg)) & MASK_64),
   }
 }
 
