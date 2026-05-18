@@ -1,7 +1,7 @@
-import Long from 'long'
-import { curry, scan } from 'ramda'
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, SchemeFn, StreamScheme } from './types'
+
+const MASK_64 = 0xffffffffffffffffn
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -12,72 +12,126 @@ import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, S
  * Even though delta is an unsigned integer, we can pass a signed integer to go backwards, it just
  * goes "the long way round".
  */
-export const stepState = curry((delta: number, pcg: PCGState): PCGState => {
+const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   let currMultiplier = pcg.algorithm.multiplier
   const incrementers: Record<StreamScheme, SchemeFn> = {
     [StreamScheme.SETSEQ]: () => pcg.streamId,
     [StreamScheme.ONESEQ]: () => pcg.algorithm.increment,
     // TODO: [StreamScheme.UNIQUE]: () => null,
-    [StreamScheme.MCG]: () => Long.fromInt(0, true),
+    [StreamScheme.MCG]: () => 0n,
   }
 
   let currIncrement = incrementers[pcg.algorithm.streamScheme]()
 
-  let accMultiplier = Long.fromInt(1, true)
-  let accIncrement = Long.fromInt(0, true)
+  let accMultiplier = 1n
+  let accIncrement = 0n
 
-  for (
-    let remainingDelta = Long.fromValue(delta).toUnsigned();
-    remainingDelta.gt(0);
-    remainingDelta = remainingDelta.shru(1)
-  ) {
-    if (remainingDelta.isOdd()) {
-      accMultiplier = accMultiplier.mul(currMultiplier)
-      accIncrement = accIncrement.mul(currMultiplier).add(currIncrement)
+  for (let remainingDelta = BigInt(delta) & MASK_64; remainingDelta > 0n; remainingDelta >>= 1n) {
+    if ((remainingDelta & 1n) === 1n) {
+      accMultiplier = (accMultiplier * currMultiplier) & MASK_64
+      accIncrement = (accIncrement * currMultiplier + currIncrement) & MASK_64
     }
 
-    currIncrement = currMultiplier.add(1).mul(currIncrement)
-    currMultiplier = currMultiplier.mul(currMultiplier)
+    currIncrement = ((currMultiplier + 1n) * currIncrement) & MASK_64
+    currMultiplier = (currMultiplier * currMultiplier) & MASK_64
   }
 
   return {
     ...pcg,
-    state: pcg.state.mul(accMultiplier).add(accIncrement),
+    state: (pcg.state * accMultiplier + accIncrement) & MASK_64,
   }
-})
+}
 
-export const nextState = stepState(1)
+export function stepState(delta: number): (pcg: PCGState) => PCGState
+export function stepState(delta: number, pcg: PCGState): PCGState
+export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGState) => PCGState) {
+  if (pcg === undefined) return (p: PCGState) => stepStateImpl(delta, p)
+  return stepStateImpl(delta, pcg)
+}
+
+// Fast path for delta=1, which is the common case driven by randomInt.
+// Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
+export const nextState = (pcg: PCGState): PCGState => {
+  const scheme = pcg.algorithm.streamScheme
+  const increment =
+    scheme === StreamScheme.SETSEQ
+      ? pcg.streamId
+      : scheme === StreamScheme.ONESEQ
+        ? pcg.algorithm.increment
+        : 0n
+  return {
+    ...pcg,
+    state: (pcg.state * pcg.algorithm.multiplier + increment) & MASK_64,
+  }
+}
 
 export const prevState = stepState(-1)
 
-export const randomInt = curry((min: number, max: number, pcg: PCGState): [number, PCGState] => {
+const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
   const bound = max - min
   if (bound < 0 || bound >= pcg.algorithm.outputMaxRange) throw new RangeError()
 
   const threshold = (pcg.algorithm.outputMaxRange - bound) % bound
+  const getOutput = pcg.getOutput
 
-  // Uniformity guarantees that this loop will terminate
-  let n: Long
+  let n: number
   let nextPcg = pcg
   do {
-    n = Long.fromValue(pcg.getOutput(nextPcg.state))
+    n = getOutput(nextPcg.state)
     nextPcg = nextState(nextPcg)
-  } while (n.lt(threshold))
+  } while (n < threshold)
 
-  return [n.mod(bound).add(min).toNumber(), nextPcg]
-})
+  return [(n % bound) + min, nextPcg]
+}
 
-// Manually-typed curried overloads — ramda's Curry<> helper erases generics.
+interface RandomIntPartial1 {
+  (max: number): (pcg: PCGState) => [number, PCGState]
+  (max: number, pcg: PCGState): [number, PCGState]
+}
+
+export function randomInt(min: number, max: number, pcg: PCGState): [number, PCGState]
+export function randomInt(min: number, max: number): (pcg: PCGState) => [number, PCGState]
+export function randomInt(min: number): RandomIntPartial1
+export function randomInt(min: number, max?: number, pcg?: PCGState): unknown {
+  if (max === undefined) {
+    return ((m: number, p?: PCGState) =>
+      p === undefined ? (pp: PCGState) => randomIntImpl(min, m, pp) : randomIntImpl(min, m, p)) as RandomIntPartial1
+  }
+  if (pcg === undefined) return (p: PCGState) => randomIntImpl(min, max, p)
+  return randomIntImpl(min, max, pcg)
+}
+
+const randomListImpl = <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] => {
+  if (length <= 0) return []
+  const result: [T, PCGState][] = new Array(length)
+  let curr = rng(initPcg)
+  result[0] = curr
+  for (let i = 1; i < length; i++) {
+    curr = rng(curr[1])
+    result[i] = curr
+  }
+  return result
+}
+
+interface RandomListPartial1 {
+  <T>(rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
+  <T>(rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+}
+
 interface RandomListFn {
   <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
   <T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
-  <T>(length: number): (rng: RandomFn<T>, initPcg: PCGState) => [T, PCGState][]
+  (length: number): RandomListPartial1
 }
 
-export const randomList: RandomListFn = curry(
-  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] =>
-    scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
-) as RandomListFn
+export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown>, initPcg?: PCGState): unknown => {
+  if (rng === undefined) {
+    return (r: RandomFn<unknown>, p?: PCGState) =>
+      p === undefined ? (pp: PCGState) => randomListImpl(length, r, pp) : randomListImpl(length, r, p)
+  }
+  if (initPcg === undefined) return (p: PCGState) => randomListImpl(length, rng, p)
+  return randomListImpl(length, rng, initPcg)
+}) as RandomListFn
 
 export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
   (
@@ -85,10 +139,10 @@ export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig):
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
-    const streamId = Long.fromValue(initStreamId).toUnsigned().shl(1).or(1)
+    const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
 
     return nextState({
-      state: streamId.add(initState),
+      state: (streamId + BigInt(initState)) & MASK_64,
       streamId,
       algorithm: {
         streamScheme,

@@ -1,5 +1,3 @@
-import Long from 'long'
-
 export enum OutputFnType {
   XSH_RR = 0,
   XSH_RS = 1,
@@ -8,7 +6,7 @@ export enum OutputFnType {
   RXS_M_XS = 4,
 }
 
-export type OutputFn = (state: Long) => number
+export type OutputFn = (state: bigint) => number
 
 // TODO: Implement more stream schemes
 
@@ -19,26 +17,26 @@ export enum StreamScheme {
   MCG = 3,
 }
 
-export type SchemeFn = () => Long
+export type SchemeFn = () => bigint
 
-export type LongLike = Long | number | bigint | string | { low: number; high: number; unsigned: boolean }
+export type LongLike = bigint | number | string
 
 export type PCGConfig = {
   numOutputBits: number
-  multiplier: Long
-  increment: Long
+  multiplier: bigint
+  increment: bigint
   outputFns: Record<OutputFnType, OutputFn>
 }
 
 export type PCGState = {
-  state: Long
-  streamId: Long
+  state: bigint
+  streamId: bigint
   algorithm: {
     streamScheme: StreamScheme
     outputFnType: OutputFnType
     outputMaxRange: number
-    multiplier: Long
-    increment: Long
+    multiplier: bigint
+    increment: bigint
   }
   getOutput: OutputFn
 }

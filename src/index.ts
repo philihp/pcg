@@ -1,4 +1,3 @@
-import Long from 'long'
 import { ror32 } from './bitwise'
 import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
 import { OutputFnType } from './types'
@@ -8,23 +7,24 @@ export { stepState, nextState, prevState, randomInt, randomList } from './create
 export { OutputFnType, StreamScheme } from './types'
 export type { CreatePcg, CreatePcgOptions, LongLike, OutputFn, PCGConfig, PCGState, RandomFn, SchemeFn } from './types'
 
+const MASK_32 = 0xffffffffn
+const MASK_64 = 0xffffffffffffffffn
+
 export const createPcg32 = createPcg({
   numOutputBits: 32,
   multiplier: pcgDefaultMultiplier64,
   increment: pcgDefaultIncrement64,
   outputFns: {
-    [OutputFnType.XSH_RR]: (state: Long): number =>
-      ror32(state.shru(59).toInt(), state.shru(18).xor(state).shru(27).toInt()),
-    [OutputFnType.XSH_RS]: (state: Long): number => state.shru(22).xor(state).shru(state.shru(61).add(22)).toInt(),
-    [OutputFnType.XSL_RR]: (state: Long): number => ror32(state.shru(59).toInt(), state.shru(32).xor(state).toInt()),
-    // [OutputFnType.XSL_RR_RR]: (state: Long): number => {
-    //   const high = state.shru(32)
-    //   const newlow = ror32(state.shru(59).toInt(), high.xor(state).toInt())
-    //   return new Long(ror32(new Long(newlow).and(32).toInt(), high.toInt())).shl(32).or(newlow).toInt()
-    // },
-    [OutputFnType.RXS_M_XS]: (state: Long): number => {
-      const word = state.shru(13).add(3).xor(state).mul(62169)
-      return word.shru(11).xor(word).toInt()
+    [OutputFnType.XSH_RR]: (state: bigint): number =>
+      ror32(Number(state >> 59n), Number((((state >> 18n) ^ state) >> 27n) & MASK_32)),
+    [OutputFnType.XSH_RS]: (state: bigint): number =>
+      Number((((state >> 22n) ^ state) >> ((state >> 61n) + 22n)) & MASK_32),
+    [OutputFnType.XSL_RR]: (state: bigint): number =>
+      ror32(Number(state >> 59n), Number(((state >> 32n) ^ state) & MASK_32)),
+    // [OutputFnType.XSL_RR_RR]: see git history for the original Long-based draft.
+    [OutputFnType.RXS_M_XS]: (state: bigint): number => {
+      const word = ((((state >> 13n) + 3n) ^ state) * 62169n) & MASK_64
+      return Number(((word >> 11n) ^ word) & MASK_32)
     },
   },
 })
