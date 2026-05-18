@@ -17,6 +17,8 @@ export enum StreamScheme {
   MCG = 3,
 }
 
+export type StreamSchemeName = keyof typeof StreamScheme
+
 export type SchemeFn = (pcg: PCGState) => bigint
 
 export type LongLike = bigint | number | string
@@ -49,7 +51,7 @@ export type PCGConfig = {
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
 
 export type CreatePcgOptions = {
-  streamScheme?: StreamScheme
+  streamScheme?: StreamScheme | StreamSchemeName
   outputFnType?: OutputFnType
 }
 

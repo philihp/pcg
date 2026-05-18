@@ -1,5 +1,15 @@
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, PCGVariant, RandomFn, Uint64 } from './types'
+import {
+  CreatePcg,
+  CreatePcgOptions,
+  LongLike,
+  PCGConfig,
+  PCGState,
+  PCGVariant,
+  RandomFn,
+  StreamScheme,
+  Uint64,
+} from './types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
@@ -17,6 +27,17 @@ const getConfig = (variant: PCGVariant): PCGConfig => {
   const config = variantConfigs[variant]
   if (config === undefined) throw new Error(`Unknown PCG variant: ${String(variant)}`)
   return config
+}
+
+const resolveStreamScheme = (
+  streamScheme: StreamScheme | keyof typeof StreamScheme,
+  config: PCGConfig
+): StreamScheme => {
+  const resolved: StreamScheme = typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
+  if (resolved === undefined || config.incrementers[resolved] === undefined) {
+    throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
+  }
+  return resolved
 }
 
 export const getOutput = (pcg: PCGState): number =>
@@ -149,13 +170,14 @@ export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
+    const resolvedScheme = resolveStreamScheme(streamScheme, config)
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
     return nextState({
       state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
       streamId: fromBigInt(streamId),
       variant,
       outputFnType,
-      streamScheme,
+      streamScheme: resolvedScheme,
     })
   }
 }
