@@ -23,6 +23,33 @@ jobs:
       - run: npm test
       - run: npm run lint
 
+  compat:
+    runs-on: ubuntu-latest
+    needs: tests
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 16.x
+          - 18.x
+          - 20.x
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+      - run: npm install
+      - run: npm run build
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Smoke-test built dist (CJS)
+        run: |
+          node -e "const p = require('./dist/index.js'); const s = p.createPcg32({}, 42n, 54n); const [n, s2] = p.randomInt(0, 100)(s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2));"
+      - name: Smoke-test built dist (ESM)
+        run: |
+          node --input-type=module -e "import('./dist/index.mjs').then(p => { const s = p.createPcg32({}, 42n, 54n); const [n, s2] = p.randomInt(0, 100)(s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2)); })"
+
   coverage:
     runs-on: ubuntu-latest
     steps:
