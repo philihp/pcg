@@ -1,7 +1,7 @@
 import { ror32 } from './bitwise'
 import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
-import { OutputFnType } from './types'
-import createPcg from './createPcg'
+import { OutputFnType, PCGState, StreamScheme } from './types'
+import createPcg, { toBigInt } from './createPcg'
 
 export { stepState, nextState, prevState, randomInt, randomList, getOutput, toBigInt, fromBigInt } from './createPcg'
 export { OutputFnType, StreamScheme } from './types'
@@ -25,6 +25,11 @@ export const createPcg32 = createPcg('pcg32', {
   numOutputBits: 32,
   multiplier: pcgDefaultMultiplier64,
   increment: pcgDefaultIncrement64,
+  getIncrement: (pcg: PCGState): bigint => {
+    if (pcg.streamScheme === StreamScheme.SETSEQ) return toBigInt(pcg.streamId)
+    if (pcg.streamScheme === StreamScheme.ONESEQ) return pcgDefaultIncrement64
+    return 0n
+  },
   outputFns: {
     [OutputFnType.XSH_RR]: (state: bigint): number =>
       ror32(Number(state >> 59n), Number((((state >> 18n) ^ state) >> 27n) & MASK_32)),

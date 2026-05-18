@@ -1,16 +1,5 @@
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import {
-  CreatePcg,
-  CreatePcgOptions,
-  LongLike,
-  PCGConfig,
-  PCGState,
-  PCGVariant,
-  RandomFn,
-  SchemeFn,
-  StreamScheme,
-  Uint64,
-} from './types'
+import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, PCGVariant, RandomFn, Uint64 } from './types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
@@ -45,14 +34,7 @@ export const getOutput = (pcg: PCGState): number =>
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
   let currMultiplier = config.multiplier
-  const incrementers: Record<StreamScheme, SchemeFn> = {
-    [StreamScheme.SETSEQ]: () => toBigInt(pcg.streamId),
-    [StreamScheme.ONESEQ]: () => config.increment,
-    // TODO: [StreamScheme.UNIQUE]: () => null,
-    [StreamScheme.MCG]: () => 0n,
-  }
-
-  let currIncrement = incrementers[pcg.streamScheme]()
+  let currIncrement = config.getIncrement(pcg)
 
   let accMultiplier = 1n
   let accIncrement = 0n
@@ -84,15 +66,9 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 // Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
 export const nextState = (pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
-  const increment =
-    pcg.streamScheme === StreamScheme.SETSEQ
-      ? toBigInt(pcg.streamId)
-      : pcg.streamScheme === StreamScheme.ONESEQ
-        ? config.increment
-        : 0n
   return {
     ...pcg,
-    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + increment) & MASK_64),
+    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + config.getIncrement(pcg)) & MASK_64),
   }
 }
 
