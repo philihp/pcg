@@ -112,6 +112,16 @@ describe('basic', () => {
     expect(() => randomInt(0, -1, pcg)).toThrow(RangeError)
   })
 
+  it('supports the full 32-bit output range (bound === 2^32)', () => {
+    expect.assertions(2)
+    const pcg = createPcg32({}, 42, 54)
+    const randomFullUint32 = randomInt(0, 2 ** 32)
+    // With bound === outputMaxRange, threshold is 0 and the raw output is
+    // returned unmodified, so this should match the first raw XSH_RR output.
+    expect(randomFullUint32(pcg)[0]).toBe(0xa15c02b7)
+    expect(() => randomInt(0, 2 ** 32 + 1, pcg)).toThrow(RangeError)
+  })
+
   it('can generate a list, with corresponding states', () => {
     expect.assertions(3)
     const advancedOptions = {}

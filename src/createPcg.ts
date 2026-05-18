@@ -69,7 +69,7 @@ export const prevState = stepState(-1)
 
 const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
   const bound = max - min
-  if (bound < 0 || bound >= pcg.algorithm.outputMaxRange) throw new RangeError()
+  if (bound < 0 || bound > pcg.algorithm.outputMaxRange) throw new RangeError()
 
   const threshold = (pcg.algorithm.outputMaxRange - bound) % bound
   const getOutput = pcg.getOutput
