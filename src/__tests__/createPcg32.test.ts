@@ -1,4 +1,4 @@
-import { createPcg32, nextState, prevState, randomInt, randomList } from '..'
+import { createPcg32, getOutput, nextState, prevState, randomInt, randomList } from '..'
 import { OutputFnType } from '../types'
 
 describe('basic', () => {
@@ -145,7 +145,7 @@ describe('basic', () => {
     for (let x = 0; x < 256; x++) {
       for (let y = 0; y < 256; y++) {
         const pcg = createPcg32({}, x, y)
-        expect(pcg.getOutput(pcg.state)).not.toBe(0)
+        expect(getOutput(pcg)).not.toBe(0)
       }
     }
   })

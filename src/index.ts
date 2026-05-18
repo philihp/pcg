@@ -3,14 +3,25 @@ import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
 import { OutputFnType } from './types'
 import createPcg from './createPcg'
 
-export { stepState, nextState, prevState, randomInt, randomList } from './createPcg'
+export { stepState, nextState, prevState, randomInt, randomList, getOutput, toBigInt, fromBigInt } from './createPcg'
 export { OutputFnType, StreamScheme } from './types'
-export type { CreatePcg, CreatePcgOptions, LongLike, OutputFn, PCGConfig, PCGState, RandomFn, SchemeFn } from './types'
+export type {
+  CreatePcg,
+  CreatePcgOptions,
+  LongLike,
+  OutputFn,
+  PCGConfig,
+  PCGState,
+  PCGVariant,
+  RandomFn,
+  SchemeFn,
+  Uint64,
+} from './types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
 
-export const createPcg32 = createPcg({
+export const createPcg32 = createPcg('pcg32', {
   numOutputBits: 32,
   multiplier: pcgDefaultMultiplier64,
   increment: pcgDefaultIncrement64,

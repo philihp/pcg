@@ -21,6 +21,15 @@ export type SchemeFn = () => bigint
 
 export type LongLike = bigint | number | string
 
+// JSON-serializable representation of an unsigned 64-bit integer split into
+// two unsigned 32-bit halves. `hi` is the upper 32 bits, `lo` is the lower.
+export type Uint64 = {
+  hi: number
+  lo: number
+}
+
+export type PCGVariant = 'pcg32'
+
 export type PCGConfig = {
   numOutputBits: number
   multiplier: bigint
@@ -29,16 +38,11 @@ export type PCGConfig = {
 }
 
 export type PCGState = {
-  state: bigint
-  streamId: bigint
-  algorithm: {
-    streamScheme: StreamScheme
-    outputFnType: OutputFnType
-    outputMaxRange: number
-    multiplier: bigint
-    increment: bigint
-  }
-  getOutput: OutputFn
+  state: Uint64
+  streamId: Uint64
+  variant: PCGVariant
+  outputFnType: OutputFnType
+  streamScheme: StreamScheme
 }
 
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
