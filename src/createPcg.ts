@@ -1,5 +1,15 @@
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
-import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, PCGVariant, RandomFn, Uint64 } from './types'
+import {
+  CreatePcg,
+  CreatePcgOptions,
+  LongLike,
+  PCGConfig,
+  PCGState,
+  PCGVariant,
+  RandomFn,
+  StreamScheme,
+  Uint64,
+} from './types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
@@ -149,13 +159,18 @@ export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
+    const resolvedScheme: StreamScheme =
+      typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
+    if (resolvedScheme === undefined || config.incrementers[resolvedScheme] === undefined) {
+      throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
+    }
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
     return nextState({
       state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
       streamId: fromBigInt(streamId),
       variant,
       outputFnType,
-      streamScheme,
+      streamScheme: resolvedScheme,
     })
   }
 }

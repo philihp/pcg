@@ -49,10 +49,12 @@ In this above example, `value === v1` and `state1 === s1`.
 - `MCG` — multiplicative congruential generator (increment = 0); shorter period, slightly cheaper per step.
 
 ```js
-import { createPcg32, StreamScheme } from 'pcg'
+import { createPcg32 } from 'pcg'
 
-const state0 = createPcg32({ streamScheme: StreamScheme.ONESEQ }, 42, 54)
+const state0 = createPcg32({ streamScheme: 'ONESEQ' }, 42, 54)
 ```
+
+The `streamScheme` option also accepts the `StreamScheme` enum value (e.g. `StreamScheme.ONESEQ`) if you'd rather import it.
 
 ## Thanks
 

@@ -15,6 +15,7 @@ export type {
   PCGVariant,
   RandomFn,
   SchemeFn,
+  StreamSchemeName,
   Uint64,
 } from './types'
 
