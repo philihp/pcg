@@ -1,7 +1,9 @@
 import Long from 'long'
-import { curry, scan } from 'ramda'
+import { curry } from 'ramda'
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, SchemeFn, StreamScheme } from './types'
+
+const UNSIGNED_ZERO = Long.fromInt(0, true)
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -18,13 +20,13 @@ export const stepState = curry((delta: number, pcg: PCGState): PCGState => {
     [StreamScheme.SETSEQ]: () => pcg.streamId,
     [StreamScheme.ONESEQ]: () => pcg.algorithm.increment,
     // TODO: [StreamScheme.UNIQUE]: () => null,
-    [StreamScheme.MCG]: () => Long.fromInt(0, true),
+    [StreamScheme.MCG]: () => UNSIGNED_ZERO,
   }
 
   let currIncrement = incrementers[pcg.algorithm.streamScheme]()
 
   let accMultiplier = Long.fromInt(1, true)
-  let accIncrement = Long.fromInt(0, true)
+  let accIncrement = UNSIGNED_ZERO
 
   for (
     let remainingDelta = Long.fromValue(delta).toUnsigned();
@@ -46,7 +48,22 @@ export const stepState = curry((delta: number, pcg: PCGState): PCGState => {
   }
 })
 
-export const nextState = stepState(1)
+// Fast path for delta=1, which is the common case driven by randomInt.
+// Equivalent to stepState(1) but avoids the curry trampoline and the
+// jump-ahead bookkeeping loop.
+export const nextState = (pcg: PCGState): PCGState => {
+  const scheme = pcg.algorithm.streamScheme
+  const increment =
+    scheme === StreamScheme.SETSEQ
+      ? pcg.streamId
+      : scheme === StreamScheme.ONESEQ
+        ? pcg.algorithm.increment
+        : UNSIGNED_ZERO
+  return {
+    ...pcg,
+    state: pcg.state.mul(pcg.algorithm.multiplier).add(increment),
+  }
+}
 
 export const prevState = stepState(-1)
 
@@ -55,16 +72,16 @@ export const randomInt = curry((min: number, max: number, pcg: PCGState): [numbe
   if (bound < 0 || bound >= pcg.algorithm.outputMaxRange) throw new RangeError()
 
   const threshold = (pcg.algorithm.outputMaxRange - bound) % bound
+  const getOutput = pcg.getOutput
 
-  // Uniformity guarantees that this loop will terminate
-  let n: Long
+  let n: number
   let nextPcg = pcg
   do {
-    n = Long.fromValue(pcg.getOutput(nextPcg.state))
+    n = getOutput(nextPcg.state)
     nextPcg = nextState(nextPcg)
-  } while (n.lt(threshold))
+  } while (n < threshold)
 
-  return [n.mod(bound).add(min).toNumber(), nextPcg]
+  return [(n % bound) + min, nextPcg]
 })
 
 // Manually-typed curried overloads — ramda's Curry<> helper erases generics.
@@ -74,10 +91,17 @@ interface RandomListFn {
   <T>(length: number): (rng: RandomFn<T>, initPcg: PCGState) => [T, PCGState][]
 }
 
-export const randomList: RandomListFn = curry(
-  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] =>
-    scan(([, lastPcg]) => rng(lastPcg), rng(initPcg), new Array(length - 1))
-) as RandomListFn
+export const randomList: RandomListFn = curry(<T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] => {
+  if (length <= 0) return []
+  const result: [T, PCGState][] = new Array(length)
+  let curr = rng(initPcg)
+  result[0] = curr
+  for (let i = 1; i < length; i++) {
+    curr = rng(curr[1])
+    result[i] = curr
+  }
+  return result
+}) as RandomListFn
 
 export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig): CreatePcg =>
   (
