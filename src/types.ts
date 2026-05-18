@@ -17,7 +17,7 @@ export enum StreamScheme {
   MCG = 3,
 }
 
-export type SchemeFn = () => bigint
+export type SchemeFn = (pcg: PCGState) => bigint
 
 export type LongLike = bigint | number | string
 
@@ -30,19 +30,20 @@ export type Uint64 = {
 
 export type PCGVariant = 'pcg32'
 
-export type PCGConfig = {
-  numOutputBits: number
-  multiplier: bigint
-  increment: bigint
-  outputFns: Record<OutputFnType, OutputFn>
-}
-
 export type PCGState = {
   state: Uint64
   streamId: Uint64
   variant: PCGVariant
   outputFnType: OutputFnType
   streamScheme: StreamScheme
+}
+
+export type PCGConfig = {
+  numOutputBits: number
+  multiplier: bigint
+  increment: bigint
+  outputFns: Record<OutputFnType, OutputFn>
+  incrementers: Record<StreamScheme, SchemeFn>
 }
 
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
