@@ -36,7 +36,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "long": "5.3.2",
     "ramda": "0.32.0"
   },
   "devDependencies": {

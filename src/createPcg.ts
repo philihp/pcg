@@ -1,9 +1,8 @@
-import Long from 'long'
 import { curry } from 'ramda'
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import { CreatePcg, CreatePcgOptions, LongLike, PCGConfig, PCGState, RandomFn, SchemeFn, StreamScheme } from './types'
 
-const UNSIGNED_ZERO = Long.fromInt(0, true)
+const MASK_64 = 0xffffffffffffffffn
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -20,31 +19,27 @@ export const stepState = curry((delta: number, pcg: PCGState): PCGState => {
     [StreamScheme.SETSEQ]: () => pcg.streamId,
     [StreamScheme.ONESEQ]: () => pcg.algorithm.increment,
     // TODO: [StreamScheme.UNIQUE]: () => null,
-    [StreamScheme.MCG]: () => UNSIGNED_ZERO,
+    [StreamScheme.MCG]: () => 0n,
   }
 
   let currIncrement = incrementers[pcg.algorithm.streamScheme]()
 
-  let accMultiplier = Long.fromInt(1, true)
-  let accIncrement = UNSIGNED_ZERO
+  let accMultiplier = 1n
+  let accIncrement = 0n
 
-  for (
-    let remainingDelta = Long.fromValue(delta).toUnsigned();
-    remainingDelta.gt(0);
-    remainingDelta = remainingDelta.shru(1)
-  ) {
-    if (remainingDelta.isOdd()) {
-      accMultiplier = accMultiplier.mul(currMultiplier)
-      accIncrement = accIncrement.mul(currMultiplier).add(currIncrement)
+  for (let remainingDelta = BigInt(delta) & MASK_64; remainingDelta > 0n; remainingDelta >>= 1n) {
+    if ((remainingDelta & 1n) === 1n) {
+      accMultiplier = (accMultiplier * currMultiplier) & MASK_64
+      accIncrement = (accIncrement * currMultiplier + currIncrement) & MASK_64
     }
 
-    currIncrement = currMultiplier.add(1).mul(currIncrement)
-    currMultiplier = currMultiplier.mul(currMultiplier)
+    currIncrement = ((currMultiplier + 1n) * currIncrement) & MASK_64
+    currMultiplier = (currMultiplier * currMultiplier) & MASK_64
   }
 
   return {
     ...pcg,
-    state: pcg.state.mul(accMultiplier).add(accIncrement),
+    state: (pcg.state * accMultiplier + accIncrement) & MASK_64,
   }
 })
 
@@ -58,10 +53,10 @@ export const nextState = (pcg: PCGState): PCGState => {
       ? pcg.streamId
       : scheme === StreamScheme.ONESEQ
         ? pcg.algorithm.increment
-        : UNSIGNED_ZERO
+        : 0n
   return {
     ...pcg,
-    state: pcg.state.mul(pcg.algorithm.multiplier).add(increment),
+    state: (pcg.state * pcg.algorithm.multiplier + increment) & MASK_64,
   }
 }
 
@@ -109,10 +104,10 @@ export default ({ numOutputBits, multiplier, increment, outputFns }: PCGConfig):
     initState: LongLike,
     initStreamId: LongLike
   ): PCGState => {
-    const streamId = Long.fromValue(initStreamId).toUnsigned().shl(1).or(1)
+    const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
 
     return nextState({
-      state: streamId.add(initState),
+      state: (streamId + BigInt(initState)) & MASK_64,
       streamId,
       algorithm: {
         streamScheme,
