@@ -30,10 +30,8 @@ const getConfig = (variant: PCGVariant): PCGConfig => {
   return config
 }
 
-export const getOutput = (pcg: PCGState): number => {
-  const config = getConfig(pcg.variant)
-  return config.outputFns[pcg.outputFnType](toBigInt(pcg.state))
-}
+export const getOutput = (pcg: PCGState): number =>
+  getConfig(pcg.variant).outputFns[pcg.outputFnType](toBigInt(pcg.state))
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -47,9 +45,8 @@ export const getOutput = (pcg: PCGState): number => {
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
   let currMultiplier = config.multiplier
-  const streamIdBig = toBigInt(pcg.streamId)
   const incrementers: Record<StreamScheme, SchemeFn> = {
-    [StreamScheme.SETSEQ]: () => streamIdBig,
+    [StreamScheme.SETSEQ]: () => toBigInt(pcg.streamId),
     [StreamScheme.ONESEQ]: () => config.increment,
     // TODO: [StreamScheme.UNIQUE]: () => null,
     [StreamScheme.MCG]: () => 0n,
@@ -70,10 +67,9 @@ const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
     currMultiplier = (currMultiplier * currMultiplier) & MASK_64
   }
 
-  const stateBig = toBigInt(pcg.state)
   return {
     ...pcg,
-    state: fromBigInt((stateBig * accMultiplier + accIncrement) & MASK_64),
+    state: fromBigInt((toBigInt(pcg.state) * accMultiplier + accIncrement) & MASK_64),
   }
 }
 
@@ -88,17 +84,15 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 // Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
 export const nextState = (pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
-  const scheme = pcg.streamScheme
   const increment =
-    scheme === StreamScheme.SETSEQ
+    pcg.streamScheme === StreamScheme.SETSEQ
       ? toBigInt(pcg.streamId)
-      : scheme === StreamScheme.ONESEQ
+      : pcg.streamScheme === StreamScheme.ONESEQ
         ? config.increment
         : 0n
-  const stateBig = toBigInt(pcg.state)
   return {
     ...pcg,
-    state: fromBigInt((stateBig * config.multiplier + increment) & MASK_64),
+    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + increment) & MASK_64),
   }
 }
 
@@ -180,13 +174,12 @@ export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
     initStreamId: LongLike
   ): PCGState => {
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-    const initial: PCGState = {
+    return nextState({
       state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
       streamId: fromBigInt(streamId),
       variant,
       outputFnType,
       streamScheme,
-    }
-    return nextState(initial)
+    })
   }
 }
