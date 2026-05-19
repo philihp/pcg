@@ -52,6 +52,8 @@ The result of both of these will return the same state.
 - `SETSEQ` (default) — distinct stream per `streamId` (the standard "set-seq" PCG variant).
 - `ONESEQ` — a single fixed stream; `streamId` is ignored.
 - `MCG` — multiplicative congruential generator (increment = 0); shorter period, slightly cheaper per step.
+- `MULBERRY32` — derives the LCG increment by scrambling `streamId` through [mulberry32](https://gist.github.com/tommyettinger/46a3a48dac63b1bb4513bf61aa66da9b). The mixing runs in plain JS number space (`Math.imul`/bitwise) — no BigInt.
+- `SFC32` — derives the LCG increment by scrambling `streamId` through [sfc32](https://pracrand.sourceforge.net/RNG_engines.txt) with the standard 12-round warmup. Also runs in plain JS number space — no BigInt.
 
 ```js
 import { createPcg32 } from 'pcg'

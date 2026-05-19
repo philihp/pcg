@@ -15,6 +15,8 @@ export enum StreamScheme {
   ONESEQ = 1,
   // UNIQUE = 2,
   MCG = 3,
+  MULBERRY32 = 4,
+  SFC32 = 5,
 }
 
 export type StreamSchemeName = keyof typeof StreamScheme
