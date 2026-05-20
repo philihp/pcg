@@ -6,12 +6,13 @@ import { OutputFnType, PCGState, StreamScheme, Uint64 } from './types'
 // matter more than stream quality.
 const MULBERRY_INCREMENT = 0x6d2b79f5
 
-export const mulberry32Advance = (state: Uint64, delta: number): Uint64 => ({
+export const mulberry32Advance = (pcg: PCGState, delta: number): Uint64 => ({
   hi: 0,
-  lo: (state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0,
+  lo: (pcg.state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0,
 })
 
-export const mulberry32Output = ({ lo }: Uint64): number => {
+export const mulberry32Output = (pcg: PCGState): number => {
+  const { lo } = pcg.state
   let t = Math.imul(lo ^ (lo >>> 15), lo | 1)
   t = (t ^ (t + Math.imul(t ^ (t >>> 7), t | 61))) >>> 0
   return (t ^ (t >>> 14)) >>> 0
