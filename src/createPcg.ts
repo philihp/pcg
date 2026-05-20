@@ -201,7 +201,7 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export const createPcg32 = (
+export const createPcg = (
   { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
   initState: bigint | number | string,
   initStreamId: bigint | number | string
@@ -212,7 +212,11 @@ export const createPcg32 = (
   return nextState({
     state: u64FromBigInt(stateBig),
     streamId: u64FromBigInt(streamIdBig),
+    variant: 'pcg32',
     outputFnType,
     streamScheme: resolvedScheme,
   })
 }
+
+/** @deprecated Renamed to `createPcg`. This alias will be removed in 3.0.0. */
+export const createPcg32 = createPcg

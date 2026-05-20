@@ -26,9 +26,15 @@ export type Uint64 = {
 
 export type SchemeFn = (pcg: PCGState) => Uint64
 
+// Reserved for future PCG variants (e.g. pcg64). Stored on every PCGState so
+// serialized state from older versions remains forward-compatible when a new
+// variant is introduced.
+export type PCGVariant = 'pcg32'
+
 export type PCGState = {
   state: Uint64
   streamId: Uint64
+  variant: PCGVariant
   outputFnType: OutputFnType
   streamScheme: StreamScheme
 }
