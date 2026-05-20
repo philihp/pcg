@@ -51,6 +51,17 @@ export type PCGConfig = {
 
 export type RandomFn64<T> = (pcg: PCGState64) => [T, PCGState64]
 
+// State for the BigInt-free PCG32 implementation (`createPcg32`).
+// Four uint32 numbers: state hi/lo and the per-stream increment hi/lo.
+export type PCGState32 = {
+  sHi: number
+  sLo: number
+  iHi: number
+  iLo: number
+}
+
+export type RandomFn<T> = (pcg: PCGState32) => [T, PCGState32]
+
 export type CreatePcgOptions = {
   streamScheme?: StreamScheme | StreamSchemeName
   outputFnType?: OutputFnType

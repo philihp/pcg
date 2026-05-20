@@ -8,7 +8,7 @@ import {
   randomList,
   randomUint32,
   stepState,
-} from '../pcg32'
+} from '../createPcg'
 
 describe('default PCG32 (BigInt-free)', () => {
   it('produces the documented XSH_RR sequence', () => {

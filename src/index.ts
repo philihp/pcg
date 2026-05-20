@@ -4,6 +4,14 @@ import { OutputFnType, PCGState64, StreamScheme } from './types'
 import createPcg, { toBigInt } from './createPcg'
 
 export {
+  createPcg32,
+  nextState,
+  prevState,
+  stepState,
+  getOutput,
+  randomInt,
+  randomUint32,
+  randomList,
   stepState64,
   nextState64,
   prevState64,
@@ -13,17 +21,6 @@ export {
   toBigInt,
   fromBigInt,
 } from './createPcg'
-export {
-  createPcg32,
-  nextState,
-  prevState,
-  stepState,
-  getOutput,
-  randomInt,
-  randomUint32,
-  randomList,
-} from './pcg32'
-export type { PCGState32, RandomFn } from './pcg32'
 export { OutputFnType, StreamScheme } from './types'
 export type {
   CreatePcg64,
@@ -31,8 +28,10 @@ export type {
   LongLike,
   OutputFn,
   PCGConfig,
+  PCGState32,
   PCGState64,
   PCGVariant,
+  RandomFn,
   RandomFn64,
   SchemeFn,
   StreamSchemeName,

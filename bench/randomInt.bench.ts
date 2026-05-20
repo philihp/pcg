@@ -3,7 +3,7 @@
 // default BigInt-free `createPcg32` path. Run with:
 //   npm run bench
 
-import { createPcg32, randomUint32 } from '../src/pcg32'
+import { createPcg32, randomUint32 } from '../src/createPcg'
 import { createPcg64, nextState64, getOutput64, randomInt64 } from '../src'
 
 type BenchResult = { name: string; iterations: number; ms: number; opsPerSec: number; checksum: number }
