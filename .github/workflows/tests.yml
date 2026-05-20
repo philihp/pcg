@@ -45,10 +45,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Smoke-test built dist (CJS)
         run: |
-          node -e "const p = require('./dist/index.js'); const s = p.createPcg32(42n, 54n); const [n, s2] = p.randomInt(0, 100, s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2)); const s64 = p.createPcg64({}, 42n, 54n); const [n64, s64b] = p.randomInt64(0, 100)(s64); if (typeof n64 !== 'number') process.exit(1); JSON.stringify(p.nextState64(s64b));"
+          node -e "const p = require('./dist/index.js'); const s = p.createPcg32(42, 54); const [n, s2] = p.randomInt(0, 100, s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2)); const s64 = p.createPcg64({}, 42n, 54n); const [n64, s64b] = p.randomInt64(0, 100)(s64); if (typeof n64 !== 'number') process.exit(1); JSON.stringify(p.nextState64(s64b));"
       - name: Smoke-test built dist (ESM)
         run: |
-          node --input-type=module -e "import('./dist/index.mjs').then(p => { const s = p.createPcg32(42n, 54n); const [n, s2] = p.randomInt(0, 100, s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2)); const s64 = p.createPcg64({}, 42n, 54n); const [n64, s64b] = p.randomInt64(0, 100)(s64); if (typeof n64 !== 'number') process.exit(1); JSON.stringify(p.nextState64(s64b)); })"
+          node --input-type=module -e "import('./dist/index.mjs').then(p => { const s = p.createPcg32(42, 54); const [n, s2] = p.randomInt(0, 100, s); if (typeof n !== 'number') process.exit(1); JSON.stringify(p.nextState(s2)); const s64 = p.createPcg64({}, 42n, 54n); const [n64, s64b] = p.randomInt64(0, 100)(s64); if (typeof n64 !== 'number') process.exit(1); JSON.stringify(p.nextState64(s64b)); })"
 
   coverage:
     runs-on: ubuntu-latest
