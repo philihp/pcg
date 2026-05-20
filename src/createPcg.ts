@@ -34,14 +34,21 @@ const resolveStreamScheme = (
   config: PCGConfig
 ): StreamScheme => {
   const resolved: StreamScheme = typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
-  if (resolved === undefined || config.incrementers[resolved] === undefined) {
+  if (
+    resolved === undefined ||
+    (config.incrementers[resolved] === undefined && config.customRngs?.[resolved] === undefined)
+  ) {
     throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
   }
   return resolved
 }
 
-export const getOutput = (pcg: PCGState): number =>
-  getConfig(pcg.variant).outputFns[pcg.outputFnType](toBigInt(pcg.state))
+export const getOutput = (pcg: PCGState): number => {
+  const config = getConfig(pcg.variant)
+  const custom = config.customRngs?.[pcg.streamScheme]
+  if (custom !== undefined) return custom.output(pcg)
+  return config.outputFns[pcg.outputFnType](toBigInt(pcg.state))
+}
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -54,8 +61,22 @@ export const getOutput = (pcg: PCGState): number =>
  */
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
+  const custom = config.customRngs?.[pcg.streamScheme]
+  if (custom !== undefined) {
+    if (custom.jump !== undefined) return custom.jump(delta, pcg)
+    // No analytical jump for this scheme. Fall back to a brute-force loop;
+    // negative deltas would take 2^32+ steps so we disallow them.
+    if (delta < 0) {
+      throw new RangeError(`Negative stepState is not supported for this stream scheme`)
+    }
+    let curr = pcg
+    for (let i = 0; i < delta; i++) curr = custom.step(curr)
+    return curr
+  }
+  const incrementer = config.incrementers[pcg.streamScheme]
+  if (incrementer === undefined) throw new Error(`No incrementer for stream scheme: ${String(pcg.streamScheme)}`)
   let currMultiplier = config.multiplier
-  let currIncrement = config.incrementers[pcg.streamScheme](pcg)
+  let currIncrement = incrementer(pcg)
 
   let accMultiplier = 1n
   let accIncrement = 0n
@@ -87,9 +108,13 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 // Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
 export const nextState = (pcg: PCGState): PCGState => {
   const config = getConfig(pcg.variant)
+  const custom = config.customRngs?.[pcg.streamScheme]
+  if (custom !== undefined) return custom.step(pcg)
+  const incrementer = config.incrementers[pcg.streamScheme]
+  if (incrementer === undefined) throw new Error(`No incrementer for stream scheme: ${String(pcg.streamScheme)}`)
   return {
     ...pcg,
-    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + config.incrementers[pcg.streamScheme](pcg)) & MASK_64),
+    state: fromBigInt((toBigInt(pcg.state) * config.multiplier + incrementer(pcg)) & MASK_64),
   }
 }
 
@@ -102,14 +127,24 @@ const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGSta
   if (bound < 0 || bound > outputMaxRange) throw new RangeError()
 
   const threshold = (outputMaxRange - bound) % bound
-  const outputFn = config.outputFns[pcg.outputFnType]
+  const custom = config.customRngs?.[pcg.streamScheme]
 
   let n: number
   let nextPcg = pcg
-  do {
-    n = outputFn(toBigInt(nextPcg.state))
-    nextPcg = nextState(nextPcg)
-  } while (n < threshold)
+  if (custom !== undefined) {
+    // Number-only hot path: no toBigInt/fromBigInt per step.
+    const { step, output } = custom
+    do {
+      n = output(nextPcg)
+      nextPcg = step(nextPcg)
+    } while (n < threshold)
+  } else {
+    const outputFn = config.outputFns[pcg.outputFnType]
+    do {
+      n = outputFn(toBigInt(nextPcg.state))
+      nextPcg = nextState(nextPcg)
+    } while (n < threshold)
+  }
 
   return [(n % bound) + min, nextPcg]
 }
@@ -171,13 +206,20 @@ export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
     initStreamId: LongLike
   ): PCGState => {
     const resolvedScheme = resolveStreamScheme(streamScheme, config)
-    const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-    return nextState({
-      state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
-      streamId: fromBigInt(streamId),
+    const base: PCGState = {
+      state: { hi: 0, lo: 0 },
+      streamId: { hi: 0, lo: 0 },
       variant,
       outputFnType,
       streamScheme: resolvedScheme,
+    }
+    const custom = config.customRngs?.[resolvedScheme]
+    if (custom !== undefined) return custom.init(BigInt(initState), BigInt(initStreamId), base)
+    const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
+    return nextState({
+      ...base,
+      state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
+      streamId: fromBigInt(streamId),
     })
   }
 }

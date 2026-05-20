@@ -23,6 +23,22 @@ export type StreamSchemeName = keyof typeof StreamScheme
 
 export type SchemeFn = (pcg: PCGState) => bigint
 
+// Some stream schemes are not LCG-based (e.g. MULBERRY32, SFC32). They
+// override the entire step + output path with pure-number arithmetic, so the
+// hot loop never touches BigInt after instantiation.
+export type CustomRng = {
+  // Build the initial PCGState from the seed inputs. The scheme decides how to
+  // pack its internal state into PCGState's Uint64 slots.
+  init: (initState: bigint, initStreamId: bigint, base: PCGState) => PCGState
+  // Advance the state by one step.
+  step: (pcg: PCGState) => PCGState
+  // Read the current 32-bit output from the state.
+  output: (pcg: PCGState) => number
+  // Optional analytical jump-ahead. When absent, stepState falls back to a
+  // brute-force loop of `step` (and disallows negative deltas).
+  jump?: (delta: number, pcg: PCGState) => PCGState
+}
+
 export type LongLike = bigint | number | string
 
 // JSON-serializable representation of an unsigned 64-bit integer split into
@@ -47,7 +63,8 @@ export type PCGConfig = {
   multiplier: bigint
   increment: bigint
   outputFns: Record<OutputFnType, OutputFn>
-  incrementers: Record<StreamScheme, SchemeFn>
+  incrementers: Partial<Record<StreamScheme, SchemeFn>>
+  customRngs?: Partial<Record<StreamScheme, CustomRng>>
 }
 
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]

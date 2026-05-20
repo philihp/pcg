@@ -1,4 +1,4 @@
-import { createPcg32, randomInt, randomList } from '..'
+import { createPcg32, nextState, prevState, randomInt, randomList, stepState } from '..'
 import { StreamScheme } from '../types'
 
 describe('mulberry32', () => {
@@ -16,7 +16,7 @@ describe('mulberry32', () => {
     const out = randomList(listLength, randomUint32, pcg)
 
     expect(out).toHaveLength(6)
-    expect(out.map((n) => n[0])).toStrictEqual([1102053241, 2758123386, 1805040646, 2788723689, 38513835, 492666091])
+    expect(out.map((n) => n[0])).toStrictEqual([1840398733, 3033892825, 3167287505, 3209063878, 1181867093, 1219511517])
 
     // the next int after the 3rd state is the 4th int
     expect(randomUint32(out[2][1])[0]).toBe(out[3][0])
@@ -28,5 +28,29 @@ describe('mulberry32', () => {
     const b = createPcg32({ streamScheme: StreamScheme.SETSEQ }, 42, 54)
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
     expect(randomUint32(a)[0]).not.toBe(randomUint32(b)[0])
+  })
+
+  it('supports analytical jump-ahead and jump-back', () => {
+    expect.assertions(2)
+    const pcg = createPcg32({ streamScheme: StreamScheme.MULBERRY32 }, 42, 54)
+    // Jumping 5 steps forward equals 5 sequential nextState calls.
+    let manual = pcg
+    for (let i = 0; i < 5; i++) manual = nextState(manual)
+    expect(stepState(5, pcg)).toStrictEqual(manual)
+    // Round-trip: prevState ∘ nextState is identity.
+    expect(prevState(nextState(pcg))).toStrictEqual(pcg)
+  })
+
+  it('keeps state JSON-serializable (no bigint)', () => {
+    expect.assertions(0)
+    const pcg = createPcg32({ streamScheme: StreamScheme.MULBERRY32 }, 42, 54)
+    const walk = (value: unknown): void => {
+      if (value === null || typeof value !== 'object') {
+        if (typeof value === 'bigint') throw new Error('state contains a bigint')
+        return
+      }
+      for (const v of Object.values(value as Record<string, unknown>)) walk(v)
+    }
+    walk(pcg)
   })
 })

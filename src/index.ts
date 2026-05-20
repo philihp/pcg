@@ -1,6 +1,6 @@
 import { ror32 } from './bitwise'
 import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
-import { mulberry32Scheme, sfc32Scheme } from './schemes'
+import { mulberry32, sfc32 } from './schemes'
 import { OutputFnType, PCGState, StreamScheme } from './types'
 import createPcg, { toBigInt } from './createPcg'
 
@@ -9,6 +9,7 @@ export { OutputFnType, StreamScheme } from './types'
 export type {
   CreatePcg,
   CreatePcgOptions,
+  CustomRng,
   LongLike,
   OutputFn,
   PCGConfig,
@@ -31,8 +32,10 @@ export const createPcg32 = createPcg('pcg32', {
     [StreamScheme.SETSEQ]: (pcg: PCGState) => toBigInt(pcg.streamId),
     [StreamScheme.ONESEQ]: () => pcgDefaultIncrement64,
     [StreamScheme.MCG]: () => 0n,
-    [StreamScheme.MULBERRY32]: mulberry32Scheme,
-    [StreamScheme.SFC32]: sfc32Scheme,
+  },
+  customRngs: {
+    [StreamScheme.MULBERRY32]: mulberry32,
+    [StreamScheme.SFC32]: sfc32,
   },
   outputFns: {
     [OutputFnType.XSH_RR]: (state: bigint): number =>
