@@ -59,6 +59,21 @@ import { createPcg32 } from 'pcg'
 const state0 = createPcg32({ streamScheme: 'ONESEQ' }, 42, 54)
 ```
 
+## Mulberry32
+
+`mulberry32` is a small 32-bit counter-based PRNG (by Tommy Ettinger). It is
+not part of the PCG family and has a much shorter period (2^32) and weaker
+statistical properties, but the seed is a single number and each step is
+cheap. The resulting state plugs into the same `nextState`, `getOutput`,
+`randomInt`, `randomList`, and `stepState` functions.
+
+```js
+import { createMulberry32, randomInt } from 'pcg'
+
+const state0 = createMulberry32(42)
+const [value, state1] = randomInt(0, 100, state0)
+```
+
 ## Thanks
 
 - [@kripod](https://github.com/kripod/), who wrote the original [`pcg.js`](https://github.com/kripod/pcg.js)

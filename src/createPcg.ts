@@ -5,6 +5,7 @@ import {
   pcgDefaultOutputFnType,
   pcgDefaultStreamScheme,
 } from './defaults'
+import { mulberry32Advance, mulberry32Output } from './mulberry32'
 import {
   CreatePcgOptions,
   OutputFn,
@@ -17,6 +18,7 @@ import {
 } from './types'
 import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
 
+export { createMulberry32 } from './mulberry32'
 export { fromBigInt, toBigInt } from './uint64'
 
 const MASK_64 = 0xffffffffffffffffn
@@ -78,7 +80,8 @@ const resolveStreamScheme = (streamScheme: StreamScheme | keyof typeof StreamSch
   return resolved
 }
 
-export const getOutput = (pcg: PCGState): number => OUTPUT_FNS[pcg.outputFnType](pcg.state)
+export const getOutput = (pcg: PCGState): number =>
+  pcg.variant === 'mulberry32' ? mulberry32Output(pcg.state) : OUTPUT_FNS[pcg.outputFnType](pcg.state)
 
 /* Multi-step advance functions (jump-ahead, jump-back)
  *
@@ -87,6 +90,9 @@ export const getOutput = (pcg: PCGState): number => OUTPUT_FNS[pcg.outputFnType]
  * by going "the long way round" via two's complement.
  */
 const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
+  if (pcg.variant === 'mulberry32') {
+    return { ...pcg, state: mulberry32Advance(pcg.state, delta) }
+  }
   let currMultiplier = MULTIPLIER
   let currIncrement = INCREMENTERS[pcg.streamScheme](pcg)
 
@@ -123,10 +129,10 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 }
 
 // Fast path for delta=1, the common case driven by randomInt.
-export const nextState = (pcg: PCGState): PCGState => ({
-  ...pcg,
-  state: add64(mul64(pcg.state, MULTIPLIER), INCREMENTERS[pcg.streamScheme](pcg)),
-})
+export const nextState = (pcg: PCGState): PCGState =>
+  pcg.variant === 'mulberry32'
+    ? { ...pcg, state: mulberry32Advance(pcg.state, 1) }
+    : { ...pcg, state: add64(mul64(pcg.state, MULTIPLIER), INCREMENTERS[pcg.streamScheme](pcg)) }
 
 export const prevState = stepState(-1)
 
@@ -136,7 +142,7 @@ const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGSta
   if (bound < 0 || bound > outputMaxRange) throw new RangeError()
 
   const threshold = (outputMaxRange - bound) % bound
-  const outputFn = OUTPUT_FNS[pcg.outputFnType]
+  const outputFn: OutputFn = pcg.variant === 'mulberry32' ? mulberry32Output : OUTPUT_FNS[pcg.outputFnType]
 
   let n: number
   let nextPcg = pcg

@@ -1,4 +1,5 @@
 export {
+  createMulberry32,
   createPcg,
   createPcg32,
   fromBigInt,
