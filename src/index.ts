@@ -1,14 +1,22 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
 import { createPcg, createPcg32, pcg32Advance, pcg32Output } from './pcg32'
-import { PCGState, RandomFn, Uint64 } from './types'
+import { PCGState, PCGVariant, RandomFn, Uint64 } from './types'
 
 const NUM_OUTPUT_BITS = 32
 
-const advance = (pcg: PCGState, delta: number): Uint64 =>
-  pcg.variant === 'mulberry32' ? mulberry32Advance(pcg, delta) : pcg32Advance(pcg, delta)
+type VariantImpl = {
+  advance: (pcg: PCGState, delta: number) => Uint64
+  output: (pcg: PCGState) => number
+}
 
-const output = (pcg: PCGState): number =>
-  pcg.variant === 'mulberry32' ? mulberry32Output(pcg) : pcg32Output(pcg)
+const VARIANTS: Record<PCGVariant, VariantImpl> = {
+  pcg32: { advance: pcg32Advance, output: pcg32Output },
+  mulberry32: { advance: mulberry32Advance, output: mulberry32Output },
+}
+
+const advance = (pcg: PCGState, delta: number): Uint64 => VARIANTS[pcg.variant].advance(pcg, delta)
+
+const output = (pcg: PCGState): number => VARIANTS[pcg.variant].output(pcg)
 
 export const getOutput = output
 
