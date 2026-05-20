@@ -1,4 +1,4 @@
-import { OutputFnType, PCGState, StreamScheme, Uint64 } from './types'
+import { OutputFnType, PCGState, StreamScheme } from './types'
 
 // Tommy Ettinger's mulberry32: a 32-bit counter-based PRNG with a period of
 // 2^32. Compact and fast, but with much weaker statistical properties and a
@@ -6,9 +6,9 @@ import { OutputFnType, PCGState, StreamScheme, Uint64 } from './types'
 // matter more than stream quality.
 const MULBERRY_INCREMENT = 0x6d2b79f5
 
-export const mulberry32Advance = (pcg: PCGState, delta: number): Uint64 => ({
-  hi: 0,
-  lo: (pcg.state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0,
+export const mulberry32Advance = (pcg: PCGState, delta: number): PCGState => ({
+  ...pcg,
+  state: { hi: 0, lo: (pcg.state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0 },
 })
 
 export const mulberry32Output = (pcg: PCGState): number => {

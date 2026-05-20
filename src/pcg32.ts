@@ -71,9 +71,9 @@ const resolveStreamScheme = (streamScheme: StreamScheme | keyof typeof StreamSch
  * Society (Nov. 1994). Even though delta is unsigned in principle, passing a signed number works
  * by going "the long way round" via two's complement.
  */
-export const pcg32Advance = (pcg: PCGState, delta: number): Uint64 => {
+export const pcg32Advance = (pcg: PCGState, delta: number): PCGState => {
   const increment = INCREMENTERS[pcg.streamScheme](pcg)
-  if (delta === 1) return add64(mul64(pcg.state, MULTIPLIER), increment)
+  if (delta === 1) return { ...pcg, state: add64(mul64(pcg.state, MULTIPLIER), increment) }
 
   let currMultiplier = MULTIPLIER
   let currIncrement = increment
@@ -97,7 +97,7 @@ export const pcg32Advance = (pcg: PCGState, delta: number): Uint64 => {
     remHi = remHi >>> 1
   }
 
-  return add64(mul64(pcg.state, accMultiplier), accIncrement)
+  return { ...pcg, state: add64(mul64(pcg.state, accMultiplier), accIncrement) }
 }
 
 export const pcg32Output = (pcg: PCGState): number => OUTPUT_FNS[pcg.outputFnType](pcg.state)
@@ -117,5 +117,5 @@ export const createPcg32 = (
     outputFnType,
     streamScheme: resolvedScheme,
   }
-  return { ...seeded, state: pcg32Advance(seeded, 1) }
+  return pcg32Advance(seeded, 1)
 }

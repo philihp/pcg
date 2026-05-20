@@ -34,9 +34,10 @@ export type LongLike = bigint | number | string
 
 // Reserved for future PCG variants (e.g. pcg64). Stored on every PCGState so
 // serialized state from older versions remains forward-compatible when a new
-// variant is introduced. `mulberry32` is a small 32-bit counter-based generator
-// (not part of the PCG family) that reuses the same state shape.
-export type PCGVariant = 'pcg32' | 'mulberry32'
+// variant is introduced. `mulberry32` and `sfc32` are non-PCG generators that
+// reuse the same state shape: mulberry32 packs into `state.lo`; sfc32 spreads
+// its four 32-bit registers across `state` (a, b) and `streamId` (c, counter).
+export type PCGVariant = 'pcg32' | 'mulberry32' | 'sfc32'
 
 export type PCGState = {
   state: Uint64
