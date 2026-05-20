@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Added `mulberry32` as an additional generator variant. `createMulberry32(seed)`
+  produces a `PCGState` tagged with `variant: 'mulberry32'` that works with the
+  existing `nextState`, `getOutput`, `randomInt`, `randomList`, and `stepState`
+  functions.
+
 ## 2.0.0
 
 ### Breaking changes
