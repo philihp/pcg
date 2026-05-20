@@ -6,7 +6,7 @@ export enum OutputFnType {
   RXS_M_XS = 4,
 }
 
-export type OutputFn = (state: bigint) => number
+export type OutputFn = (state: Uint64) => number
 
 // TODO: Implement more stream schemes
 
@@ -19,10 +19,6 @@ export enum StreamScheme {
 
 export type StreamSchemeName = keyof typeof StreamScheme
 
-export type SchemeFn = (pcg: PCGState) => bigint
-
-export type LongLike = bigint | number | string
-
 // JSON-serializable representation of an unsigned 64-bit integer split into
 // two unsigned 32-bit halves. `hi` is the upper 32 bits, `lo` is the lower.
 export type Uint64 = {
@@ -30,22 +26,15 @@ export type Uint64 = {
   lo: number
 }
 
-export type PCGVariant = 'pcg32'
+export type SchemeFn = (pcg: PCGState) => Uint64
+
+export type LongLike = bigint | number | string
 
 export type PCGState = {
   state: Uint64
   streamId: Uint64
-  variant: PCGVariant
   outputFnType: OutputFnType
   streamScheme: StreamScheme
-}
-
-export type PCGConfig = {
-  numOutputBits: number
-  multiplier: bigint
-  increment: bigint
-  outputFns: Record<OutputFnType, OutputFn>
-  incrementers: Record<StreamScheme, SchemeFn>
 }
 
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
@@ -54,5 +43,3 @@ export type CreatePcgOptions = {
   streamScheme?: StreamScheme | StreamSchemeName
   outputFnType?: OutputFnType
 }
-
-export type CreatePcg = (options: CreatePcgOptions, initState: LongLike, initStreamId: LongLike) => PCGState
