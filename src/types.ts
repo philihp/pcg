@@ -17,8 +17,6 @@ export enum StreamScheme {
   MCG = 3,
 }
 
-export type StreamSchemeName = keyof typeof StreamScheme
-
 // JSON-serializable representation of an unsigned 64-bit integer split into
 // two unsigned 32-bit halves. `hi` is the upper 32 bits, `lo` is the lower.
 export type Uint64 = {
@@ -27,8 +25,6 @@ export type Uint64 = {
 }
 
 export type SchemeFn = (pcg: PCGState) => Uint64
-
-export type LongLike = bigint | number | string
 
 export type PCGState = {
   state: Uint64
@@ -40,6 +36,6 @@ export type PCGState = {
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
 
 export type CreatePcgOptions = {
-  streamScheme?: StreamScheme | StreamSchemeName
+  streamScheme?: StreamScheme | keyof typeof StreamScheme
   outputFnType?: OutputFnType
 }

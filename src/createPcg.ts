@@ -7,7 +7,6 @@ import {
 } from './defaults'
 import {
   CreatePcgOptions,
-  LongLike,
   OutputFn,
   OutputFnType,
   PCGState,
@@ -16,16 +15,20 @@ import {
   StreamScheme,
   Uint64,
 } from './types'
-import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
+import { add64, fromNumber, mul64 } from './uint64'
 
-export { fromBigInt, toBigInt } from './uint64'
-
+const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
 
 const NUM_OUTPUT_BITS = 32
 
-const MULTIPLIER: Uint64 = fromBigInt(pcgDefaultMultiplier64)
-const INCREMENT: Uint64 = fromBigInt(pcgDefaultIncrement64)
+const u64FromBigInt = (value: bigint): Uint64 => ({
+  hi: Number((value >> 32n) & MASK_32),
+  lo: Number(value & MASK_32),
+})
+
+const MULTIPLIER: Uint64 = u64FromBigInt(pcgDefaultMultiplier64)
+const INCREMENT: Uint64 = u64FromBigInt(pcgDefaultIncrement64)
 const ZERO_U64: Uint64 = { hi: 0, lo: 0 }
 const ONE_U64: Uint64 = { hi: 0, lo: 1 }
 
@@ -200,15 +203,15 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
 
 export const createPcg32 = (
   { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
-  initState: LongLike,
-  initStreamId: LongLike
+  initState: bigint | number | string,
+  initStreamId: bigint | number | string
 ): PCGState => {
   const resolvedScheme = resolveStreamScheme(streamScheme)
   const streamIdBig = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
   const stateBig = (streamIdBig + BigInt(initState)) & MASK_64
   return nextState({
-    state: fromBigInt(stateBig),
-    streamId: fromBigInt(streamIdBig),
+    state: u64FromBigInt(stateBig),
+    streamId: u64FromBigInt(streamIdBig),
     outputFnType,
     streamScheme: resolvedScheme,
   })

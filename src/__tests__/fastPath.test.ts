@@ -1,9 +1,16 @@
-import { createPcg32, getOutput, nextState, prevState, randomInt, stepState, toBigInt } from '..'
-import { OutputFnType, PCGState, StreamScheme } from '../types'
+import { createPcg32, getOutput, nextState, prevState, randomInt, stepState } from '..'
+import { OutputFnType, PCGState, StreamScheme, Uint64 } from '../types'
 
+const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
 const MULT = 6364136223846793005n
 const INC = 1442695040888963407n
+
+const toBig = ({ hi, lo }: Uint64): bigint => (BigInt(hi) << 32n) | BigInt(lo)
+const fromBig = (v: bigint): Uint64 => ({
+  hi: Number((v >> 32n) & MASK_32),
+  lo: Number(v & MASK_32),
+})
 
 // Reference BigInt implementation of the LCG advance, used to cross-check the
 // number-based fast path.
@@ -15,11 +22,11 @@ describe('fast path correctness vs BigInt reference', () => {
     const pcg = createPcg32({ streamScheme: StreamScheme.SETSEQ }, 42, 54)
     const streamInc = ((BigInt(54) & MASK_64) << 1n) | 1n
     let live: PCGState = pcg
-    let refState = toBigInt(pcg.state)
+    let refState = toBig(pcg.state)
     for (let i = 0; i < 1000; i++) {
       live = nextState(live)
       refState = referenceNext(refState, streamInc)
-      expect(toBigInt(live.state)).toBe(refState)
+      expect(live.state).toEqual(fromBig(refState))
     }
   })
 
@@ -27,11 +34,11 @@ describe('fast path correctness vs BigInt reference', () => {
     expect.assertions(1000)
     const pcg = createPcg32({ streamScheme: StreamScheme.ONESEQ }, 42, 54)
     let live: PCGState = pcg
-    let refState = toBigInt(pcg.state)
+    let refState = toBig(pcg.state)
     for (let i = 0; i < 1000; i++) {
       live = nextState(live)
       refState = referenceNext(refState, INC)
-      expect(toBigInt(live.state)).toBe(refState)
+      expect(live.state).toEqual(fromBig(refState))
     }
   })
 
@@ -39,11 +46,11 @@ describe('fast path correctness vs BigInt reference', () => {
     expect.assertions(1000)
     const pcg = createPcg32({ streamScheme: StreamScheme.MCG }, 42, 54)
     let live: PCGState = pcg
-    let refState = toBigInt(pcg.state)
+    let refState = toBig(pcg.state)
     for (let i = 0; i < 1000; i++) {
       live = nextState(live)
       refState = referenceNext(refState, 0n)
-      expect(toBigInt(live.state)).toBe(refState)
+      expect(live.state).toEqual(fromBig(refState))
     }
   })
 })
@@ -59,7 +66,7 @@ describe('stepState fast-exponentiation', () => {
       for (let i = 0; i < delta; i++) walked = nextState(walked)
       const jumped = stepState(delta, pcg)
       expect(jumped.state).toEqual(walked.state)
-      expect(toBigInt(stepState(-delta, jumped).state)).toBe(toBigInt(pcg.state))
+      expect(stepState(-delta, jumped).state).toEqual(pcg.state)
     }
   })
 

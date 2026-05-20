@@ -1,6 +1,15 @@
-import { add64, fromBigInt, fromNumber, mul64, toBigInt } from '../uint64'
+import { add64, fromNumber, mul64 } from '../uint64'
+import { Uint64 } from '../types'
 
+const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
+
+// Local BigInt <-> Uint64 helpers, used only as a reference oracle for these
+// tests; the library no longer ships them as public API.
+const fromBig = (v: bigint): Uint64 => ({
+  hi: Number((v >> 32n) & MASK_32),
+  lo: Number(v & MASK_32),
+})
 
 describe('uint64', () => {
   describe('fromNumber', () => {
@@ -18,7 +27,7 @@ describe('uint64', () => {
       expect(fromNumber(0x100000000)).toEqual({ hi: 1, lo: 0 })
     })
 
-    it('encodes -1 as the all-ones two\'s complement word', () => {
+    it("encodes -1 as the all-ones two's complement word", () => {
       expect(fromNumber(-1)).toEqual({ hi: 0xffffffff, lo: 0xffffffff })
     })
 
@@ -26,20 +35,11 @@ describe('uint64', () => {
       expect(fromNumber(-2)).toEqual({ hi: 0xffffffff, lo: 0xfffffffe })
     })
 
-    it('agrees with fromBigInt for representable signed values', () => {
+    it('agrees with the BigInt two\'s-complement encoding for representable values', () => {
       const samples = [0, 1, 7, -1, -7, 0xffffffff, -0xffffffff, 0x100000000, -0x100000000]
       for (const n of samples) {
         const big = (BigInt(n) + (1n << 64n)) & MASK_64
-        expect(fromNumber(n)).toEqual(fromBigInt(big))
-      }
-    })
-  })
-
-  describe('toBigInt / fromBigInt round-trip', () => {
-    it('survives full 64-bit values', () => {
-      const samples = [0n, 1n, 0x80000000n, 0xffffffffn, 0x100000000n, 0xdeadbeefcafebaben, MASK_64]
-      for (const v of samples) {
-        expect(toBigInt(fromBigInt(v))).toBe(v)
+        expect(fromNumber(n)).toEqual(fromBig(big))
       }
     })
   })
@@ -71,8 +71,8 @@ describe('uint64', () => {
       ]
       for (const a of samples) {
         for (const b of samples) {
-          const expected = fromBigInt((a + b) & MASK_64)
-          expect(add64(fromBigInt(a), fromBigInt(b))).toEqual(expected)
+          const expected = fromBig((a + b) & MASK_64)
+          expect(add64(fromBig(a), fromBig(b))).toEqual(expected)
         }
       }
     })
@@ -84,15 +84,15 @@ describe('uint64', () => {
     })
 
     it('produces carry into the hi half', () => {
-      const a = fromBigInt(0xffffffffn)
-      const b = fromBigInt(0xffffffffn)
-      expect(mul64(a, b)).toEqual(fromBigInt((0xffffffffn * 0xffffffffn) & MASK_64))
+      const a = fromBig(0xffffffffn)
+      const b = fromBig(0xffffffffn)
+      expect(mul64(a, b)).toEqual(fromBig((0xffffffffn * 0xffffffffn) & MASK_64))
     })
 
     it('wraps modulo 2^64', () => {
-      const a = fromBigInt(MASK_64)
-      const b = fromBigInt(MASK_64)
-      expect(mul64(a, b)).toEqual(fromBigInt((MASK_64 * MASK_64) & MASK_64))
+      const a = fromBig(MASK_64)
+      const b = fromBig(MASK_64)
+      expect(mul64(a, b)).toEqual(fromBig((MASK_64 * MASK_64) & MASK_64))
     })
 
     it('matches BigInt multiplication for the PCG multiplier constants', () => {
@@ -107,15 +107,15 @@ describe('uint64', () => {
       ]
       for (const a of samples) {
         for (const b of samples) {
-          const expected = fromBigInt((a * b) & MASK_64)
-          expect(mul64(fromBigInt(a), fromBigInt(b))).toEqual(expected)
+          const expected = fromBig((a * b) & MASK_64)
+          expect(mul64(fromBig(a), fromBig(b))).toEqual(expected)
         }
       }
     })
 
     it('matches BigInt for a pseudo-random sweep', () => {
-      // Self-contained pseudo-random sweep so we don't depend on the module under test
-      // to drive its own correctness check.
+      // Self-contained pseudo-random sweep so we don't depend on the module
+      // under test to drive its own correctness check.
       let s = 0x9e3779b97f4a7c15n
       const next = (): bigint => {
         s = (s * 6364136223846793005n + 1442695040888963407n) & MASK_64
@@ -124,8 +124,8 @@ describe('uint64', () => {
       for (let i = 0; i < 200; i++) {
         const a = next()
         const b = next()
-        const expected = fromBigInt((a * b) & MASK_64)
-        expect(mul64(fromBigInt(a), fromBigInt(b))).toEqual(expected)
+        const expected = fromBig((a * b) & MASK_64)
+        expect(mul64(fromBig(a), fromBig(b))).toEqual(expected)
       }
     })
   })
