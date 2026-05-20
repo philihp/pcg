@@ -1,6 +1,7 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
 import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
-import { PCGState, PCGVariant, RandomFn, Uint64 } from './types'
+import { createSfc32, sfc32Advance, sfc32Output } from './sfc32'
+import { PCGState, PCGVariant, RandomFn } from './types'
 
 const NUM_OUTPUT_BITS = 32
 
@@ -9,25 +10,26 @@ const NUM_OUTPUT_BITS = 32
 export const createPcg = createPcg32
 
 type VariantImpl = {
-  advance: (pcg: PCGState, delta: number) => Uint64
+  advance: (pcg: PCGState, delta: number) => PCGState
   output: (pcg: PCGState) => number
 }
 
 const VARIANTS: Record<PCGVariant, VariantImpl> = {
   pcg32: { advance: pcg32Advance, output: pcg32Output },
   mulberry32: { advance: mulberry32Advance, output: mulberry32Output },
+  sfc32: { advance: sfc32Advance, output: sfc32Output },
 }
 
-const advance = (pcg: PCGState, delta: number): Uint64 => VARIANTS[pcg.variant].advance(pcg, delta)
+const advance = (pcg: PCGState, delta: number): PCGState => VARIANTS[pcg.variant].advance(pcg, delta)
 
 const output = (pcg: PCGState): number => VARIANTS[pcg.variant].output(pcg)
 
 export const getOutput = output
 
 // Fast path for delta=1, the common case driven by randomInt.
-export const nextState = (pcg: PCGState): PCGState => ({ ...pcg, state: advance(pcg, 1) })
+export const nextState = (pcg: PCGState): PCGState => advance(pcg, 1)
 
-const stepStateImpl = (delta: number, pcg: PCGState): PCGState => ({ ...pcg, state: advance(pcg, delta) })
+const stepStateImpl = (delta: number, pcg: PCGState): PCGState => advance(pcg, delta)
 
 export function stepState(delta: number): (pcg: PCGState) => PCGState
 export function stepState(delta: number, pcg: PCGState): PCGState
@@ -104,7 +106,7 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export { createMulberry32, createPcg32 }
+export { createMulberry32, createPcg32, createSfc32 }
 export { fromBigInt, toBigInt } from './uint64'
 export { OutputFnType, StreamScheme } from './types'
 export type {
