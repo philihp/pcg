@@ -16,3 +16,5 @@ dist/
 
 # npmrc should prevent this, but at any rate...
 package-lock.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
