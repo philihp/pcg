@@ -7,7 +7,7 @@ import { fromBigInt } from './uint64'
 const NUM_OUTPUT_BITS = 32
 const MASK_64 = 0xffffffffffffffffn
 
-export const createPcg = (
+export const createPcg32 = (
   { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
   initState: bigint | number | string,
   initStreamId: bigint | number | string
@@ -25,8 +25,9 @@ export const createPcg = (
   return { ...seeded, state: pcg32Advance(seeded, 1) }
 }
 
-/** @deprecated Renamed to `createPcg`. This alias will be removed in 3.0.0. */
-export const createPcg32 = createPcg
+// Alias kept for callers that adopted the 2.0.0 name; will be deprecated in a
+// future release once the variant-suffixed factories settle as the convention.
+export const createPcg = createPcg32
 
 type VariantImpl = {
   advance: (pcg: PCGState, delta: number) => Uint64
