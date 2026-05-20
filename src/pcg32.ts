@@ -5,15 +5,7 @@ import {
   pcgDefaultOutputFnType,
   pcgDefaultStreamScheme,
 } from './defaults'
-import {
-  CreatePcgOptions,
-  OutputFn,
-  OutputFnType,
-  PCGState,
-  SchemeFn,
-  StreamScheme,
-  Uint64,
-} from './types'
+import { CreatePcgOptions, OutputFn, OutputFnType, PCGState, SchemeFn, StreamScheme, Uint64 } from './types'
 import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
 
 const MASK_64 = 0xffffffffffffffffn
@@ -110,7 +102,7 @@ export const pcg32Advance = (pcg: PCGState, delta: number): Uint64 => {
 
 export const pcg32Output = (pcg: PCGState): number => OUTPUT_FNS[pcg.outputFnType](pcg.state)
 
-export const createPcg = (
+export const createPcg32 = (
   { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
   initState: bigint | number | string,
   initStreamId: bigint | number | string
@@ -127,6 +119,3 @@ export const createPcg = (
   }
   return { ...seeded, state: pcg32Advance(seeded, 1) }
 }
-
-/** @deprecated Renamed to `createPcg`. This alias will be removed in 3.0.0. */
-export const createPcg32 = createPcg

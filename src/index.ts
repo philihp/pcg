@@ -1,8 +1,12 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
-import { createPcg, createPcg32, pcg32Advance, pcg32Output } from './pcg32'
+import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
 import { PCGState, PCGVariant, RandomFn, Uint64 } from './types'
 
 const NUM_OUTPUT_BITS = 32
+
+// Alias kept for callers that adopted the 2.0.0 name; will be deprecated in a
+// future release once the variant-suffixed factories settle as the convention.
+export const createPcg = createPcg32
 
 type VariantImpl = {
   advance: (pcg: PCGState, delta: number) => Uint64
@@ -100,7 +104,7 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export { createMulberry32, createPcg, createPcg32 }
+export { createMulberry32, createPcg32 }
 export { fromBigInt, toBigInt } from './uint64'
 export { OutputFnType, StreamScheme } from './types'
 export type {

@@ -23,12 +23,12 @@ describe('PCGVariant tag', () => {
 })
 
 describe('createPcg alias', () => {
-  it('createPcg32 is the same function as createPcg', () => {
+  it('createPcg is the same function as createPcg32', () => {
     expect.assertions(1)
-    expect(createPcg32).toBe(createPcg)
+    expect(createPcg).toBe(createPcg32)
   })
 
-  it('createPcg32 and createPcg produce identical state for the same seed', () => {
+  it('createPcg and createPcg32 produce identical state for the same seed', () => {
     expect.assertions(2)
     const a = createPcg({}, 42, 54)
     const b = createPcg32({}, 42, 54)
