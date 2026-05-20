@@ -36,33 +36,31 @@ export const add64 = (a: Uint64, b: Uint64): Uint64 => {
   return { hi: (a.hi + b.hi + carry) >>> 0, lo }
 }
 
-// 64-bit unsigned multiplication mod 2^64, using 16-bit lane decomposition so
-// that no intermediate product exceeds Number.MAX_SAFE_INTEGER.
+// 64-bit unsigned multiplication mod 2^64. The low 32 bits of the result are
+// just the low 32 bits of (a.lo * b.lo), which Math.imul gives us directly.
+// For the high 32 bits we need the full 64-bit product of two 32-bit values,
+// which still requires a 16-bit lane split — but only for that single product,
+// since cross terms (a.lo*b.hi, a.hi*b.lo) contribute only to the high half
+// mod 2^64 and so can also use Math.imul.
 export const mul64 = (a: Uint64, b: Uint64): Uint64 => {
-  const a0 = a.lo & 0xffff
-  const a1 = a.lo >>> 16
-  const a2 = a.hi & 0xffff
-  const a3 = a.hi >>> 16
-  const b0 = b.lo & 0xffff
-  const b1 = b.lo >>> 16
-  const b2 = b.hi & 0xffff
-  const b3 = b.hi >>> 16
+  const aLo = a.lo
+  const aHi = a.hi
+  const bLo = b.lo
+  const bHi = b.hi
 
-  const lane0 = a0 * b0
-  let lane1 = a0 * b1 + a1 * b0
-  let lane2 = a0 * b2 + a1 * b1 + a2 * b0
-  let lane3 = a0 * b3 + a1 * b2 + a2 * b1 + a3 * b0
+  const lo = Math.imul(aLo, bLo) >>> 0
 
-  const w0 = lane0 & 0xffff
-  lane1 += Math.floor(lane0 / 0x10000)
-  const w1 = lane1 & 0xffff
-  lane2 += Math.floor(lane1 / 0x10000)
-  const w2 = lane2 & 0xffff
-  lane3 += Math.floor(lane2 / 0x10000)
-  const w3 = lane3 & 0xffff
+  const a0 = aLo & 0xffff
+  const a1 = aLo >>> 16
+  const b0 = bLo & 0xffff
+  const b1 = bLo >>> 16
+  const p00 = a0 * b0
+  const p01 = a0 * b1
+  const p10 = a1 * b0
+  const p11 = a1 * b1
+  const midCarry = ((p00 >>> 16) + (p01 & 0xffff) + (p10 & 0xffff)) >>> 16
+  const llHi = p11 + (p01 >>> 16) + (p10 >>> 16) + midCarry
 
-  return {
-    hi: ((w3 << 16) | w2) >>> 0,
-    lo: ((w1 << 16) | w0) >>> 0,
-  }
+  const hi = (llHi + Math.imul(aLo, bHi) + Math.imul(aHi, bLo)) >>> 0
+  return { hi, lo }
 }
