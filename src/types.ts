@@ -6,7 +6,7 @@ export enum OutputFnType {
   RXS_M_XS = 4,
 }
 
-export type OutputFn = (state: bigint) => number
+export type OutputFn = (state: Uint64) => number
 
 // TODO: Implement more stream schemes
 
@@ -17,11 +17,8 @@ export enum StreamScheme {
   MCG = 3,
 }
 
+/** @deprecated Will be removed in 3.0.0. Use `keyof typeof StreamScheme` directly. */
 export type StreamSchemeName = keyof typeof StreamScheme
-
-export type SchemeFn = (pcg: PCGState) => bigint
-
-export type LongLike = bigint | number | string
 
 // JSON-serializable representation of an unsigned 64-bit integer split into
 // two unsigned 32-bit halves. `hi` is the upper 32 bits, `lo` is the lower.
@@ -30,6 +27,14 @@ export type Uint64 = {
   lo: number
 }
 
+export type SchemeFn = (pcg: PCGState) => Uint64
+
+/** @deprecated Will be removed in 3.0.0. Use `bigint | number | string` directly. */
+export type LongLike = bigint | number | string
+
+// Reserved for future PCG variants (e.g. pcg64). Stored on every PCGState so
+// serialized state from older versions remains forward-compatible when a new
+// variant is introduced.
 export type PCGVariant = 'pcg32'
 
 export type PCGState = {
@@ -40,19 +45,9 @@ export type PCGState = {
   streamScheme: StreamScheme
 }
 
-export type PCGConfig = {
-  numOutputBits: number
-  multiplier: bigint
-  increment: bigint
-  outputFns: Record<OutputFnType, OutputFn>
-  incrementers: Record<StreamScheme, SchemeFn>
-}
-
 export type RandomFn<T> = (pcg: PCGState) => [T, PCGState]
 
 export type CreatePcgOptions = {
-  streamScheme?: StreamScheme | StreamSchemeName
+  streamScheme?: StreamScheme | keyof typeof StreamScheme
   outputFnType?: OutputFnType
 }
-
-export type CreatePcg = (options: CreatePcgOptions, initState: LongLike, initStreamId: LongLike) => PCGState

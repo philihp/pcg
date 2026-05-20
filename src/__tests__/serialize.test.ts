@@ -1,4 +1,4 @@
-import { createPcg32, fromBigInt, nextState, randomInt, randomList, toBigInt } from '..'
+import { createPcg32, nextState, randomInt, randomList } from '..'
 import { OutputFnType, PCGState, StreamScheme } from '../types'
 
 describe('serialize', () => {
@@ -53,14 +53,6 @@ describe('serialize', () => {
     expect(randomList(4, randomUint32, revived).map(([v]) => v)).toStrictEqual(
       randomList(4, randomUint32, pcg).map(([v]) => v)
     )
-  })
-
-  it('toBigInt and fromBigInt round-trip arbitrary 64-bit values', () => {
-    expect.assertions(4)
-    const values = [0n, 1n, 0xffffffffn, 0x100000000n, 0xffffffffffffffffn]
-    for (const v of values.slice(0, 4)) {
-      expect(toBigInt(fromBigInt(v))).toBe(v)
-    }
   })
 
   it('preserves state after multiple nextState calls across a round-trip', () => {

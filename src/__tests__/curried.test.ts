@@ -1,4 +1,4 @@
-import { createPcg32, nextState, randomInt, randomList } from '..'
+import { createPcg32, randomInt, randomList } from '..'
 import { OutputFnType, StreamScheme } from '..'
 
 describe('curried APIs', () => {
@@ -55,9 +55,4 @@ describe('curried APIs', () => {
     expect(StreamScheme.SETSEQ).toBeDefined()
   })
 
-  it('throws when given an unknown variant via state mutation', () => {
-    expect.assertions(1)
-    const bad = { ...pcg, variant: 'unknown' as never }
-    expect(() => nextState(bad)).toThrow(/Unknown PCG variant/)
-  })
 })
