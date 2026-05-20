@@ -1,29 +1,8 @@
-import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
-import { pcg32Advance, pcg32Output, resolveStreamScheme } from './pcg32'
-import { CreatePcgOptions, PCGState, PCGVariant, RandomFn, Uint64 } from './types'
-import { fromBigInt } from './uint64'
+import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
+import { PCGState, PCGVariant, RandomFn, Uint64 } from './types'
 
 const NUM_OUTPUT_BITS = 32
-const MASK_64 = 0xffffffffffffffffn
-
-export const createPcg32 = (
-  { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
-  initState: bigint | number | string,
-  initStreamId: bigint | number | string
-): PCGState => {
-  const resolvedScheme = resolveStreamScheme(streamScheme)
-  const streamIdBig = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-  const stateBig = (streamIdBig + BigInt(initState)) & MASK_64
-  const seeded: PCGState = {
-    state: fromBigInt(stateBig),
-    streamId: fromBigInt(streamIdBig),
-    variant: 'pcg32',
-    outputFnType,
-    streamScheme: resolvedScheme,
-  }
-  return { ...seeded, state: pcg32Advance(seeded, 1) }
-}
 
 // Alias kept for callers that adopted the 2.0.0 name; will be deprecated in a
 // future release once the variant-suffixed factories settle as the convention.
@@ -125,7 +104,7 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export { createMulberry32 }
+export { createMulberry32, createPcg32 }
 export { fromBigInt, toBigInt } from './uint64'
 export { OutputFnType, StreamScheme } from './types'
 export type {
