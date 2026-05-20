@@ -1,19 +1,39 @@
 import { ror32 } from './bitwise'
 import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
-import { OutputFnType, PCGState, StreamScheme } from './types'
+import { OutputFnType, PCGState64, StreamScheme } from './types'
 import createPcg, { toBigInt } from './createPcg'
 
-export { stepState, nextState, prevState, randomInt, randomList, getOutput, toBigInt, fromBigInt } from './createPcg'
+export {
+  stepState64,
+  nextState64,
+  prevState64,
+  randomInt64,
+  randomList64,
+  getOutput64,
+  toBigInt,
+  fromBigInt,
+} from './createPcg'
+export {
+  createPcg32,
+  nextState,
+  prevState,
+  stepState,
+  getOutput,
+  randomInt,
+  randomUint32,
+  randomList,
+} from './pcg32'
+export type { PCGState32, RandomFn } from './pcg32'
 export { OutputFnType, StreamScheme } from './types'
 export type {
-  CreatePcg,
+  CreatePcg64,
   CreatePcgOptions,
   LongLike,
   OutputFn,
   PCGConfig,
-  PCGState,
+  PCGState64,
   PCGVariant,
-  RandomFn,
+  RandomFn64,
   SchemeFn,
   StreamSchemeName,
   Uint64,
@@ -22,12 +42,12 @@ export type {
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
 
-export const createPcg32 = createPcg('pcg32', {
+export const createPcg64 = createPcg('pcg32', {
   numOutputBits: 32,
   multiplier: pcgDefaultMultiplier64,
   increment: pcgDefaultIncrement64,
   incrementers: {
-    [StreamScheme.SETSEQ]: (pcg: PCGState) => toBigInt(pcg.streamId),
+    [StreamScheme.SETSEQ]: (pcg: PCGState64) => toBigInt(pcg.streamId),
     [StreamScheme.ONESEQ]: () => pcgDefaultIncrement64,
     [StreamScheme.MCG]: () => 0n,
   },

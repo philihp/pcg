@@ -1,52 +1,52 @@
-import { createPcg32, nextState, randomInt, randomList } from '..'
+import { createPcg64, nextState64, randomInt64, randomList64 } from '..'
 import { OutputFnType, StreamScheme } from '..'
 
 describe('curried APIs', () => {
-  const pcg = createPcg32({}, 42, 54)
-  const directRng = randomInt(0, 2 ** 32 - 1)
+  const pcg = createPcg64({}, 42, 54)
+  const directRng = randomInt64(0, 2 ** 32 - 1)
   const expected = directRng(pcg)
 
-  it('randomInt(min)(max)(pcg) is equivalent to randomInt(min, max, pcg)', () => {
+  it('randomInt64(min)(max)(pcg) is equivalent to randomInt64(min, max, pcg)', () => {
     expect.assertions(2)
-    const partial = randomInt(0)
+    const partial = randomInt64(0)
     const ranger = partial(2 ** 32 - 1)
     const [value, next] = ranger(pcg)
     expect(value).toBe(expected[0])
     expect(next).toStrictEqual(expected[1])
   })
 
-  it('randomInt(min)(max, pcg) is equivalent to randomInt(min, max, pcg)', () => {
+  it('randomInt64(min)(max, pcg) is equivalent to randomInt64(min, max, pcg)', () => {
     expect.assertions(2)
-    const partial = randomInt(0)
+    const partial = randomInt64(0)
     const [value, next] = partial(2 ** 32 - 1, pcg)
     expect(value).toBe(expected[0])
     expect(next).toStrictEqual(expected[1])
   })
 
-  it('randomList(length)(rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
+  it('randomList64(length)(rng)(pcg) is equivalent to randomList64(length, rng, pcg)', () => {
     expect.assertions(1)
-    const expectedList = randomList(3, directRng, pcg)
-    const list = randomList(3)<number>(directRng)(pcg)
+    const expectedList = randomList64(3, directRng, pcg)
+    const list = randomList64(3)<number>(directRng)(pcg)
     expect(list).toStrictEqual(expectedList)
   })
 
-  it('randomList(length)(rng, pcg) is equivalent to randomList(length, rng, pcg)', () => {
+  it('randomList64(length)(rng, pcg) is equivalent to randomList64(length, rng, pcg)', () => {
     expect.assertions(1)
-    const expectedList = randomList(3, directRng, pcg)
-    const list = randomList(3)<number>(directRng, pcg)
+    const expectedList = randomList64(3, directRng, pcg)
+    const list = randomList64(3)<number>(directRng, pcg)
     expect(list).toStrictEqual(expectedList)
   })
 
-  it('randomList(length, rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
+  it('randomList64(length, rng)(pcg) is equivalent to randomList64(length, rng, pcg)', () => {
     expect.assertions(1)
-    const expectedList = randomList(3, directRng, pcg)
-    const list = randomList(3, directRng)(pcg)
+    const expectedList = randomList64(3, directRng, pcg)
+    const list = randomList64(3, directRng)(pcg)
     expect(list).toStrictEqual(expectedList)
   })
 
-  it('randomList of zero length returns an empty array', () => {
+  it('randomList64 of zero length returns an empty array', () => {
     expect.assertions(1)
-    expect(randomList(0, directRng, pcg)).toStrictEqual([])
+    expect(randomList64(0, directRng, pcg)).toStrictEqual([])
   })
 
   it('exposes OutputFnType and StreamScheme from the package entry point', () => {
@@ -58,6 +58,6 @@ describe('curried APIs', () => {
   it('throws when given an unknown variant via state mutation', () => {
     expect.assertions(1)
     const bad = { ...pcg, variant: 'unknown' as never }
-    expect(() => nextState(bad)).toThrow(/Unknown PCG variant/)
+    expect(() => nextState64(bad)).toThrow(/Unknown PCG variant/)
   })
 })

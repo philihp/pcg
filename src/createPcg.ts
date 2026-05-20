@@ -1,12 +1,12 @@
 import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import {
-  CreatePcg,
+  CreatePcg64,
   CreatePcgOptions,
   LongLike,
   PCGConfig,
-  PCGState,
+  PCGState64,
   PCGVariant,
-  RandomFn,
+  RandomFn64,
   StreamScheme,
   Uint64,
 } from './types'
@@ -40,7 +40,7 @@ const resolveStreamScheme = (
   return resolved
 }
 
-export const getOutput = (pcg: PCGState): number =>
+export const getOutput64 = (pcg: PCGState64): number =>
   getConfig(pcg.variant).outputFns[pcg.outputFnType](toBigInt(pcg.state))
 
 /* Multi-step advance functions (jump-ahead, jump-back)
@@ -52,7 +52,7 @@ export const getOutput = (pcg: PCGState): number =>
  * Even though delta is an unsigned integer, we can pass a signed integer to go backwards, it just
  * goes "the long way round".
  */
-const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
+const stepState64Impl = (delta: number, pcg: PCGState64): PCGState64 => {
   const config = getConfig(pcg.variant)
   let currMultiplier = config.multiplier
   let currIncrement = config.incrementers[pcg.streamScheme](pcg)
@@ -76,16 +76,16 @@ const stepStateImpl = (delta: number, pcg: PCGState): PCGState => {
   }
 }
 
-export function stepState(delta: number): (pcg: PCGState) => PCGState
-export function stepState(delta: number, pcg: PCGState): PCGState
-export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGState) => PCGState) {
-  if (pcg === undefined) return (p: PCGState) => stepStateImpl(delta, p)
-  return stepStateImpl(delta, pcg)
+export function stepState64(delta: number): (pcg: PCGState64) => PCGState64
+export function stepState64(delta: number, pcg: PCGState64): PCGState64
+export function stepState64(delta: number, pcg?: PCGState64): PCGState64 | ((pcg: PCGState64) => PCGState64) {
+  if (pcg === undefined) return (p: PCGState64) => stepState64Impl(delta, p)
+  return stepState64Impl(delta, pcg)
 }
 
-// Fast path for delta=1, which is the common case driven by randomInt.
-// Equivalent to stepState(1) but avoids the jump-ahead bookkeeping loop.
-export const nextState = (pcg: PCGState): PCGState => {
+// Fast path for delta=1, which is the common case driven by randomInt64.
+// Equivalent to stepState64(1) but avoids the jump-ahead bookkeeping loop.
+export const nextState64 = (pcg: PCGState64): PCGState64 => {
   const config = getConfig(pcg.variant)
   return {
     ...pcg,
@@ -93,9 +93,9 @@ export const nextState = (pcg: PCGState): PCGState => {
   }
 }
 
-export const prevState = stepState(-1)
+export const prevState64 = stepState64(-1)
 
-const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
+const randomInt64Impl = (min: number, max: number, pcg: PCGState64): [number, PCGState64] => {
   const config = getConfig(pcg.variant)
   const outputMaxRange = 2 ** config.numOutputBits
   const bound = max - min
@@ -108,32 +108,34 @@ const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGSta
   let nextPcg = pcg
   do {
     n = outputFn(toBigInt(nextPcg.state))
-    nextPcg = nextState(nextPcg)
+    nextPcg = nextState64(nextPcg)
   } while (n < threshold)
 
   return [(n % bound) + min, nextPcg]
 }
 
-interface RandomIntPartial1 {
-  (max: number): (pcg: PCGState) => [number, PCGState]
-  (max: number, pcg: PCGState): [number, PCGState]
+interface RandomInt64Partial1 {
+  (max: number): (pcg: PCGState64) => [number, PCGState64]
+  (max: number, pcg: PCGState64): [number, PCGState64]
 }
 
-export function randomInt(min: number, max: number, pcg: PCGState): [number, PCGState]
-export function randomInt(min: number, max: number): (pcg: PCGState) => [number, PCGState]
-export function randomInt(min: number): RandomIntPartial1
-export function randomInt(min: number, max?: number, pcg?: PCGState): unknown {
+export function randomInt64(min: number, max: number, pcg: PCGState64): [number, PCGState64]
+export function randomInt64(min: number, max: number): (pcg: PCGState64) => [number, PCGState64]
+export function randomInt64(min: number): RandomInt64Partial1
+export function randomInt64(min: number, max?: number, pcg?: PCGState64): unknown {
   if (max === undefined) {
-    return ((m: number, p?: PCGState) =>
-      p === undefined ? (pp: PCGState) => randomIntImpl(min, m, pp) : randomIntImpl(min, m, p)) as RandomIntPartial1
+    return ((m: number, p?: PCGState64) =>
+      p === undefined
+        ? (pp: PCGState64) => randomInt64Impl(min, m, pp)
+        : randomInt64Impl(min, m, p)) as RandomInt64Partial1
   }
-  if (pcg === undefined) return (p: PCGState) => randomIntImpl(min, max, p)
-  return randomIntImpl(min, max, pcg)
+  if (pcg === undefined) return (p: PCGState64) => randomInt64Impl(min, max, p)
+  return randomInt64Impl(min, max, pcg)
 }
 
-const randomListImpl = <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] => {
+const randomList64Impl = <T>(length: number, rng: RandomFn64<T>, initPcg: PCGState64): [T, PCGState64][] => {
   if (length <= 0) return []
-  const result: [T, PCGState][] = new Array(length)
+  const result: [T, PCGState64][] = new Array(length)
   let curr = rng(initPcg)
   result[0] = curr
   for (let i = 1; i < length; i++) {
@@ -143,36 +145,40 @@ const randomListImpl = <T>(length: number, rng: RandomFn<T>, initPcg: PCGState):
   return result
 }
 
-interface RandomListPartial1 {
-  <T>(rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
-  <T>(rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+interface RandomList64Partial1 {
+  <T>(rng: RandomFn64<T>): (initPcg: PCGState64) => [T, PCGState64][]
+  <T>(rng: RandomFn64<T>, initPcg: PCGState64): [T, PCGState64][]
 }
 
-interface RandomListFn {
-  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
-  <T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
-  (length: number): RandomListPartial1
+interface RandomList64Fn {
+  <T>(length: number, rng: RandomFn64<T>, initPcg: PCGState64): [T, PCGState64][]
+  <T>(length: number, rng: RandomFn64<T>): (initPcg: PCGState64) => [T, PCGState64][]
+  (length: number): RandomList64Partial1
 }
 
-export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown>, initPcg?: PCGState): unknown => {
+export const randomList64: RandomList64Fn = ((
+  length: number,
+  rng?: RandomFn64<unknown>,
+  initPcg?: PCGState64
+): unknown => {
   if (rng === undefined) {
-    return (r: RandomFn<unknown>, p?: PCGState) =>
-      p === undefined ? (pp: PCGState) => randomListImpl(length, r, pp) : randomListImpl(length, r, p)
+    return (r: RandomFn64<unknown>, p?: PCGState64) =>
+      p === undefined ? (pp: PCGState64) => randomList64Impl(length, r, pp) : randomList64Impl(length, r, p)
   }
-  if (initPcg === undefined) return (p: PCGState) => randomListImpl(length, rng, p)
-  return randomListImpl(length, rng, initPcg)
-}) as RandomListFn
+  if (initPcg === undefined) return (p: PCGState64) => randomList64Impl(length, rng, p)
+  return randomList64Impl(length, rng, initPcg)
+}) as RandomList64Fn
 
-export default (variant: PCGVariant, config: PCGConfig): CreatePcg => {
+export default (variant: PCGVariant, config: PCGConfig): CreatePcg64 => {
   variantConfigs[variant] = config
   return (
     { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
     initState: LongLike,
     initStreamId: LongLike
-  ): PCGState => {
+  ): PCGState64 => {
     const resolvedScheme = resolveStreamScheme(streamScheme, config)
     const streamId = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-    return nextState({
+    return nextState64({
       state: fromBigInt((streamId + BigInt(initState)) & MASK_64),
       streamId: fromBigInt(streamId),
       variant,

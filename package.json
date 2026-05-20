@@ -36,7 +36,8 @@
     "prepare": "husky install && npm run build",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "bench": "tsx bench/randomInt.bench.ts"
   },
   "dependencies": {},
   "devDependencies": {
@@ -54,6 +55,7 @@
     "prettier": "3.8.3",
     "ts-jest": "29.4.9",
     "tsup": "^8.5.1",
+    "tsx": "^4.22.3",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.3"
   },

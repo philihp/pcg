@@ -1,4 +1,4 @@
-import { createPcg32, randomInt, randomList } from '..'
+import { createPcg64, randomInt64, randomList64 } from '..'
 import { StreamScheme } from '../types'
 
 describe('oneseq', () => {
@@ -9,11 +9,11 @@ describe('oneseq', () => {
     }
     const initState = 42
     const initStreamId = 54
-    const pcg = createPcg32(advancedOptions, initState, initStreamId)
+    const pcg = createPcg64(advancedOptions, initState, initStreamId)
 
-    const randomUint32 = randomInt(0, 2 ** 32 - 1)
+    const randomUint32 = randomInt64(0, 2 ** 32 - 1)
     const listLength = 6
-    const out = randomList(listLength, randomUint32, pcg)
+    const out = randomList64(listLength, randomUint32, pcg)
 
     expect(out).toHaveLength(6)
     expect(out.map((n) => n[0])).toStrictEqual([73173280, 3745155691, 2856497084, 4276626055, 3324726470, 3500761220])
