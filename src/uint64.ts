@@ -1,5 +1,24 @@
 import { Uint64 } from './types'
 
+const MASK_32 = 0xffffffffn
+
+/**
+ * @deprecated Will be removed in 3.0.0. The library no longer uses BigInt
+ * internally; if you need a bigint, do `(BigInt(hi) << 32n) | BigInt(lo)` at
+ * the call site.
+ */
+export const toBigInt = ({ hi, lo }: Uint64): bigint => (BigInt(hi) << 32n) | BigInt(lo)
+
+/**
+ * @deprecated Will be removed in 3.0.0. The library no longer uses BigInt
+ * internally; if you need to construct a Uint64 from a bigint, split it as
+ * `{ hi: Number((v >> 32n) & 0xffffffffn), lo: Number(v & 0xffffffffn) }`.
+ */
+export const fromBigInt = (value: bigint): Uint64 => ({
+  hi: Number((value >> 32n) & MASK_32),
+  lo: Number(value & MASK_32),
+})
+
 // Convert a JS number (treated as a signed 64-bit integer) to Uint64.
 // Negative values are encoded as two's complement modulo 2^64.
 export const fromNumber = (value: number): Uint64 => {

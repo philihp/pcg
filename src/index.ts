@@ -1,3 +1,24 @@
-export { createPcg, createPcg32, getOutput, nextState, prevState, randomInt, randomList, stepState } from './createPcg'
+export {
+  createPcg,
+  createPcg32,
+  fromBigInt,
+  getOutput,
+  nextState,
+  prevState,
+  randomInt,
+  randomList,
+  stepState,
+  toBigInt,
+} from './createPcg'
 export { OutputFnType, StreamScheme } from './types'
-export type { CreatePcgOptions, OutputFn, PCGState, PCGVariant, RandomFn, SchemeFn, Uint64 } from './types'
+export type {
+  CreatePcgOptions,
+  LongLike,
+  OutputFn,
+  PCGState,
+  PCGVariant,
+  RandomFn,
+  SchemeFn,
+  StreamSchemeName,
+  Uint64,
+} from './types'

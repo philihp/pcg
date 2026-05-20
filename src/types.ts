@@ -17,6 +17,9 @@ export enum StreamScheme {
   MCG = 3,
 }
 
+/** @deprecated Will be removed in 3.0.0. Use `keyof typeof StreamScheme` directly. */
+export type StreamSchemeName = keyof typeof StreamScheme
+
 // JSON-serializable representation of an unsigned 64-bit integer split into
 // two unsigned 32-bit halves. `hi` is the upper 32 bits, `lo` is the lower.
 export type Uint64 = {
@@ -25,6 +28,9 @@ export type Uint64 = {
 }
 
 export type SchemeFn = (pcg: PCGState) => Uint64
+
+/** @deprecated Will be removed in 3.0.0. Use `bigint | number | string` directly. */
+export type LongLike = bigint | number | string
 
 // Reserved for future PCG variants (e.g. pcg64). Stored on every PCGState so
 // serialized state from older versions remains forward-compatible when a new
