@@ -1,8 +1,32 @@
+import { pcgDefaultOutputFnType, pcgDefaultStreamScheme } from './defaults'
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
-import { createPcg, createPcg32, pcg32Advance, pcg32Output } from './pcg32'
-import { PCGState, PCGVariant, RandomFn, Uint64 } from './types'
+import { pcg32Advance, pcg32Output, resolveStreamScheme } from './pcg32'
+import { CreatePcgOptions, PCGState, PCGVariant, RandomFn, Uint64 } from './types'
+import { fromBigInt } from './uint64'
 
 const NUM_OUTPUT_BITS = 32
+const MASK_64 = 0xffffffffffffffffn
+
+export const createPcg = (
+  { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
+  initState: bigint | number | string,
+  initStreamId: bigint | number | string
+): PCGState => {
+  const resolvedScheme = resolveStreamScheme(streamScheme)
+  const streamIdBig = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
+  const stateBig = (streamIdBig + BigInt(initState)) & MASK_64
+  const seeded: PCGState = {
+    state: fromBigInt(stateBig),
+    streamId: fromBigInt(streamIdBig),
+    variant: 'pcg32',
+    outputFnType,
+    streamScheme: resolvedScheme,
+  }
+  return { ...seeded, state: pcg32Advance(seeded, 1) }
+}
+
+/** @deprecated Renamed to `createPcg`. This alias will be removed in 3.0.0. */
+export const createPcg32 = createPcg
 
 type VariantImpl = {
   advance: (pcg: PCGState, delta: number) => Uint64
@@ -100,7 +124,7 @@ export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown
   return randomListImpl(length, rng, initPcg)
 }) as RandomListFn
 
-export { createMulberry32, createPcg, createPcg32 }
+export { createMulberry32 }
 export { fromBigInt, toBigInt } from './uint64'
 export { OutputFnType, StreamScheme } from './types'
 export type {

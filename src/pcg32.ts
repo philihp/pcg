@@ -1,22 +1,7 @@
 import { ror32 } from './bitwise'
-import {
-  pcgDefaultIncrement64,
-  pcgDefaultMultiplier64,
-  pcgDefaultOutputFnType,
-  pcgDefaultStreamScheme,
-} from './defaults'
-import {
-  CreatePcgOptions,
-  OutputFn,
-  OutputFnType,
-  PCGState,
-  SchemeFn,
-  StreamScheme,
-  Uint64,
-} from './types'
+import { pcgDefaultIncrement64, pcgDefaultMultiplier64 } from './defaults'
+import { OutputFn, OutputFnType, PCGState, SchemeFn, StreamScheme, Uint64 } from './types'
 import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
-
-const MASK_64 = 0xffffffffffffffffn
 
 const MULTIPLIER: Uint64 = fromBigInt(pcgDefaultMultiplier64)
 const INCREMENT: Uint64 = fromBigInt(pcgDefaultIncrement64)
@@ -65,7 +50,7 @@ const OUTPUT_FNS: Record<OutputFnType, OutputFn> = {
   },
 }
 
-const resolveStreamScheme = (streamScheme: StreamScheme | keyof typeof StreamScheme): StreamScheme => {
+export const resolveStreamScheme = (streamScheme: StreamScheme | keyof typeof StreamScheme): StreamScheme => {
   const resolved: StreamScheme = typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
   if (resolved === undefined || INCREMENTERS[resolved] === undefined) {
     throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
@@ -109,24 +94,3 @@ export const pcg32Advance = (pcg: PCGState, delta: number): Uint64 => {
 }
 
 export const pcg32Output = (pcg: PCGState): number => OUTPUT_FNS[pcg.outputFnType](pcg.state)
-
-export const createPcg = (
-  { streamScheme = pcgDefaultStreamScheme, outputFnType = pcgDefaultOutputFnType }: CreatePcgOptions,
-  initState: bigint | number | string,
-  initStreamId: bigint | number | string
-): PCGState => {
-  const resolvedScheme = resolveStreamScheme(streamScheme)
-  const streamIdBig = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
-  const stateBig = (streamIdBig + BigInt(initState)) & MASK_64
-  const seeded: PCGState = {
-    state: fromBigInt(stateBig),
-    streamId: fromBigInt(streamIdBig),
-    variant: 'pcg32',
-    outputFnType,
-    streamScheme: resolvedScheme,
-  }
-  return { ...seeded, state: pcg32Advance(seeded, 1) }
-}
-
-/** @deprecated Renamed to `createPcg`. This alias will be removed in 3.0.0. */
-export const createPcg32 = createPcg
