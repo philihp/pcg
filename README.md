@@ -41,10 +41,10 @@ const list = randomList(3, randomUint32, state0)
 | Function | State size | Notes |
 | --- | --- | --- |
 | `createPcg32(options, seed, streamId)` | 64-bit | Full PCG; reversible; supports stream schemes and output functions. |
-| `createMulberry32(seed)` | 32-bit | Tommy Ettinger's mulberry32. Compact and fast. Period 2³². |
-| `createSfc32(seed)` | 128-bit | Chris Doty-Humphrey's sfc32. Passes PractRand. **Not reversible** — `prevState` / negative `stepState` deltas throw. |
+| `createMulberry32(seed)` | 32-bit | Tommy Ettinger's mulberry32. Smaller state, shorter period (2³²). |
+| `createSfc32(seed)` | 128-bit | Chris Doty-Humphrey's sfc32. Not reversible. |
 
-All three return a `PCGState` and work with every function below.
+Alternative factories are not technically PCGs, they are provided for comparison. All three return a compatible `PCGState`.
 
 ### Drawing values
 
@@ -55,7 +55,7 @@ All three return a `PCGState` and work with every function below.
 ### Advancing the state
 
 - `nextState(state) → PCGState` — advance by 1.
-- `prevState(state) → PCGState` — rewind by 1.
+- `prevState(state) → PCGState` — rewind by 1. Unsupported by sfc32.
 - `stepState(delta, state) → PCGState` — jump ahead or back by any signed integer. O(log Δ) via Brown's jump-ahead algorithm for PCG.
 
 ### Configuring `createPcg32`
