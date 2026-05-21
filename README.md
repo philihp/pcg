@@ -6,9 +6,7 @@
 ![Downloads](https://img.shields.io/npm/dt/pcg)
 ![License](https://img.shields.io/npm/l/pcg)
 
-A functional TypeScript implementation of the [PCG family of random number generators](http://pcg-random.org), plus a couple of lightweight alternatives (`mulberry32`, `sfc32`) that share the same API.
-
-State is immutable: every call returns a `[value, nextState]` tuple, so the same input always produces the same output. This makes runs reproducible, replayable, and trivially serializable — `PCGState` is plain JSON (`{ hi, lo }` halves, no `bigint`s).
+A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later.
 
 ## Install
 
@@ -16,7 +14,7 @@ State is immutable: every call returns a `[value, nextState]` tuple, so the same
 npm install pcg
 ```
 
-The package ships dual ESM/CJS builds and TypeScript types. Node 18+ is supported; Node 22+ is recommended.
+The package ships dual ESM/CJS builds and TypeScript types.
 
 ## Quick start
 
@@ -50,15 +48,15 @@ All three return a `PCGState` and work with every function below.
 
 ### Drawing values
 
-- `randomInt(min, max)(state) → [number, PCGState]` — uniform integer in `[min, max)`. Curried in any arity (`randomInt(min)(max)(state)`, `randomInt(min, max, state)`, etc.).
+- `randomInt(min, max, state) → [number, PCGState]` — uniform integer in `[min, max)`. Curried so `const random = randomInt(min, max); random(state)` also works.
 - `randomList(length, rng, state) → [value, PCGState][]` — runs `rng` `length` times, threading the state. Also fully curried.
 - `getOutput(state) → number` — raw 32-bit output for the current state, no advance.
 
 ### Advancing the state
 
-- `nextState(state) → PCGState` — advance by 1 (fast path).
-- `prevState(state) → PCGState` — rewind by 1 (PCG only).
-- `stepState(delta, state) → PCGState` — jump ahead or back by any signed integer. Curried: `stepState(delta)(state)`. O(log Δ) via Brown's jump-ahead algorithm for PCG; O(Δ) and forward-only for sfc32.
+- `nextState(state) → PCGState` — advance by 1.
+- `prevState(state) → PCGState` — rewind by 1.
+- `stepState(delta, state) → PCGState` — jump ahead or back by any signed integer. O(log Δ) via Brown's jump-ahead algorithm for PCG.
 
 ### Configuring `createPcg32`
 
@@ -66,9 +64,12 @@ All three return a `PCGState` and work with every function below.
 import { createPcg32, OutputFnType, StreamScheme } from 'pcg'
 
 const state = createPcg32(
-  { outputFnType: OutputFnType.XSH_RR, streamScheme: StreamScheme.SETSEQ },
-  42n,
-  54n
+  {
+    outputFnType: OutputFnType.XSH_RR,
+    streamScheme: StreamScheme.SETSEQ
+  },
+  42,
+  54
 )
 ```
 
@@ -95,19 +96,13 @@ Both options also accept their string names (`'XSH_RR'`, `'SETSEQ'`, …) if you
 
 `PCGState`, `Uint64`, `RandomFn<T>`, `CreatePcgOptions`, `OutputFn`, `SchemeFn`, `PCGVariant` are all exported. State is `{ state: Uint64, streamId: Uint64, variant, outputFnType, streamScheme }` where `Uint64` is `{ hi: number, lo: number }`.
 
-## Picking a generator
-
-- **PCG32** — the default. Use it unless you have a reason not to. Stream selection, reversible, ~7× faster hot path since 2.0.
-- **mulberry32** — pick when you want the smallest possible state (one `uint32`) and don't need a long period or multiple streams. Good for procedurally generated UI, one-off shuffles.
-- **sfc32** — pick when you want a chaotic generator with strong statistical properties and don't need to rewind. State is 128 bits but every op is 32-bit, so it's quick in JS.
-
 ## Migrating from 1.x
 
-`PCGState` is no longer a `bigint`. The 64-bit halves are now `{ hi, lo }` objects, which means `JSON.stringify` round-trips cleanly — but raw v1.x state will not deserialize into v2.x. Re-seed and replay, or convert with the (deprecated) `fromBigInt` / `toBigInt` helpers.
+`PCGState` is no longer a `bigint`. The 64-bit halves are now `{ hi: number, lo:number }` objects, so serialization with `JSON.stringify` round-trips cleanly.
 
 See [`CHANGELOG.md`](./CHANGELOG.md) for the full set of changes.
 
 ## Thanks
 
 - [@kripod](https://github.com/kripod/), who wrote the original [`pcg.js`](https://github.com/kripod/pcg.js).
-- Melissa O'Neill, for the [PCG family](http://pcg-random.org).
+- Melissa O'Neill, for her work on the [PCG family](http://pcg-random.org).
