@@ -2,18 +2,14 @@ export enum OutputFnType {
   XSH_RR = 0,
   XSH_RS = 1,
   XSL_RR = 2,
-  // XSL_RR_RR = 3 // currently unstable
   RXS_M_XS = 4,
 }
 
 export type OutputFn = (state: Uint64) => number
 
-// TODO: Implement more stream schemes
-
 export enum StreamScheme {
   SETSEQ = 0,
   ONESEQ = 1,
-  // UNIQUE = 2,
   MCG = 3,
 }
 
