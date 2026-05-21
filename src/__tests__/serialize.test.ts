@@ -1,20 +1,20 @@
+import { describe, test } from 'node:test'
+import assert from 'node:assert/strict'
 import { createPcg32, nextState, randomInt, randomList } from '..'
 import { OutputFnType, PCGState, StreamScheme } from '../types'
 
 describe('serialize', () => {
-  it('round-trips the state through JSON.stringify/parse', () => {
-    expect.assertions(2)
+  test('round-trips the state through JSON.stringify/parse', () => {
     const pcg = createPcg32({}, 42, 54)
     const json = JSON.stringify(pcg)
     const revived = JSON.parse(json) as PCGState
-    expect(revived).toStrictEqual(pcg)
+    assert.deepEqual(revived, pcg)
 
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
-    expect(randomUint32(revived)[0]).toBe(randomUint32(pcg)[0])
+    assert.equal(randomUint32(revived)[0], randomUint32(pcg)[0])
   })
 
-  it('continues a generation sequence after a serialization round-trip', () => {
-    expect.assertions(1)
+  test('continues a generation sequence after a serialization round-trip', () => {
     const pcg = createPcg32({}, 42, 54)
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
 
@@ -25,11 +25,10 @@ describe('serialize', () => {
     const persisted = JSON.parse(JSON.stringify(firstThree[2][1])) as PCGState
     const resumed = randomList(3, randomUint32, persisted).map(([v]) => v)
 
-    expect([...firstThree.map(([v]) => v), ...resumed]).toStrictEqual(reference)
+    assert.deepEqual([...firstThree.map(([v]) => v), ...resumed], reference)
   })
 
-  it('state contains no functions and no bigints', () => {
-    expect.assertions(0)
+  test('state contains no functions and no bigints', () => {
     const pcg = createPcg32({}, 42, 54)
     const seen = new Set<unknown>()
     const walk = (value: unknown): void => {
@@ -42,21 +41,20 @@ describe('serialize', () => {
       seen.add(value)
       for (const v of Object.values(value as Record<string, unknown>)) walk(v)
     }
-    walk(pcg)
+    assert.doesNotThrow(() => walk(pcg))
   })
 
-  it('survives serialization with non-default scheme and output function', () => {
-    expect.assertions(1)
+  test('survives serialization with non-default scheme and output function', () => {
     const pcg = createPcg32({ streamScheme: StreamScheme.ONESEQ, outputFnType: OutputFnType.RXS_M_XS }, 42, 54)
     const revived = JSON.parse(JSON.stringify(pcg)) as PCGState
     const randomUint32 = randomInt(0, 2 ** 32 - 1)
-    expect(randomList(4, randomUint32, revived).map(([v]) => v)).toStrictEqual(
+    assert.deepEqual(
+      randomList(4, randomUint32, revived).map(([v]) => v),
       randomList(4, randomUint32, pcg).map(([v]) => v)
     )
   })
 
-  it('preserves state after multiple nextState calls across a round-trip', () => {
-    expect.assertions(1)
+  test('preserves state after multiple nextState calls across a round-trip', () => {
     const pcg = createPcg32({}, 42, 54)
     let live = pcg
     let revived: PCGState = JSON.parse(JSON.stringify(pcg))
@@ -64,6 +62,6 @@ describe('serialize', () => {
       live = nextState(live)
       revived = nextState(JSON.parse(JSON.stringify(revived)))
     }
-    expect(revived).toStrictEqual(live)
+    assert.deepEqual(revived, live)
   })
 })
