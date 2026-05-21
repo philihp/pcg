@@ -4,7 +4,7 @@
   "description": "A functional typescript implementation of the PCG family random number generators",
   "sideEffects": false,
   "engines": {
-    "node": ">=16"
+    "node": ">=12"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -34,9 +34,9 @@
     "build": "tsup",
     "lint": "eslint src",
     "prepare": "husky install && npm run build",
-    "test": "node --import tsx --test 'src/__tests__/*.test.ts'",
-    "test:coverage": "mkdir -p coverage && node --import tsx --test --experimental-test-coverage --test-coverage-exclude='src/__tests__/**' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info 'src/__tests__/*.test.ts'",
-    "test:watch": "node --import tsx --test --watch 'src/__tests__/*.test.ts'"
+    "test": "node --import tsx --test src/__tests__/*.test.ts",
+    "test:coverage": "mkdir -p coverage && node --import tsx --test --experimental-test-coverage --test-coverage-exclude='src/__tests__/**' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info src/__tests__/*.test.ts",
+    "test:watch": "node --import tsx --test --watch src/__tests__/*.test.ts"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
