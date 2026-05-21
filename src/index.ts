@@ -1,7 +1,7 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
 import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
 import { createSfc32, sfc32Advance, sfc32Output } from './sfc32'
-import { PCGState, PCGVariant, RandomFn } from './types'
+import { PCGState, PCGVariant, RandomFn, RandomIntPartial1, RandomListPartial1 } from './types'
 
 const NUM_OUTPUT_BITS = 32
 
@@ -57,11 +57,6 @@ const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGSta
   return [(n % bound) + min, nextPcg]
 }
 
-interface RandomIntPartial1 {
-  (max: number): (pcg: PCGState) => [number, PCGState]
-  (max: number, pcg: PCGState): [number, PCGState]
-}
-
 export function randomInt(min: number, max: number, pcg: PCGState): [number, PCGState]
 export function randomInt(min: number, max: number): (pcg: PCGState) => [number, PCGState]
 export function randomInt(min: number): RandomIntPartial1
@@ -86,29 +81,26 @@ const randomListImpl = <T>(length: number, rng: RandomFn<T>, initPcg: PCGState):
   return result
 }
 
-interface RandomListPartial1 {
-  <T>(rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
-  <T>(rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
-}
-
-interface RandomListFn {
-  <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
-  <T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
-  (length: number): RandomListPartial1
-}
-
-export const randomList: RandomListFn = ((length: number, rng?: RandomFn<unknown>, initPcg?: PCGState): unknown => {
-  if (rng === undefined) {
-    return (r: RandomFn<unknown>, p?: PCGState) =>
-      p === undefined ? (pp: PCGState) => randomListImpl(length, r, pp) : randomListImpl(length, r, p)
+const curryRandomList = (length: number): RandomListPartial1 => {
+  const partial = (rng: RandomFn<unknown>, initPcg?: PCGState) => {
+    if (initPcg === undefined) return (p: PCGState) => randomListImpl(length, rng, p)
+    return randomListImpl(length, rng, initPcg)
   }
+  return partial as RandomListPartial1
+}
+
+export function randomList<T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+export function randomList<T>(length: number, rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
+export function randomList(length: number): RandomListPartial1
+export function randomList(length: number, rng?: RandomFn<unknown>, initPcg?: PCGState): unknown {
+  if (rng === undefined) return curryRandomList(length)
   if (initPcg === undefined) return (p: PCGState) => randomListImpl(length, rng, p)
   return randomListImpl(length, rng, initPcg)
-}) as RandomListFn
+}
 
 export { createMulberry32, createPcg32, createSfc32 }
 export { fromBigInt, toBigInt } from './uint64'
-export { OutputFnType, StreamScheme } from './types'
+export { OutputFnType, StreamScheme } from './enums'
 export type {
   CreatePcgOptions,
   LongLike,

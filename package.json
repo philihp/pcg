@@ -2,22 +2,23 @@
   "name": "pcg",
   "version": "2.1.0",
   "description": "A functional typescript implementation of the PCG family random number generators",
+  "type": "module",
   "sideEffects": false,
   "engines": {
     "node": ">=18"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
@@ -35,7 +36,7 @@
     "lint": "eslint src",
     "prepare": "npm run build",
     "test": "node --import tsx --test src/__tests__/*.test.ts",
-    "test:coverage": "mkdir -p coverage && node --import tsx --test --experimental-test-coverage --test-coverage-exclude='src/__tests__/**' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info src/__tests__/*.test.ts",
+    "test:coverage": "mkdir -p coverage && node --import tsx --test --experimental-test-coverage --test-coverage-exclude='src/__tests__/**' --test-coverage-exclude='src/types.ts' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info src/__tests__/*.test.ts",
     "test:watch": "node --import tsx --test --watch src/__tests__/*.test.ts"
   },
   "devDependencies": {

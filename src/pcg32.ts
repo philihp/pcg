@@ -5,7 +5,8 @@ import {
   pcgDefaultOutputFnType,
   pcgDefaultStreamScheme,
 } from './defaults'
-import { CreatePcgOptions, OutputFn, OutputFnType, PCGState, SchemeFn, StreamScheme, Uint64 } from './types'
+import { OutputFnType, StreamScheme } from './enums'
+import { CreatePcgOptions, OutputFn, PCGState, SchemeFn, Uint64 } from './types'
 import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
 
 const MASK_64 = 0xffffffffffffffffn
@@ -59,9 +60,7 @@ const OUTPUT_FNS: Record<OutputFnType, OutputFn> = {
 
 const resolveStreamScheme = (streamScheme: StreamScheme | keyof typeof StreamScheme): StreamScheme => {
   const resolved: StreamScheme = typeof streamScheme === 'string' ? StreamScheme[streamScheme] : streamScheme
-  if (resolved === undefined || INCREMENTERS[resolved] === undefined) {
-    throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
-  }
+  if (resolved === undefined) throw new Error(`Unknown stream scheme: ${String(streamScheme)}`)
   return resolved
 }
 
@@ -110,12 +109,6 @@ export const createPcg32 = (
   const resolvedScheme = resolveStreamScheme(streamScheme)
   const streamIdBig = (((BigInt(initStreamId) & MASK_64) << 1n) | 1n) & MASK_64
   const stateBig = (streamIdBig + BigInt(initState)) & MASK_64
-  const seeded: PCGState = {
-    state: fromBigInt(stateBig),
-    streamId: fromBigInt(streamIdBig),
-    variant: 'pcg32',
-    outputFnType,
-    streamScheme: resolvedScheme,
-  }
+  const seeded: PCGState = { state: fromBigInt(stateBig), streamId: fromBigInt(streamIdBig), variant: 'pcg32', outputFnType, streamScheme: resolvedScheme }
   return pcg32Advance(seeded, 1)
 }

@@ -5,6 +5,8 @@
     "declaration": true,
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "types": ["node"]
   },
   "include": ["./src/**/*"]

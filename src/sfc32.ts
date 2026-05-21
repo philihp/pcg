@@ -1,4 +1,5 @@
-import { OutputFnType, PCGState, StreamScheme } from './types'
+import { OutputFnType, StreamScheme } from './enums'
+import { PCGState } from './types'
 
 // Chris Doty-Humphrey's sfc32: a 128-bit-state chaotic PRNG built from add,
 // xor, shift, and rotate. Fast, passes PractRand, and well-suited to JS since

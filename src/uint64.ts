@@ -53,24 +53,9 @@ export const add64 = (a: Uint64, b: Uint64): Uint64 => {
 // since cross terms (a.lo*b.hi, a.hi*b.lo) contribute only to the high half
 // mod 2^64 and so can also use Math.imul.
 export const mul64 = (a: Uint64, b: Uint64): Uint64 => {
-  const aLo = a.lo
-  const aHi = a.hi
-  const bLo = b.lo
-  const bHi = b.hi
-
-  const lo = Math.imul(aLo, bLo) >>> 0
-
-  const a0 = aLo & 0xffff
-  const a1 = aLo >>> 16
-  const b0 = bLo & 0xffff
-  const b1 = bLo >>> 16
-  const p00 = a0 * b0
-  const p01 = a0 * b1
-  const p10 = a1 * b0
-  const p11 = a1 * b1
+  const a0 = a.lo & 0xffff, a1 = a.lo >>> 16, b0 = b.lo & 0xffff, b1 = b.lo >>> 16
+  const p00 = a0 * b0, p01 = a0 * b1, p10 = a1 * b0, p11 = a1 * b1
   const midCarry = ((p00 >>> 16) + (p01 & 0xffff) + (p10 & 0xffff)) >>> 16
   const llHi = p11 + (p01 >>> 16) + (p10 >>> 16) + midCarry
-
-  const hi = (llHi + Math.imul(aLo, bHi) + Math.imul(aHi, bLo)) >>> 0
-  return { hi, lo }
+  return { hi: (llHi + Math.imul(a.lo, b.hi) + Math.imul(a.hi, b.lo)) >>> 0, lo: Math.imul(a.lo, b.lo) >>> 0 }
 }

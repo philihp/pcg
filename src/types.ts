@@ -1,17 +1,8 @@
-export enum OutputFnType {
-  XSH_RR = 0,
-  XSH_RS = 1,
-  XSL_RR = 2,
-  RXS_M_XS = 4,
-}
+import { OutputFnType, StreamScheme } from './enums'
+
+export { OutputFnType, StreamScheme }
 
 export type OutputFn = (state: Uint64) => number
-
-export enum StreamScheme {
-  SETSEQ = 0,
-  ONESEQ = 1,
-  MCG = 3,
-}
 
 /** @deprecated Will be removed in 3.0.0. Use `keyof typeof StreamScheme` directly. */
 export type StreamSchemeName = keyof typeof StreamScheme
@@ -49,3 +40,14 @@ export type CreatePcgOptions = {
   streamScheme?: StreamScheme | keyof typeof StreamScheme
   outputFnType?: OutputFnType
 }
+
+export interface RandomIntPartial1 {
+  (max: number): (pcg: PCGState) => [number, PCGState]
+  (max: number, pcg: PCGState): [number, PCGState]
+}
+
+export interface RandomListPartial1 {
+  <T>(rng: RandomFn<T>): (initPcg: PCGState) => [T, PCGState][]
+  <T>(rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][]
+}
+
