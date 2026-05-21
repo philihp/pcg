@@ -35,7 +35,7 @@
     "lint": "eslint src",
     "prepare": "husky install && npm run build",
     "test": "node --import tsx --test 'src/__tests__/*.test.ts'",
-    "test:coverage": "node --import tsx --test --experimental-test-coverage 'src/__tests__/*.test.ts'",
+    "test:coverage": "mkdir -p coverage && node --import tsx --test --experimental-test-coverage --test-coverage-exclude='src/__tests__/**' --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info 'src/__tests__/*.test.ts'",
     "test:watch": "node --import tsx --test --watch 'src/__tests__/*.test.ts'"
   },
   "devDependencies": {
