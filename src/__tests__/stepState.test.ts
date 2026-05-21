@@ -1,8 +1,9 @@
+import { describe, test } from 'node:test'
+import assert from 'node:assert/strict'
 import { createPcg32, nextState, stepState, randomInt } from '..'
 
 describe('stepState', () => {
-  it('can step forward multiple states', () => {
-    expect.assertions(1)
+  test('can step forward multiple states', () => {
     const random = randomInt(0, 2 ** 32 - 1)
     const s0 = createPcg32({}, 42, 54)
 
@@ -11,6 +12,6 @@ describe('stepState', () => {
     const s3 = nextState(s2)
     const s4 = nextState(s3)
     const q4 = stepState(4, s0)
-    expect(random(s4)[0]).toBe(random(q4)[0])
+    assert.equal(random(s4)[0], random(q4)[0])
   })
 })

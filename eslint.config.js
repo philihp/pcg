@@ -1,7 +1,6 @@
 const js = require('@eslint/js')
 const tseslint = require('typescript-eslint')
 const importPlugin = require('eslint-plugin-import')
-const jestPlugin = require('eslint-plugin-jest')
 
 module.exports = [
   js.configs.recommended,
@@ -40,13 +39,6 @@ module.exports = [
           caughtErrorsIgnorePattern: '_',
         },
       ],
-    },
-  },
-  {
-    files: ['src/**/__tests__/**/*.ts'],
-    plugins: { jest: jestPlugin },
-    rules: {
-      ...jestPlugin.configs.recommended.rules,
     },
   },
   {

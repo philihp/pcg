@@ -1,3 +1,5 @@
+import { describe, test } from 'node:test'
+import assert from 'node:assert/strict'
 import { createPcg32, randomInt, randomList } from '..'
 import { OutputFnType, StreamScheme } from '..'
 
@@ -6,53 +8,45 @@ describe('curried APIs', () => {
   const directRng = randomInt(0, 2 ** 32 - 1)
   const expected = directRng(pcg)
 
-  it('randomInt(min)(max)(pcg) is equivalent to randomInt(min, max, pcg)', () => {
-    expect.assertions(2)
+  test('randomInt(min)(max)(pcg) is equivalent to randomInt(min, max, pcg)', () => {
     const partial = randomInt(0)
     const ranger = partial(2 ** 32 - 1)
     const [value, next] = ranger(pcg)
-    expect(value).toBe(expected[0])
-    expect(next).toStrictEqual(expected[1])
+    assert.equal(value, expected[0])
+    assert.deepEqual(next, expected[1])
   })
 
-  it('randomInt(min)(max, pcg) is equivalent to randomInt(min, max, pcg)', () => {
-    expect.assertions(2)
+  test('randomInt(min)(max, pcg) is equivalent to randomInt(min, max, pcg)', () => {
     const partial = randomInt(0)
     const [value, next] = partial(2 ** 32 - 1, pcg)
-    expect(value).toBe(expected[0])
-    expect(next).toStrictEqual(expected[1])
+    assert.equal(value, expected[0])
+    assert.deepEqual(next, expected[1])
   })
 
-  it('randomList(length)(rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
-    expect.assertions(1)
+  test('randomList(length)(rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
     const expectedList = randomList(3, directRng, pcg)
     const list = randomList(3)<number>(directRng)(pcg)
-    expect(list).toStrictEqual(expectedList)
+    assert.deepEqual(list, expectedList)
   })
 
-  it('randomList(length)(rng, pcg) is equivalent to randomList(length, rng, pcg)', () => {
-    expect.assertions(1)
+  test('randomList(length)(rng, pcg) is equivalent to randomList(length, rng, pcg)', () => {
     const expectedList = randomList(3, directRng, pcg)
     const list = randomList(3)<number>(directRng, pcg)
-    expect(list).toStrictEqual(expectedList)
+    assert.deepEqual(list, expectedList)
   })
 
-  it('randomList(length, rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
-    expect.assertions(1)
+  test('randomList(length, rng)(pcg) is equivalent to randomList(length, rng, pcg)', () => {
     const expectedList = randomList(3, directRng, pcg)
     const list = randomList(3, directRng)(pcg)
-    expect(list).toStrictEqual(expectedList)
+    assert.deepEqual(list, expectedList)
   })
 
-  it('randomList of zero length returns an empty array', () => {
-    expect.assertions(1)
-    expect(randomList(0, directRng, pcg)).toStrictEqual([])
+  test('randomList of zero length returns an empty array', () => {
+    assert.deepEqual(randomList(0, directRng, pcg), [])
   })
 
-  it('exposes OutputFnType and StreamScheme from the package entry point', () => {
-    expect.assertions(2)
-    expect(OutputFnType.XSH_RR).toBeDefined()
-    expect(StreamScheme.SETSEQ).toBeDefined()
+  test('exposes OutputFnType and StreamScheme from the package entry point', () => {
+    assert.notEqual(OutputFnType.XSH_RR, undefined)
+    assert.notEqual(StreamScheme.SETSEQ, undefined)
   })
-
 })
