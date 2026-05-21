@@ -36,29 +36,11 @@ const list = randomList(3, randomUint32, state0)
 
 ## API
 
-### Factories
+### Initialize state
 
-| Function | State size | Notes |
-| --- | --- | --- |
-| `createPcg32(options, seed, streamId)` | 64-bit | Full PCG; reversible; supports stream schemes and output functions. |
-| `createMulberry32(seed)` | 32-bit | Tommy Ettinger's mulberry32. Smaller state, shorter period (2³²). |
-| `createSfc32(seed)` | 128-bit | Chris Doty-Humphrey's sfc32. Not reversible. |
+`createPcg32(options, seed, streamId) → PCGState`
 
-Alternative factories are not technically PCGs, they are provided for comparison. All three return a compatible `PCGState`.
-
-### Drawing values
-
-- `randomInt(min, max, state) → [number, PCGState]` — uniform integer in `[min, max)`. Curried so `const random = randomInt(min, max); random(state)` also works.
-- `randomList(length, rng, state) → [value, PCGState][]` — runs `rng` `length` times, threading the state. Also fully curried.
-- `getOutput(state) → number` — raw 32-bit output for the current state, no advance.
-
-### Advancing the state
-
-- `nextState(state) → PCGState` — advance by 1.
-- `prevState(state) → PCGState` — rewind by 1. Unsupported by sfc32.
-- `stepState(delta, state) → PCGState` — jump ahead or back by any signed integer. O(log Δ) via Brown's jump-ahead algorithm for PCG.
-
-### Configuring `createPcg32`
+e.g.
 
 ```ts
 import { createPcg32, OutputFnType, StreamScheme } from 'pcg'
@@ -88,9 +70,19 @@ const state = createPcg32(
 | --- | --- |
 | `SETSEQ` *(default)* | Per-state stream id; lets independent streams coexist from one seed family. |
 | `ONESEQ` | Single fixed increment; ignores `streamId`. |
-| `MCG` | Multiplicative congruential generator (no increment). Fastest, period halved. |
+| `MCG` | Multiplicative congruential generator (no increment). Fastest, but period halved. |
 
-Both options also accept their string names (`'XSH_RR'`, `'SETSEQ'`, …) if you'd rather not import the enums.
+### Drawing values
+
+- `randomInt(min, max, state) → [number, PCGState]` — uniform integer in `[min, max)`. Curried so `const random = randomInt(min, max); random(state)` also works.
+- `randomList(length, rng, state) → [value, PCGState][]` — runs `rng` `length` times, threading the state. Also fully curried.
+- `getOutput(state) → number` — output at the current state without advance.
+
+### Advancing state
+
+- `nextState(state) → PCGState` — advance by 1.
+- `prevState(state) → PCGState` — rewind by 1. Unsupported by sfc32.
+- `stepState(delta, state) → PCGState` — jump ahead or back where delta is a signed integer. O(log Δ) via Brown's jump-ahead algorithm for PCG.
 
 ### Types
 
