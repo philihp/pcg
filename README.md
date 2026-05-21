@@ -16,7 +16,7 @@ State is immutable: every call returns a `[value, nextState]` tuple, so the same
 npm install pcg
 ```
 
-The package ships dual ESM/CJS builds and TypeScript types. Node 16+ is supported; Node 22+ is recommended.
+The package ships dual ESM/CJS builds and TypeScript types. Node 18+ is supported; Node 22+ is recommended.
 
 ## Quick start
 
