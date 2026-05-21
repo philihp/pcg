@@ -5,7 +5,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
-    "types": ["jest", "node"]
+    "types": ["node"]
   },
   "include": ["./src/**/*"]
 }
