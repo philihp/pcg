@@ -88,4 +88,4 @@ See [`CHANGELOG.md`](./CHANGELOG.md) for the full set of changes.
 ## Thanks
 
 - [@kripod](https://github.com/kripod/), who wrote the original [`pcg.js`](https://github.com/kripod/pcg.js).
-- Melissa O'Neill, for her work on the [PCG family](http://pcg-random.org).
+- [Melissa O'Neill](https://www.cs.hmc.edu/~oneill/), for her work on the [PCG family](http://pcg-random.org).
