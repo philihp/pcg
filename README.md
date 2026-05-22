@@ -1,6 +1,6 @@
 # pcg
 
-> Seeded, deterministic PRNG for JavaScript & TypeScript — PCG32, mulberry32, sfc32. Same seed, same sequence.
+A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later.
 
 [![Version](https://img.shields.io/npm/v/pcg.svg)](https://www.npmjs.com/package/pcg)
 [![Tests](https://github.com/philihp/pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/pcg/actions/workflows/tests.yml)
@@ -8,8 +8,6 @@
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/pcg)](https://bundlephobia.com/package/pcg)
 ![Downloads](https://img.shields.io/npm/dm/pcg)
 ![License](https://img.shields.io/npm/l/pcg)
-
-A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later.
 
 ## Install
 
