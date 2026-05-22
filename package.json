@@ -2,6 +2,20 @@
   "name": "pcg",
   "version": "3.0.0",
   "description": "A functional typescript implementation of the PCG family random number generators",
+  "keywords": [
+    "prng",
+    "rng",
+    "random",
+    "seeded",
+    "seedable",
+    "deterministic",
+    "reproducible",
+    "pcg",
+    "sfc32",
+    "mulberry32"
+  ],
+  "homepage": "https://github.com/philihp/pcg#readme",
+  "bugs": "https://github.com/philihp/pcg/issues",
   "type": "module",
   "sideEffects": false,
   "engines": {
