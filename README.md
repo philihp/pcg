@@ -1,6 +1,6 @@
 # pcg
 
-A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later.
+A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later. Ships dual ESM/CJS builds and TypeScript types. Runs on Node 18+, Bun, Deno, and modern browsers.
 
 [![Version](https://img.shields.io/npm/v/pcg.svg)](https://www.npmjs.com/package/pcg)
 [![Tests](https://github.com/philihp/pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/pcg/actions/workflows/tests.yml)
@@ -8,14 +8,6 @@ A functional implementation of the [PCG family random number generators](http://
 [![Bundle size](https://img.shields.io/bundlephobia/minzip/pcg)](https://bundlephobia.com/package/pcg)
 ![Downloads](https://img.shields.io/npm/dm/pcg)
 ![License](https://img.shields.io/npm/l/pcg)
-
-## Install
-
-```sh
-npm install pcg
-```
-
-The package ships dual ESM/CJS builds and TypeScript types. Runs on Node 18+, Bun, Deno, and modern browsers.
 
 ## Quick start
 
@@ -40,8 +32,6 @@ const list = randomList(3, randomUint32, state0)
 ### Initialize state
 
 `createPcg32(options, seed, streamId) → PCGState`
-
-e.g.
 
 ```ts
 import { createPcg32, OutputFnType, StreamScheme } from 'pcg'
