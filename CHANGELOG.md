@@ -1,6 +1,12 @@
 # Changelog
 
-## 2.1.0
+## 3.0.0
+
+### Breaking changes
+
+- **Minimum Node.js version raised from `>=16` to `>=18`.** Node 16 has
+  been EOL since September 2023; Node 18 is the lowest line still in any
+  kind of common deployment. Consumers on Node 16 should stay on 2.x.
 
 ### Features
 
@@ -20,9 +26,6 @@
 - Migrated the test suite from `jest` to the built-in `node:test` runner
   (#342). No behavior change for consumers; dev iteration is faster and
   the dependency footprint shrinks.
-- Minimum Node.js version raised from `>=16` to `>=18`. Node 16 has been
-  EOL since September 2023; Node 18 is the lowest line still in any kind
-  of common deployment.
 - Dropped unused `husky` / `lint-staged` dev dependencies. Linting still
   runs in CI.
 - Pinned `@types/node` to `^24` to match the `@tsconfig/node24` base.
