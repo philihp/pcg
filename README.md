@@ -17,7 +17,7 @@ A functional implementation of the [PCG family random number generators](http://
 npm install pcg
 ```
 
-The package ships dual ESM/CJS builds and TypeScript types. **Runs on Node 18+, Bun, Deno, and modern browsers.**
+The package ships dual ESM/CJS builds and TypeScript types. Runs on Node 18+, Bun, Deno, and modern browsers.
 
 ## Quick start
 
