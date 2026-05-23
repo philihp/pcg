@@ -54,13 +54,11 @@
     "test:watch": "node --import tsx --test --watch src/__tests__/*.test.ts"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.4",
+    "@eslint/js": "10.0.1",
     "@philihp/prettier-config": "1.0.0",
     "@tsconfig/node24": "24.0.4",
     "@types/node": "^24.0.0",
-    "eslint": "9.39.4",
-    "eslint-import-resolver-typescript": "4.4.4",
-    "eslint-plugin-import": "2.32.0",
+    "eslint": "10.4.0",
     "prettier": "3.8.3",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3",
