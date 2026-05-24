@@ -47,6 +47,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint src",
     "prepare": "npm run build",
     "test": "node --import tsx --test src/__tests__/*.test.ts",

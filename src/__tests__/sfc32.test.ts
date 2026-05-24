@@ -15,9 +15,7 @@ import { PCGState } from '../types'
 //       t,
 //     }
 //   }
-const CANONICAL_SEED_42 = [
-  1296217524, 1908088579, 2163594420, 882717154, 1079537450, 41221136, 53294074, 1415219387,
-]
+const CANONICAL_SEED_42 = [1296217524, 1908088579, 2163594420, 882717154, 1079537450, 41221136, 53294074, 1415219387]
 
 describe('sfc32', () => {
   test('matches the canonical reference sequence for seed=42', () => {
