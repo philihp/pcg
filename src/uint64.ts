@@ -28,10 +28,10 @@ export const fromNumber = (value: number): Uint64 => {
       lo: value >>> 0,
     }
   }
-  const absLo = (-value) >>> 0
+  const absLo = -value >>> 0
   const absHi = Math.floor(-value / 0x100000000) >>> 0
-  const invLo = (~absLo) >>> 0
-  const invHi = (~absHi) >>> 0
+  const invLo = ~absLo >>> 0
+  const invHi = ~absHi >>> 0
   const sumLo = invLo + 1
   const lo = sumLo >>> 0
   const carry = sumLo > 0xffffffff ? 1 : 0

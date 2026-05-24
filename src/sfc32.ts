@@ -41,8 +41,7 @@ export const sfc32Advance = (pcg: PCGState, delta: number): PCGState => {
   return pack(pcg, regs)
 }
 
-export const sfc32Output = (pcg: PCGState): number =>
-  (((pcg.state.hi + pcg.state.lo) >>> 0) + pcg.streamId.lo) >>> 0
+export const sfc32Output = (pcg: PCGState): number => (((pcg.state.hi + pcg.state.lo) >>> 0) + pcg.streamId.lo) >>> 0
 
 export const createSfc32 = (seed: bigint | number | string): PCGState => {
   const seedLo = Number(BigInt(seed) & 0xffffffffn)

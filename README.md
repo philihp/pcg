@@ -39,7 +39,7 @@ import { createPcg32, OutputFnType, StreamScheme } from 'pcg'
 const state = createPcg32(
   {
     outputFnType: OutputFnType.XSH_RR,
-    streamScheme: StreamScheme.SETSEQ
+    streamScheme: StreamScheme.SETSEQ,
   },
   42,
   54
@@ -48,20 +48,20 @@ const state = createPcg32(
 
 **Output functions** (`OutputFnType`) — different ways of permuting the 64-bit state into a 32-bit word.
 
-| Variant | Notes |
-| --- | --- |
-| `XSH_RR` *(default)* | xor-shift high, random rotate. The PCG default; good all-rounder. |
-| `XSH_RS` | xor-shift high, random shift. Slightly faster, marginally weaker. |
-| `XSL_RR` | xor-shift low, random rotate. |
-| `RXS_M_XS` | random xor-shift, multiply, xor-shift. Strongest of the four; slightly slower. |
+| Variant              | Notes                                                                          |
+| -------------------- | ------------------------------------------------------------------------------ |
+| `XSH_RR` _(default)_ | xor-shift high, random rotate. The PCG default; good all-rounder.              |
+| `XSH_RS`             | xor-shift high, random shift. Slightly faster, marginally weaker.              |
+| `XSL_RR`             | xor-shift low, random rotate.                                                  |
+| `RXS_M_XS`           | random xor-shift, multiply, xor-shift. Strongest of the four; slightly slower. |
 
 **Stream schemes** (`StreamScheme`) — how the increment is chosen each step.
 
-| Variant | Notes |
-| --- | --- |
-| `SETSEQ` *(default)* | Per-state stream id; lets independent streams coexist from one seed family. |
-| `ONESEQ` | Single fixed increment; ignores `streamId`. |
-| `MCG` | Multiplicative congruential generator (no increment). Fastest, but period halved. |
+| Variant              | Notes                                                                             |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `SETSEQ` _(default)_ | Per-state stream id; lets independent streams coexist from one seed family.       |
+| `ONESEQ`             | Single fixed increment; ignores `streamId`.                                       |
+| `MCG`                | Multiplicative congruential generator (no increment). Fastest, but period halved. |
 
 ### Drawing values
 
