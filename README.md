@@ -18,7 +18,7 @@ import { createPcg32, nextState, randomInt, randomList } from 'pcg'
 // The seed picks *where* in that series to start.
 const state0 = createPcg32({}, 42, 54)
 
-const randomUint32 = randomInt(0, 2 ** 32 - 1)
+const randomUint32 = randomInt(0, 2 ** 32)
 const [value, state1] = randomUint32(state0)
 
 const list = randomList(3, randomUint32, state0)
