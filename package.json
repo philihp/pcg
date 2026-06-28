@@ -61,7 +61,7 @@
     "@tsconfig/node24": "24.0.4",
     "@types/node": "^24.0.0",
     "eslint": "10.6.0",
-    "prettier": "3.9.0",
+    "prettier": "3.9.1",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3",
     "typescript": "6.0.3",
