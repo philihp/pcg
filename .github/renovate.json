@@ -1,3 +1,32 @@
 {
-  "extends": ["@philihp"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["@philihp"],
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "automergeSchedule": ["at any time"],
+  "platformAutomerge": true,
+  "ignoreTests": false,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "packageRules": [
+    {
+      "description": "Dev tooling is covered by CI; let it merge itself once the matrix is green.",
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "description": "Majors that reach consumers (runtime deps, peer deps, the engines floor) are a human call.",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["dependencies", "peerDependencies", "engines"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "A Node major changes the version the package is developed against; review it by hand.",
+      "matchManagers": ["nodenv", "nvm"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
 }
