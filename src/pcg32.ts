@@ -5,7 +5,8 @@ import {
   pcgDefaultOutputFnType,
   pcgDefaultStreamScheme,
 } from './defaults'
-import { CreatePcgOptions, OutputFn, OutputFnType, PCGState, SchemeFn, StreamScheme, Uint64 } from './types'
+import { OutputFnType, StreamScheme } from './types'
+import type { CreatePcgOptions, OutputFn, PCGState, SchemeFn, Uint64 } from './types'
 import { add64, fromBigInt, fromNumber, mul64 } from './uint64'
 
 const MASK_64 = 0xffffffffffffffffn

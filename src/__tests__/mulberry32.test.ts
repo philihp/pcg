@@ -1,7 +1,7 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createMulberry32, getOutput, nextState, prevState, randomInt, randomList, stepState } from '..'
-import { PCGState } from '../types'
+import type { PCGState } from '../types'
 
 // Reference values produced by Tommy Ettinger's canonical mulberry32(seed=42):
 //   function mulberry32(a) {

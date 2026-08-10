@@ -1,7 +1,8 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createPcg32, getOutput, nextState, prevState, randomInt, stepState } from '..'
-import { OutputFnType, PCGState, StreamScheme, Uint64 } from '../types'
+import { OutputFnType, StreamScheme } from '../types'
+import type { PCGState, Uint64 } from '../types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn

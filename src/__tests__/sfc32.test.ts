@@ -1,7 +1,7 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createSfc32, getOutput, nextState, randomInt, randomList, stepState } from '..'
-import { PCGState } from '../types'
+import type { PCGState } from '../types'
 
 // Reference values produced by the canonical sfc32 (Chris Doty-Humphrey,
 // PractRand) seeded with a=b=c=seed, d=1, and 15 warmup rounds:

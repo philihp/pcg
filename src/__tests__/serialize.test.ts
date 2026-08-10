@@ -1,7 +1,8 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createPcg32, nextState, randomInt, randomList } from '..'
-import { OutputFnType, PCGState, StreamScheme } from '../types'
+import { OutputFnType, StreamScheme } from '../types'
+import type { PCGState } from '../types'
 
 describe('serialize', () => {
   test('round-trips the state through JSON.stringify/parse', () => {
@@ -22,7 +23,7 @@ describe('serialize', () => {
 
     // Generate the first 3, persist the state, then continue.
     const firstThree = randomList(3, randomUint32, pcg)
-    const persisted = JSON.parse(JSON.stringify(firstThree[2][1])) as PCGState
+    const persisted = JSON.parse(JSON.stringify(firstThree[2]![1])) as PCGState
     const resumed = randomList(3, randomUint32, persisted).map(([v]) => v)
 
     assert.deepEqual([...firstThree.map(([v]) => v), ...resumed], reference)

@@ -18,7 +18,7 @@ describe('streamScheme accepts a string name', () => {
       () =>
         // @ts-expect-error - intentionally invalid name
         createPcg32({ streamScheme: 'NOPE' }, 42, 54),
-      /Unknown stream scheme/
+      /Unknown stream scheme/u
     )
   })
 })
