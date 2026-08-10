@@ -1,4 +1,4 @@
-import { Uint64 } from './types'
+import type { Uint64 } from './types'
 
 const MASK_32 = 0xffffffffn
 

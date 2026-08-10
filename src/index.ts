@@ -1,7 +1,7 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
 import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
 import { createSfc32, sfc32Advance, sfc32Output } from './sfc32'
-import { PCGState, PCGVariant, RandomFn } from './types'
+import type { PCGState, PCGVariant, RandomFn } from './types'
 
 const NUM_OUTPUT_BITS = 32
 
@@ -76,7 +76,7 @@ export function randomInt(min: number, max?: number, pcg?: PCGState): unknown {
 
 const randomListImpl = <T>(length: number, rng: RandomFn<T>, initPcg: PCGState): [T, PCGState][] => {
   if (length <= 0) return []
-  const result: [T, PCGState][] = new Array(length)
+  const result: [T, PCGState][] = Array.from({ length })
   let curr = rng(initPcg)
   result[0] = curr
   for (let i = 1; i < length; i++) {

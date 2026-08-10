@@ -1,4 +1,5 @@
-import { OutputFnType, PCGState, StreamScheme } from './types'
+import { OutputFnType, StreamScheme } from './types'
+import type { PCGState } from './types'
 
 // Tommy Ettinger's mulberry32: a 32-bit counter-based PRNG with a period of
 // 2^32. Compact and fast, but with much weaker statistical properties and a

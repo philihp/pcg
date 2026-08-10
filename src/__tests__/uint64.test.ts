@@ -1,7 +1,7 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { add64, fromNumber, mul64 } from '../uint64'
-import { Uint64 } from '../types'
+import type { Uint64 } from '../types'
 
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn

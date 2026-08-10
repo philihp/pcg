@@ -17,6 +17,6 @@ describe('mcg', () => {
     )
 
     // the next int after the 3rd state is the 4th int
-    assert.equal(randomUint32(out[2][1])[0], out[3][0])
+    assert.equal(randomUint32(out[2]![1])[0], out[3]![0])
   })
 })

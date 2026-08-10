@@ -1,6 +1,7 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
-import { getOutput, OutputFnType, PCGState, StreamScheme } from '..'
+import { getOutput, OutputFnType, StreamScheme } from '..'
+import type { PCGState } from '..'
 
 // Cover output-function branches that the canonical seed=42/stream=54 stream
 // doesn't naturally hit. State is constructed directly so the relevant bits

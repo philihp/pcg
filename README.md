@@ -1,6 +1,6 @@
 # pcg
 
-A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later. Ships dual ESM/CJS builds and TypeScript types. Runs on Node 18+, Bun, Deno, and modern browsers.
+A functional implementation of the [PCG family random number generators](http://pcg-random.org), written in TypeScript. Runs are reproducible, replayable, and rewindable. State can be serialized and reconstituted later. Ships dual ESM/CJS builds and TypeScript types. Runs on Node 22+, Bun, Deno, and modern browsers.
 
 [![Version](https://img.shields.io/npm/v/pcg.svg)](https://www.npmjs.com/package/pcg)
 [![Tests](https://github.com/philihp/pcg/actions/workflows/tests.yml/badge.svg)](https://github.com/philihp/pcg/actions/workflows/tests.yml)

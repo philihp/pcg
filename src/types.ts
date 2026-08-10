@@ -1,17 +1,21 @@
-export enum OutputFnType {
-  XSH_RR = 0,
-  XSH_RS = 1,
-  XSL_RR = 2,
-  RXS_M_XS = 4,
-}
+export const OutputFnType = {
+  XSH_RR: 0,
+  XSH_RS: 1,
+  XSL_RR: 2,
+  RXS_M_XS: 4,
+} as const
+
+export type OutputFnType = (typeof OutputFnType)[keyof typeof OutputFnType]
 
 export type OutputFn = (state: Uint64) => number
 
-export enum StreamScheme {
-  SETSEQ = 0,
-  ONESEQ = 1,
-  MCG = 3,
-}
+export const StreamScheme = {
+  SETSEQ: 0,
+  ONESEQ: 1,
+  MCG: 3,
+} as const
+
+export type StreamScheme = (typeof StreamScheme)[keyof typeof StreamScheme]
 
 /** @deprecated Will be removed in 3.0.0. Use `keyof typeof StreamScheme` directly. */
 export type StreamSchemeName = keyof typeof StreamScheme

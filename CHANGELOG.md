@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased
+
+### Breaking changes
+
+- **Minimum Node.js version raised from `>=18` to `>=22`.** Node 18 and 20
+  are both EOL; 22 is the oldest line still in maintenance. Consumers on
+  Node 18/20 should stay on 3.x.
+- **`OutputFnType` and `StreamScheme` are now `const` objects instead of
+  `enum`s.** Both are still exported as a value and as a type, so
+  `StreamScheme.MCG`, `StreamScheme['MCG']`, and `streamScheme: StreamScheme`
+  all keep working. What no longer works is the enum reverse mapping
+  (`StreamScheme[0] === 'SETSEQ'`), and the types are now unions of their
+  numeric literals rather than nominal enum types, so plain numbers are
+  accepted where an enum member was previously required.
+
+### Tooling
+
+- Upgraded to TypeScript 7, the native compiler. Type checking now runs as
+  its own `npm run typecheck` step in CI.
+- Replaced `tsup` with `tsdown` (rolldown) for the dual ESM/CJS build.
+  Output filenames are unchanged.
+- Replaced `eslint` / `typescript-eslint` with `oxlint`, configured in
+  `.oxlintrc.json`.
+- The source is now `erasableSyntaxOnly`, `verbatimModuleSyntax`, and
+  `isolatedModules` clean, and type checks with `noUncheckedIndexedAccess`.
+- Bumped `@types/node` to `^26` and rebased `tsconfig.json` on
+  `@tsconfig/node22`.
+- CI matrix moved to Node 22/24/26.
+
 ## 3.0.0
 
 ### Breaking changes
