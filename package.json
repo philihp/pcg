@@ -1,6 +1,6 @@
 {
   "name": "pcg",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "A functional typescript implementation of the PCG family random number generators",
   "keywords": [
     "prng",
