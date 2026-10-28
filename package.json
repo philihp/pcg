@@ -38,7 +38,8 @@
     }
   },
   "files": [
-    "/dist/"
+    "/dist/",
+    "!/dist/**/*.map"
   ],
   "repository": "https://github.com/philihp/pcg",
   "contributors": [

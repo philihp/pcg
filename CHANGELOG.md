@@ -20,6 +20,9 @@
 - `randomInt` on an MCG state of 0, a fixed point whose output is always 0,
   now throws a `RangeError` (maximum call stack size exceeded) instead of
   never returning.
+- The npm package no longer ships source maps, and its files carry no
+  `sourceMappingURL` comments, so tools do not ask for maps that are not
+  there. The packed tarball goes from 25.2 kB to 7.9 kB.
 
 ### Performance
 
