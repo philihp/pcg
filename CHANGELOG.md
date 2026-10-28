@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.1.0
+
+- **Supports Node.js 14 and later again.** The 4.0.0 code already ran on
+  Node 14, but its `engines` field said `>=22`, so Yarn 1 and npm with
+  `engine-strict` refused to install it on older Node. `engines.node` is now
+  `>=14`, and the build targets Node 14, so newer syntax is lowered for it.
+  The output is unchanged: the built files are the same as 4.0.0's.
+- CI now loads the built package, ESM and CommonJS, on Node 14, 16, 18 and
+  20, and checks every public function's output against values recorded on
+  the newest Node (`test/compat`). The toolchain itself still needs Node 22,
+  so the full test suite runs on 22, 24 and 26 as before.
+
 ## 4.0.0
 
 ### Breaking changes

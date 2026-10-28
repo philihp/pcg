@@ -1,6 +1,6 @@
 {
   "name": "pcg",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A functional typescript implementation of the PCG family random number generators",
   "keywords": [
     "prng",
@@ -19,7 +19,7 @@
   "type": "module",
   "sideEffects": false,
   "engines": {
-    "node": ">=22"
+    "node": ">=14"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",

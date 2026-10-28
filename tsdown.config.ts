@@ -9,7 +9,7 @@ export default defineConfig({
   sourcemap: 'hidden',
   clean: true,
   outDir: 'dist',
-  target: 'node22',
+  target: 'node14',
   treeshake: true,
   unbundle: false,
   // Keep the published filenames stable: index.js/.d.ts for ESM, index.cjs/.d.cts for CJS.
