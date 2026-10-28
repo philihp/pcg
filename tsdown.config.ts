@@ -4,7 +4,9 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
   dts: true,
-  sourcemap: true,
+  // Maps are written for local debugging, but the published files carry no
+  // sourceMappingURL comment, and package.json leaves the maps out.
+  sourcemap: 'hidden',
   clean: true,
   outDir: 'dist',
   target: 'node22',
