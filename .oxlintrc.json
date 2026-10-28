@@ -13,7 +13,7 @@
   },
   "overrides": [
     {
-      "files": ["src/__tests__/**/*.ts"],
+      "files": ["src/__tests__/**/*.ts", "test/**/*.{cjs,mjs}"],
       "rules": {
         "max-lines-per-function": "off"
       }

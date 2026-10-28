@@ -1,0 +1,2337 @@
+{
+  "OutputFnType": {
+    "XSH_RR": 0,
+    "XSH_RS": 1,
+    "XSL_RR": 2,
+    "RXS_M_XS": 4
+  },
+  "StreamScheme": {
+    "SETSEQ": 0,
+    "ONESEQ": 1,
+    "MCG": 3
+  },
+  "pcg32": [
+    {
+      "outputFnType": 0,
+      "streamScheme": 0,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213176
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [83, 97, 24, 55, 55],
+      "rejecting": [559678134, 974992175, 64156306],
+      "next": 2068313097,
+      "jumped": {
+        "hi": 2010479146,
+        "lo": 2408563984
+      },
+      "list": [3, 7, 4, 5],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213176
+      },
+      "jumpedBack": {
+        "hi": 2727350214,
+        "lo": 1718489568
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 0,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [31, 98, 26, 69, 8],
+      "rejecting": [1725441649, 790075577, 1349849120],
+      "next": 3872925298,
+      "jumped": {
+        "hi": 2870602247,
+        "lo": 1591934753
+      },
+      "list": [1, 8, 6, 9],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3982986200,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 0,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [32, 19, 44, 42, 76],
+      "rejecting": [137562383, 708032895, 654626227],
+      "next": 1746973319,
+      "jumped": {
+        "hi": 347728391,
+        "lo": 1591934753
+      },
+      "list": [2, 9, 4, 2],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3473378264,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 0,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956507
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [69, 8, 25, 97, 9],
+      "rejecting": [1979778520, 1321217759, 125089876],
+      "next": 3468701408,
+      "jumped": {
+        "hi": 3325350842,
+        "lo": 2433236627
+      },
+      "list": [9, 8, 5, 7],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956507
+      },
+      "jumpedBack": {
+        "hi": 2548696530,
+        "lo": 2170522531
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 0,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701332
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [3, 17, 95, 21, 51],
+      "rejecting": [492405672, 1950905624, 1532014651],
+      "next": 2083674117,
+      "jumped": {
+        "hi": 272200387,
+        "lo": 1138216108
+      },
+      "list": [3, 7, 5, 1],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701332
+      },
+      "jumpedBack": {
+        "hi": 878695766,
+        "lo": 747038332
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 1,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 744260151,
+          "lo": 597001434
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 1
+      },
+      "outputs": [80, 91, 84, 55, 70],
+      "rejecting": [1597672042, 709013435, 2129142406],
+      "next": 3745155691,
+      "jumped": {
+        "hi": 2035957610,
+        "lo": 1897675554
+      },
+      "list": [0, 1, 4, 5],
+      "rewound": {
+        "hi": 744260151,
+        "lo": 597001434
+      },
+      "jumpedBack": {
+        "hi": 3242020147,
+        "lo": 2495617938
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 1,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1452834459,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 1
+      },
+      "outputs": [37, 86, 4, 24, 61],
+      "rejecting": [1794425688, 1958393337, 488266955],
+      "next": 4105876986,
+      "jumped": {
+        "hi": 2896080711,
+        "lo": 1081046323
+      },
+      "list": [7, 6, 4, 4],
+      "rewound": {
+        "hi": 1452834459,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 202688837,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 1,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 1010335387,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 1
+      },
+      "outputs": [65, 1, 22, 85, 79],
+      "rejecting": [1972819452, 2104162736, 185088430],
+      "next": 4120303101,
+      "jumped": {
+        "hi": 373206855,
+        "lo": 1081046323
+      },
+      "list": [5, 1, 2, 5],
+      "rewound": {
+        "hi": 1010335387,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 3988048197,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 1,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 3069333306,
+          "lo": 2821744765
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 1
+      },
+      "outputs": [53, 6, 0, 30, 49],
+      "rejecting": [637851181, 1633652905, 829477402],
+      "next": 891303506,
+      "jumped": {
+        "hi": 3350829306,
+        "lo": 1922348197
+      },
+      "list": [3, 6, 0, 0],
+      "rewound": {
+        "hi": 3069333306,
+        "lo": 2821744765
+      },
+      "jumpedBack": {
+        "hi": 3063366463,
+        "lo": 2947650901
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 1,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1345582166,
+          "lo": 3130489590
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 1
+      },
+      "outputs": [2, 7, 10, 3, 94],
+      "rejecting": [1375837953, 1746169458, 1706883861],
+      "next": 3893653107,
+      "jumped": {
+        "hi": 297678851,
+        "lo": 627327678
+      },
+      "list": [2, 7, 0, 3],
+      "rewound": {
+        "hi": 1345582166,
+        "lo": 3130489590
+      },
+      "jumpedBack": {
+        "hi": 1393365699,
+        "lo": 1524166702
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 3,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213067
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 3
+      },
+      "outputs": [83, 97, 18, 14, 76],
+      "rejecting": [559678134, 865592969, 1663537513],
+      "next": 481379097,
+      "jumped": {
+        "hi": 675237249,
+        "lo": 2268400235
+      },
+      "list": [3, 7, 8, 4],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213067
+      },
+      "jumpedBack": {
+        "hi": 3581310459,
+        "lo": 3524118699
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 3,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 3
+      },
+      "outputs": [31, 19, 64, 91, 29],
+      "rejecting": [783449015, 312157342, 666927980],
+      "next": 88499419,
+      "jumped": {
+        "hi": 1535360350,
+        "lo": 1451771004
+      },
+      "list": [1, 9, 4, 1],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 541979149,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 3,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 3
+      },
+      "outputs": [32, 34, 99, 38, 25],
+      "rejecting": [137562383, 178304685, 166078350],
+      "next": 2325788334,
+      "jumped": {
+        "hi": 3307453790,
+        "lo": 1451771004
+      },
+      "list": [2, 4, 9, 8],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 32371213,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 3,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956398
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 3
+      },
+      "outputs": [69, 73, 96, 12, 37],
+      "rejecting": [1979778520, 2143586924, 1104092863],
+      "next": 4291070573,
+      "jumped": {
+        "hi": 1990108945,
+        "lo": 2293072878
+      },
+      "list": [9, 3, 6, 2],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956398
+      },
+      "jumpedBack": {
+        "hi": 3402656775,
+        "lo": 3976151662
+      }
+    },
+    {
+      "outputFnType": 0,
+      "streamScheme": 3,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701223
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 0,
+        "streamScheme": 3
+      },
+      "outputs": [3, 65, 52, 96, 61],
+      "rejecting": [1551564593, 1041558930, 2096840403],
+      "next": 146435865,
+      "jumped": {
+        "hi": 3231925786,
+        "lo": 998052359
+      },
+      "list": [3, 5, 2, 6],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701223
+      },
+      "jumpedBack": {
+        "hi": 1732656011,
+        "lo": 2552667463
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 0,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213176
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 0
+      },
+      "outputs": [92, 69, 1, 90, 10],
+      "rejecting": [268233520, 1288360052, 943513541],
+      "next": 2415717169,
+      "jumped": {
+        "hi": 2010479146,
+        "lo": 2408563984
+      },
+      "list": [2, 9, 1, 0],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213176
+      },
+      "jumpedBack": {
+        "hi": 2727350214,
+        "lo": 1718489568
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 0,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 0
+      },
+      "outputs": [59, 80, 79, 41, 45],
+      "rejecting": [318903810, 1395418396, 1462107964],
+      "next": 1730880980,
+      "jumped": {
+        "hi": 2870602247,
+        "lo": 1591934753
+      },
+      "list": [9, 0, 9, 1],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3982986200,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 0,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 0
+      },
+      "outputs": [66, 28, 47, 44, 29],
+      "rejecting": [1269594595, 1553139446, 1509150358],
+      "next": 749539728,
+      "jumped": {
+        "hi": 347728391,
+        "lo": 1591934753
+      },
+      "list": [6, 8, 7, 4],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3473378264,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 0,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956507
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 0
+      },
+      "outputs": [60, 72, 72, 26, 42],
+      "rejecting": [1855156923, 185696843, 971066237],
+      "next": 10546972,
+      "jumped": {
+        "hi": 3325350842,
+        "lo": 2433236627
+      },
+      "list": [0, 2, 2, 6],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956507
+      },
+      "jumpedBack": {
+        "hi": 2548696530,
+        "lo": 2170522531
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 0,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701332
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 0
+      },
+      "outputs": [25, 62, 56, 96, 36],
+      "rejecting": [544012107, 1422591647, 1306098187],
+      "next": 211369562,
+      "jumped": {
+        "hi": 272200387,
+        "lo": 1138216108
+      },
+      "list": [5, 2, 6, 6],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701332
+      },
+      "jumpedBack": {
+        "hi": 878695766,
+        "lo": 747038332
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 1,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 744260151,
+          "lo": 597001434
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 1
+      },
+      "outputs": [75, 27, 87, 73, 36],
+      "rejecting": [956632226, 513944142, 386484786],
+      "next": 1300160827,
+      "jumped": {
+        "hi": 2035957610,
+        "lo": 1897675554
+      },
+      "list": [5, 7, 7, 3],
+      "rewound": {
+        "hi": 744260151,
+        "lo": 597001434
+      },
+      "jumpedBack": {
+        "hi": 3242020147,
+        "lo": 2495617938
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 1,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1452834459,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 1
+      },
+      "outputs": [51, 80, 29, 78, 73],
+      "rejecting": [411025702, 983942831, 1391940380],
+      "next": 3131426480,
+      "jumped": {
+        "hi": 2896080711,
+        "lo": 1081046323
+      },
+      "list": [1, 0, 9, 8],
+      "rewound": {
+        "hi": 1452834459,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 202688837,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 1,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 1010335387,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 1
+      },
+      "outputs": [83, 97, 93, 16, 57],
+      "rejecting": [2010452348, 1441054167, 1043298708],
+      "next": 4157935997,
+      "jumped": {
+        "hi": 373206855,
+        "lo": 1081046323
+      },
+      "list": [3, 7, 3, 6],
+      "rewound": {
+        "hi": 1010335387,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 3988048197,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 1,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 3069333306,
+          "lo": 2821744765
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 1
+      },
+      "outputs": [52, 37, 23, 62, 16],
+      "rejecting": [1581890603, 344504188, 1716173074],
+      "next": 2491987837,
+      "jumped": {
+        "hi": 3350829306,
+        "lo": 1922348197
+      },
+      "list": [2, 7, 3, 2],
+      "rewound": {
+        "hi": 3069333306,
+        "lo": 2821744765
+      },
+      "jumpedBack": {
+        "hi": 3063366463,
+        "lo": 2947650901
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 1,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1345582166,
+          "lo": 3130489590
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 1
+      },
+      "outputs": [85, 75, 18, 94, 1],
+      "rejecting": [969392326, 828844369, 767309152],
+      "next": 3116875975,
+      "jumped": {
+        "hi": 297678851,
+        "lo": 627327678
+      },
+      "list": [5, 5, 8, 4],
+      "rewound": {
+        "hi": 1345582166,
+        "lo": 3130489590
+      },
+      "jumpedBack": {
+        "hi": 1393365699,
+        "lo": 1524166702
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 3,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213067
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 3
+      },
+      "outputs": [92, 89, 1, 34, 66],
+      "rejecting": [1293577052, 1197402817, 2140749373],
+      "next": 415331289,
+      "jumped": {
+        "hi": 675237249,
+        "lo": 2268400235
+      },
+      "list": [2, 9, 1, 4],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213067
+      },
+      "jumpedBack": {
+        "hi": 3581310459,
+        "lo": 3524118699
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 3,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 3
+      },
+      "outputs": [59, 80, 38, 60, 72],
+      "rejecting": [318903810, 999266089, 1049744719],
+      "next": 1368516580,
+      "jumped": {
+        "hi": 1535360350,
+        "lo": 1451771004
+      },
+      "list": [9, 0, 8, 0],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 541979149,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 3,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 3
+      },
+      "outputs": [66, 23, 69, 73, 32],
+      "rejecting": [1456799083, 701634257, 941695322],
+      "next": 1464235223,
+      "jumped": {
+        "hi": 3307453790,
+        "lo": 1451771004
+      },
+      "list": [6, 3, 9, 3],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 32371213,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 3,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956398
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 3
+      },
+      "outputs": [60, 55, 31, 20, 96],
+      "rejecting": [651612006, 1159043882, 258825471],
+      "next": 2799095655,
+      "jumped": {
+        "hi": 1990108945,
+        "lo": 2293072878
+      },
+      "list": [0, 5, 1, 0],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956398
+      },
+      "jumpedBack": {
+        "hi": 3402656775,
+        "lo": 3976151662
+      }
+    },
+    {
+      "outputFnType": 1,
+      "streamScheme": 3,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701223
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 1,
+        "streamScheme": 3
+      },
+      "outputs": [25, 31, 96, 43, 98],
+      "rejecting": [838580794, 292386905, 1069601297],
+      "next": 1863809731,
+      "jumped": {
+        "hi": 3231925786,
+        "lo": 998052359
+      },
+      "list": [5, 1, 6, 3],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701223
+      },
+      "jumpedBack": {
+        "hi": 1732656011,
+        "lo": 2552667463
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 0,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213176
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 0
+      },
+      "outputs": [4, 90, 50, 72, 18],
+      "rejecting": [1835076141, 1498192923, 317603202],
+      "next": 3982559790,
+      "jumped": {
+        "hi": 2010479146,
+        "lo": 2408563984
+      },
+      "list": [4, 0, 0, 2],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213176
+      },
+      "jumpedBack": {
+        "hi": 2727350214,
+        "lo": 1718489568
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 0,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 0
+      },
+      "outputs": [84, 23, 3, 53, 55],
+      "rejecting": [1576275574, 1344362354, 2021324006],
+      "next": 3723759223,
+      "jumped": {
+        "hi": 2870602247,
+        "lo": 1591934753
+      },
+      "list": [4, 3, 3, 3],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3982986200,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 0,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 0
+      },
+      "outputs": [99, 37, 75, 28, 23],
+      "rejecting": [725161250, 1946304988, 2021356774],
+      "next": 4093788637,
+      "jumped": {
+        "hi": 347728391,
+        "lo": 1591934753
+      },
+      "list": [9, 7, 5, 8],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3473378264,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 0,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956507
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 0
+      },
+      "outputs": [38, 16, 77, 46, 5],
+      "rejecting": [1128076356, 1325539055, 714173470],
+      "next": 921417516,
+      "jumped": {
+        "hi": 3325350842,
+        "lo": 2433236627
+      },
+      "list": [8, 6, 7, 6],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956507
+      },
+      "jumpedBack": {
+        "hi": 2548696530,
+        "lo": 2170522531
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 0,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701332
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 0
+      },
+      "outputs": [77, 76, 25, 72, 77],
+      "rejecting": [134087428, 1257300927, 855277218],
+      "next": 3404784576,
+      "jumped": {
+        "hi": 272200387,
+        "lo": 1138216108
+      },
+      "list": [7, 6, 5, 2],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701332
+      },
+      "jumpedBack": {
+        "hi": 878695766,
+        "lo": 747038332
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 1,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 744260151,
+          "lo": 597001434
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 1
+      },
+      "outputs": [87, 40, 46, 88, 25],
+      "rejecting": [262147791, 1662623897, 1445590039],
+      "next": 2409631440,
+      "jumped": {
+        "hi": 2035957610,
+        "lo": 1897675554
+      },
+      "list": [7, 0, 6, 8],
+      "rewound": {
+        "hi": 744260151,
+        "lo": 597001434
+      },
+      "jumpedBack": {
+        "hi": 3242020147,
+        "lo": 2495617938
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 1,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1452834459,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 1
+      },
+      "outputs": [45, 73, 26, 61, 33],
+      "rejecting": [872691796, 1348036112, 123767584],
+      "next": 1089513873,
+      "jumped": {
+        "hi": 2896080711,
+        "lo": 1081046323
+      },
+      "list": [5, 3, 6, 1],
+      "rewound": {
+        "hi": 1452834459,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 202688837,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 1,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 1010335387,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 1
+      },
+      "outputs": [97, 54, 19, 48, 13],
+      "rejecting": [552895148, 1151413670, 780973776],
+      "next": 1163076254,
+      "jumped": {
+        "hi": 373206855,
+        "lo": 1081046323
+      },
+      "list": [7, 4, 9, 8],
+      "rewound": {
+        "hi": 1010335387,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 3988048197,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 1,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 3069333306,
+          "lo": 2821744765
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 1
+      },
+      "outputs": [71, 72, 76, 23, 30],
+      "rejecting": [311723823, 1593506862, 1561919446],
+      "next": 2459207472,
+      "jumped": {
+        "hi": 3350829306,
+        "lo": 1922348197
+      },
+      "list": [1, 2, 6, 3],
+      "rewound": {
+        "hi": 3069333306,
+        "lo": 2821744765
+      },
+      "jumpedBack": {
+        "hi": 3063366463,
+        "lo": 2947650901
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 1,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1345582166,
+          "lo": 3130489590
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 1
+      },
+      "outputs": [75, 48, 95, 44, 48],
+      "rejecting": [674933026, 450528999, 1098438746],
+      "next": 2598012648,
+      "jumped": {
+        "hi": 297678851,
+        "lo": 627327678
+      },
+      "list": [5, 8, 5, 4],
+      "rewound": {
+        "hi": 1345582166,
+        "lo": 3130489590
+      },
+      "jumpedBack": {
+        "hi": 1393365699,
+        "lo": 1524166702
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 3,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213067
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 3
+      },
+      "outputs": [38, 15, 30, 12, 51],
+      "rejecting": [503821902, 1205504092, 1357253636],
+      "next": 620257015,
+      "jumped": {
+        "hi": 675237249,
+        "lo": 2268400235
+      },
+      "list": [8, 5, 0, 2],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213067
+      },
+      "jumpedBack": {
+        "hi": 3581310459,
+        "lo": 3524118699
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 3,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 3
+      },
+      "outputs": [97, 82, 19, 13, 77],
+      "rejecting": [1611498148, 1291646764, 1866171962],
+      "next": 1348771082,
+      "jumped": {
+        "hi": 1535360350,
+        "lo": 1451771004
+      },
+      "list": [7, 2, 9, 3],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 541979149,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 3,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 3
+      },
+      "outputs": [23, 45, 7, 46, 33],
+      "rejecting": [1765413996, 1362719458, 1559702797],
+      "next": 3912897645,
+      "jumped": {
+        "hi": 3307453790,
+        "lo": 1451771004
+      },
+      "list": [3, 5, 7, 6],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 32371213,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 3,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956398
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 3
+      },
+      "outputs": [70, 99, 46, 33, 60],
+      "rejecting": [629681450, 536914084, 1901818611],
+      "next": 2777165099,
+      "jumped": {
+        "hi": 1990108945,
+        "lo": 2293072878
+      },
+      "list": [0, 9, 6, 3],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956398
+      },
+      "jumpedBack": {
+        "hi": 3402656775,
+        "lo": 3976151662
+      }
+    },
+    {
+      "outputFnType": 2,
+      "streamScheme": 3,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701223
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 2,
+        "streamScheme": 3
+      },
+      "outputs": [14, 54, 43, 21, 81],
+      "rejecting": [1644036865, 19927655, 1047148319],
+      "next": 1375087254,
+      "jumped": {
+        "hi": 3231925786,
+        "lo": 998052359
+      },
+      "list": [4, 4, 3, 1],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701223
+      },
+      "jumpedBack": {
+        "hi": 1732656011,
+        "lo": 2552667463
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 0,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213176
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 0
+      },
+      "outputs": [74, 22, 85, 62, 93],
+      "rejecting": [1415122925, 1554358973, 678647236],
+      "next": 3701842622,
+      "jumped": {
+        "hi": 2010479146,
+        "lo": 2408563984
+      },
+      "list": [4, 2, 5, 2],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213176
+      },
+      "jumpedBack": {
+        "hi": 2727350214,
+        "lo": 1718489568
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 0,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 0
+      },
+      "outputs": [10, 39, 60, 86, 96],
+      "rejecting": [396694990, 460524747, 757301879],
+      "next": 2544178639,
+      "jumped": {
+        "hi": 2870602247,
+        "lo": 1591934753
+      },
+      "list": [0, 9, 0, 6],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3982986200,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 0,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326557033
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 0
+      },
+      "outputs": [46, 51, 44, 50, 84],
+      "rejecting": [1024512597, 933565902, 1760117295],
+      "next": 3081049551,
+      "jumped": {
+        "hi": 347728391,
+        "lo": 1591934753
+      },
+      "list": [6, 1, 4, 0],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326557033
+      },
+      "jumpedBack": {
+        "hi": 3473378264,
+        "lo": 2336211633
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 0,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956507
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 0
+      },
+      "outputs": [38, 64, 1, 38, 38],
+      "rejecting": [1857736389, 333821615, 1149246002],
+      "next": 2481305264,
+      "jumped": {
+        "hi": 3325350842,
+        "lo": 2433236627
+      },
+      "list": [8, 4, 1, 8],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956507
+      },
+      "jumpedBack": {
+        "hi": 2548696530,
+        "lo": 2170522531
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 0,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701332
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 0
+      },
+      "outputs": [32, 24, 33, 99, 82],
+      "rejecting": [140087183, 367042175, 312799250],
+      "next": 2514525824,
+      "jumped": {
+        "hi": 272200387,
+        "lo": 1138216108
+      },
+      "list": [2, 4, 3, 9],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701332
+      },
+      "jumpedBack": {
+        "hi": 878695766,
+        "lo": 747038332
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 1,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 744260151,
+          "lo": 597001434
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 1
+      },
+      "outputs": [91, 56, 62, 21, 83],
+      "rejecting": [564013142, 1302582972, 1031678234],
+      "next": 1589411656,
+      "jumped": {
+        "hi": 2035957610,
+        "lo": 1897675554
+      },
+      "list": [1, 6, 2, 1],
+      "rewound": {
+        "hi": 744260151,
+        "lo": 597001434
+      },
+      "jumpedBack": {
+        "hi": 3242020147,
+        "lo": 2495617938
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 1,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1452834459,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 1
+      },
+      "outputs": [5, 78, 3, 81, 84],
+      "rejecting": [1083500132, 638602835, 657778038],
+      "next": 1089386578,
+      "jumped": {
+        "hi": 2896080711,
+        "lo": 1081046323
+      },
+      "list": [5, 8, 3, 1],
+      "rewound": {
+        "hi": 1452834459,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 202688837,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 1,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 1010335387,
+          "lo": 1182345291
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 1
+      },
+      "outputs": [65, 90, 91, 69, 24],
+      "rejecting": [2113174416, 546629220, 120907126],
+      "next": 1626257490,
+      "jumped": {
+        "hi": 373206855,
+        "lo": 1081046323
+      },
+      "list": [5, 0, 1, 9],
+      "rewound": {
+        "hi": 1010335387,
+        "lo": 1182345291
+      },
+      "jumpedBack": {
+        "hi": 3988048197,
+        "lo": 3113340003
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 1,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 3069333306,
+          "lo": 2821744765
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 1
+      },
+      "outputs": [72, 40, 98, 52, 72],
+      "rejecting": [606122749, 1980064523, 715338775],
+      "next": 2098068040,
+      "jumped": {
+        "hi": 3350829306,
+        "lo": 1922348197
+      },
+      "list": [2, 0, 8, 2],
+      "rewound": {
+        "hi": 3069333306,
+        "lo": 2821744765
+      },
+      "jumpedBack": {
+        "hi": 3063366463,
+        "lo": 2947650901
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 1,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1345582166,
+          "lo": 3130489590
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 1
+      },
+      "outputs": [17, 14, 89, 91, 11],
+      "rejecting": [2034816240, 999798908, 1331005039],
+      "next": 2007015714,
+      "jumped": {
+        "hi": 297678851,
+        "lo": 627327678
+      },
+      "list": [7, 4, 9, 1],
+      "rewound": {
+        "hi": 1345582166,
+        "lo": 3130489590
+      },
+      "jumpedBack": {
+        "hi": 1393365699,
+        "lo": 1524166702
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 3,
+      "seed": "42",
+      "state": {
+        "state": {
+          "hi": 408356536,
+          "lo": 741213067
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 3
+      },
+      "outputs": [46, 99, 46, 62, 57],
+      "rejecting": [1412545297, 1286212750, 605971808],
+      "next": 3433696399,
+      "jumped": {
+        "hi": 675237249,
+        "lo": 2268400235
+      },
+      "list": [6, 9, 6, 2],
+      "rewound": {
+        "hi": 408356536,
+        "lo": 741213067
+      },
+      "jumpedBack": {
+        "hi": 3581310459,
+        "lo": 3524118699
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 3,
+      "seed": "-1",
+      "state": {
+        "state": {
+          "hi": 1116930844,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 3
+      },
+      "outputs": [64, 65, 25, 70, 46],
+      "rejecting": [1915453216, 2123655476, 463712797],
+      "next": 4062936865,
+      "jumped": {
+        "hi": 1535360350,
+        "lo": 1451771004
+      },
+      "list": [4, 5, 5, 0],
+      "rewound": {
+        "hi": 1116930844,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 541979149,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 3,
+      "seed": "9007199254740991",
+      "state": {
+        "state": {
+          "hi": 674431772,
+          "lo": 1326556924
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 3
+      },
+      "outputs": [0, 81, 89, 54, 10],
+      "rejecting": [1067130551, 513042740, 1636965805],
+      "next": 304840481,
+      "jumped": {
+        "hi": 3307453790,
+        "lo": 1451771004
+      },
+      "list": [0, 1, 9, 4],
+      "rewound": {
+        "hi": 674431772,
+        "lo": 1326556924
+      },
+      "jumpedBack": {
+        "hi": 32371213,
+        "lo": 4141840764
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 3,
+      "seed": "12345",
+      "state": {
+        "state": {
+          "hi": 2733429691,
+          "lo": 2965956398
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 3
+      },
+      "outputs": [74, 13, 94, 29, 68],
+      "rejecting": [1847440325, 834282045, 1659025509],
+      "next": 1505992113,
+      "jumped": {
+        "hi": 1990108945,
+        "lo": 2293072878
+      },
+      "list": [4, 3, 4, 9],
+      "rewound": {
+        "hi": 2733429691,
+        "lo": 2965956398
+      },
+      "jumpedBack": {
+        "hi": 3402656775,
+        "lo": 3976151662
+      }
+    },
+    {
+      "outputFnType": 4,
+      "streamScheme": 3,
+      "seed": "54",
+      "state": {
+        "state": {
+          "hi": 1009678551,
+          "lo": 3274701223
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 109
+        },
+        "variant": "pcg32",
+        "outputFnType": 4,
+        "streamScheme": 3
+      },
+      "outputs": [2, 14, 25, 3, 6],
+      "rejecting": [924461153, 1047788854, 812361557],
+      "next": 2123620814,
+      "jumped": {
+        "hi": 3231925786,
+        "lo": 998052359
+      },
+      "list": [2, 4, 5, 3],
+      "rewound": {
+        "hi": 1009678551,
+        "lo": 3274701223
+      },
+      "jumpedBack": {
+        "hi": 1732656011,
+        "lo": 2552667463
+      }
+    }
+  ],
+  "alias": true,
+  "bigint": [
+    "1753877967969059832",
+    {
+      "hi": 408356536,
+      "lo": 741213176
+    }
+  ],
+  "mulberry32": [
+    {
+      "state": {
+        "state": {
+          "hi": 0,
+          "lo": 1831565855
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 0
+        },
+        "variant": "mulberry32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [56, 90, 4, 5, 78],
+      "rejecting": [434237307, 1513829055, 729002156],
+      "next": 1925393290,
+      "jumped": {
+        "hi": 0,
+        "lo": 3741310759
+      },
+      "list": [6, 0, 4, 5],
+      "rewound": {
+        "hi": 0,
+        "lo": 1831565855
+      },
+      "jumpedBack": {
+        "hi": 0,
+        "lo": 4216788247
+      }
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 0,
+          "lo": 1831565812
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 0
+        },
+        "variant": "mulberry32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [11, 16, 48, 36, 31],
+      "rejecting": [1702622162, 926221199, 1907222787],
+      "next": 813802916,
+      "jumped": {
+        "hi": 0,
+        "lo": 3741310716
+      },
+      "list": [1, 6, 8, 6],
+      "rewound": {
+        "hi": 0,
+        "lo": 1831565812
+      },
+      "jumpedBack": {
+        "hi": 0,
+        "lo": 4216788204
+      }
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 0,
+          "lo": 1831565812
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 0
+        },
+        "variant": "mulberry32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [11, 16, 48, 36, 31],
+      "rejecting": [1702622162, 926221199, 1907222787],
+      "next": 813802916,
+      "jumped": {
+        "hi": 0,
+        "lo": 3741310716
+      },
+      "list": [1, 6, 8, 6],
+      "rewound": {
+        "hi": 0,
+        "lo": 1831565812
+      },
+      "jumpedBack": {
+        "hi": 0,
+        "lo": 4216788204
+      }
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 0,
+          "lo": 1831578158
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 0
+        },
+        "variant": "mulberry32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [69, 44, 50, 52, 86],
+      "rejecting": [2060417220, 1365517903, 40494537],
+      "next": 1317490944,
+      "jumped": {
+        "hi": 0,
+        "lo": 3741323062
+      },
+      "list": [9, 4, 0, 2],
+      "rewound": {
+        "hi": 0,
+        "lo": 1831578158
+      },
+      "jumpedBack": {
+        "hi": 0,
+        "lo": 4216800550
+      }
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 0,
+          "lo": 1831565867
+        },
+        "streamId": {
+          "hi": 0,
+          "lo": 0
+        },
+        "variant": "mulberry32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [64, 52, 30, 58, 0],
+      "rejecting": [710572003, 832006132, 250654485],
+      "next": 2858055652,
+      "jumped": {
+        "hi": 0,
+        "lo": 3741310771
+      },
+      "list": [4, 2, 0, 8],
+      "rewound": {
+        "hi": 0,
+        "lo": 1831565867
+      },
+      "jumpedBack": {
+        "hi": 0,
+        "lo": 4216788259
+      }
+    }
+  ],
+  "sfc32": [
+    {
+      "state": {
+        "state": {
+          "hi": 1536321818,
+          "lo": 4054862986
+        },
+        "streamId": {
+          "hi": 4056259990,
+          "lo": 16
+        },
+        "variant": "sfc32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [24, 79, 20, 54, 50],
+      "rejecting": [16110771, 1614595146, 53851882],
+      "next": 1908088579,
+      "jumped": {
+        "hi": 3325766758,
+        "lo": 1313244739
+      },
+      "list": [4, 9, 0, 4]
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 3189223276,
+          "lo": 1269036761
+        },
+        "streamId": {
+          "hi": 2729929822,
+          "lo": 16
+        },
+        "variant": "sfc32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [57, 81, 49, 52, 80],
+      "rejecting": [2050940300, 1948486915, 1915322075],
+      "next": 66647681,
+      "jumped": {
+        "hi": 1361581585,
+        "lo": 1037861607
+      },
+      "list": [7, 1, 9, 2]
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 3189223276,
+          "lo": 1269036761
+        },
+        "streamId": {
+          "hi": 2729929822,
+          "lo": 16
+        },
+        "variant": "sfc32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [57, 81, 49, 52, 80],
+      "rejecting": [2050940300, 1948486915, 1915322075],
+      "next": 66647681,
+      "jumped": {
+        "hi": 1361581585,
+        "lo": 1037861607
+      },
+      "list": [7, 1, 9, 2]
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 1721124166,
+          "lo": 3723992113
+        },
+        "streamId": {
+          "hi": 2195691148,
+          "lo": 16
+        },
+        "variant": "sfc32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [99, 36, 60, 99, 87],
+      "rejecting": [167811570, 545305513, 1250838127],
+      "next": 2004202236,
+      "jumped": {
+        "hi": 2862472957,
+        "lo": 2181847560
+      },
+      "list": [9, 6, 0, 9]
+    },
+    {
+      "state": {
+        "state": {
+          "hi": 2342596356,
+          "lo": 1355367715
+        },
+        "streamId": {
+          "hi": 473476321,
+          "lo": 16
+        },
+        "variant": "sfc32",
+        "outputFnType": 0,
+        "streamScheme": 0
+      },
+      "outputs": [87, 67, 86, 63, 64],
+      "rejecting": [1550480438, 952380514, 744604915],
+      "next": 1323251067,
+      "jumped": {
+        "hi": 3976633862,
+        "lo": 3122221982
+      },
+      "list": [7, 7, 6, 3]
+    }
+  ]
+}
