@@ -58,28 +58,29 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 
 export const prevState = stepState(-1)
 
+// For an integer bound this equals n % bound, which V8 computes with a slow
+// float modulo once n reaches 2^31. A non-integer bound keeps the float
+// modulo, so its result stays exactly what it was.
+const accept = (min: number, bound: number, n: number, nextPcg: PCGState): [number, PCGState] => [
+  (Number.isInteger(bound) ? n - Math.floor(n / bound) * bound : n % bound) + min,
+  nextPcg,
+]
+
+// A draw below the threshold is rejected and replaced by the next one. Fewer
+// than half of all draws are rejected, so the recursion stays shallow.
+const redraw = (min: number, bound: number, threshold: number, n: number, nextPcg: PCGState): [number, PCGState] =>
+  n < threshold ? redraw(min, bound, threshold, output(nextPcg), advance(nextPcg, 1)) : accept(min, bound, n, nextPcg)
+
 const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
   const bound = max - min
   if (bound < 0 || bound > OUTPUT_MAX_RANGE) throw new RangeError()
 
-  let n = output(pcg)
-  let nextPcg = advance(pcg, 1)
+  const n = output(pcg)
+  const nextPcg = advance(pcg, 1)
   // Draws below 2^32 mod bound are rejected to keep the result unbiased. That
   // threshold is always below bound, so a draw of at least bound is accepted
   // without computing it; only a smaller draw pays for the modulo.
-  if (n < bound) {
-    const threshold = (OUTPUT_MAX_RANGE - bound) % bound
-    while (n < threshold) {
-      n = output(nextPcg)
-      nextPcg = advance(nextPcg, 1)
-    }
-  }
-
-  // For an integer bound this equals n % bound, which V8 computes with a slow
-  // float modulo once n reaches 2^31. A non-integer bound keeps the float
-  // modulo, so its result stays exactly what it was.
-  const remainder = Number.isInteger(bound) ? n - Math.floor(n / bound) * bound : n % bound
-  return [remainder + min, nextPcg]
+  return n < bound ? redraw(min, bound, (OUTPUT_MAX_RANGE - bound) % bound, n, nextPcg) : accept(min, bound, n, nextPcg)
 }
 
 interface RandomIntPartial1 {

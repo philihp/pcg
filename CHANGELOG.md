@@ -15,6 +15,12 @@
   numeric literals rather than nominal enum types, so plain numbers are
   accepted where an enum member was previously required.
 
+### Changed
+
+- `randomInt` on an MCG state of 0, a fixed point whose output is always 0,
+  now throws a `RangeError` (maximum call stack size exceeded) instead of
+  never returning.
+
 ### Performance
 
 - **The hot path is 1.2–3× faster, with no change to the API, its

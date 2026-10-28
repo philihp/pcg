@@ -6,6 +6,9 @@ import type { Uint64 } from '../types'
 const MASK_32 = 0xffffffffn
 const MASK_64 = 0xffffffffffffffffn
 
+// A 64-bit LCG step, to make a repeatable stream of test words.
+const lcg = (s: bigint): bigint => (s * 6364136223846793005n + 1442695040888963407n) & MASK_64
+
 // Local BigInt <-> Uint64 helpers, used only as a reference oracle for these
 // tests; the library no longer ships them as public API.
 const fromBig = (v: bigint): Uint64 => ({
@@ -135,24 +138,20 @@ describe('uint64', () => {
   describe('mulHi32', () => {
     test('returns the high word of the 64-bit product at the edges', () => {
       const samples = [0, 1, 2, 0xffff, 0x10000, 0x12345678, 0x7fffffff, 0x80000000, 0xfffffffe, 0xffffffff]
-      for (const a of samples) {
-        for (const b of samples) {
-          assert.equal(mulHi32(a, b), Number((BigInt(a) * BigInt(b)) >> 32n))
-        }
-      }
+      samples.forEach((a) =>
+        samples.forEach((b) => assert.equal(mulHi32(a, b), Number((BigInt(a) * BigInt(b)) >> 32n)))
+      )
     })
 
     test('matches BigInt for a pseudo-random sweep', () => {
-      let s = 0x9e3779b97f4a7c15n
-      const next = (): number => {
-        s = (s * 6364136223846793005n + 1442695040888963407n) & MASK_64
-        return Number(s & MASK_32)
-      }
-      for (let i = 0; i < 500; i++) {
-        const a = next()
-        const b = next()
+      Array.from({ length: 500 }).reduce<bigint>((s) => {
+        const sa = lcg(s)
+        const sb = lcg(sa)
+        const a = Number(sa & MASK_32)
+        const b = Number(sb & MASK_32)
         assert.equal(mulHi32(a, b), Number((BigInt(a) * BigInt(b)) >> 32n))
-      }
+        return sb
+      }, 0x9e3779b97f4a7c15n)
     })
   })
 })

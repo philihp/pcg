@@ -4,11 +4,12 @@ import { createMulberry32, createPcg32, createSfc32, getOutput, nextState, prevS
 import type { PCGState } from '../types'
 
 describe('immutability of inputs', () => {
-  for (const [name, make] of [
+  const generators = [
     ['pcg32', () => createPcg32({}, 42, 54)],
     ['mulberry32', () => createMulberry32(42)],
     ['sfc32', () => createSfc32(42)],
-  ] as const) {
+  ] as const
+  generators.forEach(([name, make]) => {
     test(`${name}: deriving states leaves the input untouched and shares nothing mutable`, () => {
       const pcg = make()
       const snapshot = JSON.stringify(pcg)
@@ -28,7 +29,7 @@ describe('immutability of inputs', () => {
       assert.equal(JSON.stringify(pcg), snapshot)
       assert.deepEqual(nextState(pcg), b)
     })
-  }
+  })
 })
 
 describe('corrupt state tags', () => {

@@ -59,11 +59,10 @@ const xshRs = (hi: number, lo: number): number => {
 const xslRr = (hi: number, lo: number): number => ror32(hi >>> 27, (hi ^ lo) >>> 0)
 
 const rxsMXs = (hi: number, lo: number): number => {
-  let aLo = ((lo >>> 13) | (hi << 19)) >>> 0
-  let aHi = hi >>> 13
-  const sumLo = aLo + 3
-  aLo = sumLo >>> 0
-  if (sumLo > 0xffffffff) aHi = (aHi + 1) >>> 0
+  // (state >>> 13) + 3, with the carry out of the low word
+  const sumLo = (((lo >>> 13) | (hi << 19)) >>> 0) + 3
+  const aLo = sumLo >>> 0
+  const aHi = ((hi >>> 13) + (sumLo > 0xffffffff ? 1 : 0)) >>> 0
   const xLo = (aLo ^ lo) >>> 0
   const xHi = (aHi ^ hi) >>> 0
   const mLo = xLo * RXS_MULT
