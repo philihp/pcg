@@ -1,28 +1,46 @@
 import { createMulberry32, mulberry32Advance, mulberry32Output } from './mulberry32'
 import { createPcg32, pcg32Advance, pcg32Output } from './pcg32'
 import { createSfc32, sfc32Advance, sfc32Output } from './sfc32'
-import type { PCGState, PCGVariant, RandomFn } from './types'
+import type { PCGState, RandomFn } from './types'
 
 const NUM_OUTPUT_BITS = 32
+const OUTPUT_MAX_RANGE = 2 ** NUM_OUTPUT_BITS
 
 // Alias kept for callers that adopted the 2.0.0 name; will be deprecated in a
 // future release once the variant-suffixed factories settle as the convention.
 export const createPcg = createPcg32
 
-type VariantImpl = {
-  advance: (pcg: PCGState, delta: number) => PCGState
-  output: (pcg: PCGState) => number
+const unknownVariant = (variant: never): never => {
+  throw new TypeError(`Unknown variant: ${String(variant)}`)
 }
 
-const VARIANTS: Record<PCGVariant, VariantImpl> = {
-  pcg32: { advance: pcg32Advance, output: pcg32Output },
-  mulberry32: { advance: mulberry32Advance, output: mulberry32Output },
-  sfc32: { advance: sfc32Advance, output: sfc32Output },
+// Dispatch on the variant tag with a switch rather than a lookup table, so
+// each call site reaches a known function that the engine can inline.
+const advance = (pcg: PCGState, delta: number): PCGState => {
+  switch (pcg.variant) {
+    case 'pcg32':
+      return pcg32Advance(pcg, delta)
+    case 'mulberry32':
+      return mulberry32Advance(pcg, delta)
+    case 'sfc32':
+      return sfc32Advance(pcg, delta)
+    default:
+      return unknownVariant(pcg.variant)
+  }
 }
 
-const advance = (pcg: PCGState, delta: number): PCGState => VARIANTS[pcg.variant].advance(pcg, delta)
-
-const output = (pcg: PCGState): number => VARIANTS[pcg.variant].output(pcg)
+const output = (pcg: PCGState): number => {
+  switch (pcg.variant) {
+    case 'pcg32':
+      return pcg32Output(pcg)
+    case 'mulberry32':
+      return mulberry32Output(pcg)
+    case 'sfc32':
+      return sfc32Output(pcg)
+    default:
+      return unknownVariant(pcg.variant)
+  }
+}
 
 export const getOutput = output
 
@@ -41,20 +59,27 @@ export function stepState(delta: number, pcg?: PCGState): PCGState | ((pcg: PCGS
 export const prevState = stepState(-1)
 
 const randomIntImpl = (min: number, max: number, pcg: PCGState): [number, PCGState] => {
-  const outputMaxRange = 2 ** NUM_OUTPUT_BITS
   const bound = max - min
-  if (bound < 0 || bound > outputMaxRange) throw new RangeError()
+  if (bound < 0 || bound > OUTPUT_MAX_RANGE) throw new RangeError()
 
-  const threshold = (outputMaxRange - bound) % bound
+  let n = output(pcg)
+  let nextPcg = advance(pcg, 1)
+  // Draws below 2^32 mod bound are rejected to keep the result unbiased. That
+  // threshold is always below bound, so a draw of at least bound is accepted
+  // without computing it; only a smaller draw pays for the modulo.
+  if (n < bound) {
+    const threshold = (OUTPUT_MAX_RANGE - bound) % bound
+    while (n < threshold) {
+      n = output(nextPcg)
+      nextPcg = advance(nextPcg, 1)
+    }
+  }
 
-  let n: number
-  let nextPcg = pcg
-  do {
-    n = output(nextPcg)
-    nextPcg = nextState(nextPcg)
-  } while (n < threshold)
-
-  return [(n % bound) + min, nextPcg]
+  // For an integer bound this equals n % bound, which V8 computes with a slow
+  // float modulo once n reaches 2^31. A non-integer bound keeps the float
+  // modulo, so its result stays exactly what it was.
+  const remainder = Number.isInteger(bound) ? n - Math.floor(n / bound) * bound : n % bound
+  return [remainder + min, nextPcg]
 }
 
 interface RandomIntPartial1 {

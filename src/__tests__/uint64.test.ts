@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert/strict'
-import { add64, fromNumber, mul64 } from '../uint64'
+import { add64, fromNumber, mul64, mulHi32 } from '../uint64'
 import type { Uint64 } from '../types'
 
 const MASK_32 = 0xffffffffn
@@ -128,6 +128,30 @@ describe('uint64', () => {
         const b = next()
         const expected = fromBig((a * b) & MASK_64)
         assert.deepEqual(mul64(fromBig(a), fromBig(b)), expected)
+      }
+    })
+  })
+
+  describe('mulHi32', () => {
+    test('returns the high word of the 64-bit product at the edges', () => {
+      const samples = [0, 1, 2, 0xffff, 0x10000, 0x12345678, 0x7fffffff, 0x80000000, 0xfffffffe, 0xffffffff]
+      for (const a of samples) {
+        for (const b of samples) {
+          assert.equal(mulHi32(a, b), Number((BigInt(a) * BigInt(b)) >> 32n))
+        }
+      }
+    })
+
+    test('matches BigInt for a pseudo-random sweep', () => {
+      let s = 0x9e3779b97f4a7c15n
+      const next = (): number => {
+        s = (s * 6364136223846793005n + 1442695040888963407n) & MASK_64
+        return Number(s & MASK_32)
+      }
+      for (let i = 0; i < 500; i++) {
+        const a = next()
+        const b = next()
+        assert.equal(mulHi32(a, b), Number((BigInt(a) * BigInt(b)) >> 32n))
       }
     })
   })

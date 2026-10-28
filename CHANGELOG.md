@@ -15,6 +15,36 @@
   numeric literals rather than nominal enum types, so plain numbers are
   accepted where an enum member was previously required.
 
+### Performance
+
+- **The hot path is 1.2–3× faster, with no change to the API, its
+  immutable semantics, or any output.** Measured against the previous build
+  on the same machine, Node 22 at the low end of each range and Chromium 153
+  at the high end: `randomInt` 1.2–2×, `nextState` 1.5–2×, `randomList`
+  1.1–1.35×, `createPcg32` 3.5–5×, `stepState` 2.5–3×, and `prevState`
+  about 150×. mulberry32 and sfc32 draws are 1.5–3× faster and `createSfc32`
+  about 9×. The new build was compared with the published 3.0.0 on 13.7
+  million cases across every output function, stream scheme, seed shape,
+  and `randomInt` bound, including the rare 64-bit carry.
+  - One LCG step is written out in place, so `nextState` allocates only the
+    state it returns and no intermediate `Uint64` objects. Dispatch on the
+    variant and the output function is a `switch` to known functions rather
+    than a table lookup, so each call site stays monomorphic.
+  - `prevState` multiplies by the inverse of the multiplier mod 2^64 instead
+    of running the 64-round jump-ahead for a delta of −1.
+  - `stepState` keeps Brown's jump-ahead in local halves and allocates
+    nothing per round.
+  - `randomInt` computes the rejection threshold only for a draw below the
+    bound, the only draw that can be rejected, and replaces `%` with a
+    floor-multiply-subtract for integer bounds, which avoids V8's slow float
+    modulo for draws at or above 2^31.
+  - `createPcg32` seeds number inputs without BigInt.
+- One measured loss: `getOutput` called on its own is about 20% slower (a
+  few nanoseconds per call), because the `switch` dispatch is a little more
+  code than a table lookup. The `switch` stays because a table turns into one
+  polymorphic call site as soon as a process uses more than one variant,
+  which made mulberry32 and sfc32 draws 35–50% slower in the old code.
+
 ### Tooling
 
 - Upgraded to TypeScript 7, the native compiler. Type checking now runs as

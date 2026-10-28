@@ -1,3 +1,4 @@
+import { withState } from './state'
 import { OutputFnType, StreamScheme } from './types'
 import type { PCGState } from './types'
 
@@ -10,36 +11,22 @@ const RSHIFT = 9
 const LSHIFT = 3
 const WARMUP_ROUNDS = 15
 
-type Sfc32Registers = { a: number; b: number; c: number; d: number }
-
-const step = ({ a, b, c, d }: Sfc32Registers): Sfc32Registers => {
-  const t = (((a + b) >>> 0) + d) >>> 0
-  return {
-    a: (b ^ (b >>> RSHIFT)) >>> 0,
-    b: (c + (c << LSHIFT)) >>> 0,
-    c: ((((c << BARREL_SHIFT) | (c >>> (32 - BARREL_SHIFT))) >>> 0) + t) >>> 0,
-    d: (d + 1) >>> 0,
-  }
-}
-
-const unpack = (pcg: PCGState): Sfc32Registers => ({
-  a: pcg.state.hi,
-  b: pcg.state.lo,
-  c: pcg.streamId.hi,
-  d: pcg.streamId.lo,
-})
-
-const pack = (pcg: PCGState, { a, b, c, d }: Sfc32Registers): PCGState => ({
-  ...pcg,
-  state: { hi: a, lo: b },
-  streamId: { hi: c, lo: d },
-})
-
 export const sfc32Advance = (pcg: PCGState, delta: number): PCGState => {
   if (delta < 0) throw new RangeError('sfc32 is not reversible; negative delta is unsupported')
-  let regs = unpack(pcg)
-  for (let i = 0; i < delta; i++) regs = step(regs)
-  return pack(pcg, regs)
+  let a = pcg.state.hi
+  let b = pcg.state.lo
+  let c = pcg.streamId.hi
+  let d = pcg.streamId.lo
+  // The registers stay in locals for the whole walk; each round reads the
+  // previous round's values, and only the returned state is allocated.
+  for (let i = 0; i < delta; i++) {
+    const t = (((a + b) >>> 0) + d) >>> 0
+    a = (b ^ (b >>> RSHIFT)) >>> 0
+    b = (c + (c << LSHIFT)) >>> 0
+    c = ((((c << BARREL_SHIFT) | (c >>> (32 - BARREL_SHIFT))) >>> 0) + t) >>> 0
+    d = (d + 1) >>> 0
+  }
+  return withState(pcg, { hi: a, lo: b }, { hi: c, lo: d })
 }
 
 export const sfc32Output = (pcg: PCGState): number => (((pcg.state.hi + pcg.state.lo) >>> 0) + pcg.streamId.lo) >>> 0
