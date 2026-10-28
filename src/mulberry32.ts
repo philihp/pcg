@@ -1,3 +1,4 @@
+import { withState } from './state'
 import { OutputFnType, StreamScheme } from './types'
 import type { PCGState } from './types'
 
@@ -7,10 +8,8 @@ import type { PCGState } from './types'
 // matter more than stream quality.
 const MULBERRY_INCREMENT = 0x6d2b79f5
 
-export const mulberry32Advance = (pcg: PCGState, delta: number): PCGState => ({
-  ...pcg,
-  state: { hi: 0, lo: (pcg.state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0 },
-})
+export const mulberry32Advance = (pcg: PCGState, delta: number): PCGState =>
+  withState(pcg, { hi: 0, lo: (pcg.state.lo + Math.imul(delta, MULBERRY_INCREMENT)) >>> 0 })
 
 export const mulberry32Output = (pcg: PCGState): number => {
   const { lo } = pcg.state
